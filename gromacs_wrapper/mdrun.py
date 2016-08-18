@@ -25,6 +25,7 @@ def mergeReduce(function, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
+
     Args:
         function: function to apply to reduce data
         data (:obj:`list`): List of items to be reduced
@@ -46,19 +47,16 @@ def mergeReduce(function, data):
 
 class Mdrun512(object):
     """Wrapper for the 5.1.2 version of the mdrun module
+    
     Args:
         tpr_path (str): Path to the portable binary run input file TPR.
-        output_trr_path (str): Path to the GROMACS uncompressed raw trajectory
-                               file TRR.
+        output_trr_path (str): Path to the GROMACS uncompressed raw trajectory file TRR.
         output_gro_path (str): Path to the output GROMACS structure GRO file.
-        output_edr_path (str): Path to the output GROMACS portable energy file
-                               EDR.
-        output_xtc_path (str): Path to the GROMACS compressed trajectory file
-                               XTC.
+        output_edr_path (str): Path to the output GROMACS portable energy file EDR.
+        output_xtc_path (str): Path to the GROMACS compressed trajectory file XTC.
         output_cpt_path (str): Path to the output GROMACS checkpoint file CPT.
         log_path (str): Path to the file where the mdrun log will be stored.
-        error_path (str): Path to the file where the mdrun error log will be
-                          stored.
+        error_path (str): Path to the file where the mdrun error log will be stored.
         gmx_path (str): Path to the GROMACS executable binary.
     """
 

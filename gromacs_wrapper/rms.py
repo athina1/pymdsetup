@@ -15,15 +15,13 @@ except ImportError:
 
 class Rms512(object):
     """Wrapper for the 5.1.2 version of the rms module
+    
     Args:
-        input_ref_struct (str): Path to the original (before launching the
-                                trajectory) GROMACS structure file GRO.
-        input_traj (str): Path to the GROMACS uncompressed raw trajectory
-                          file TRR.
+        input_ref_struct (str): Path to the original (before launching the trajectory) GROMACS structure file GRO.
+        input_traj (str): Path to the GROMACS uncompressed raw trajectory file TRR.
         output_xvg (str): Path to the simple xmgrace plot file XVG.
         log_path (str): Path to the file where the rms log will be stored.
-        error_path (str): Path to the file where the rms error log will be
-                          stored.
+        error_path (str): Path to the file where the rms error log will be stored.
         gmx_path (str): Path to the GROMACS executable binary.
     """
 
