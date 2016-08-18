@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gromacs_wrapper.editconf &mdash; pymdsetup alpha documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="pymdsetup alpha documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gromacs_wrapper.editconf</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Python wrapper module for the GROMACS editconf module</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">tools.file_utils</span> <span class="kn">as</span> <span class="nn">fu</span>
+    <span class="kn">from</span> <span class="nn">command_wrapper</span> <span class="kn">import</span> <span class="n">cmd_wrapper</span>
+    <span class="kn">from</span> <span class="nn">pycompss.api.task</span> <span class="kn">import</span> <span class="n">task</span>
+    <span class="kn">from</span> <span class="nn">pycompss.api.parameter</span> <span class="kn">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">pycompss.api.task</span> <span class="kn">import</span> <span class="n">task</span>
+    <span class="kn">from</span> <span class="nn">pycompss.api.constraint</span> <span class="kn">import</span> <span class="n">constraint</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pymdsetup.tools</span> <span class="kn">import</span> <span class="n">file_utils</span> <span class="k">as</span> <span class="n">fu</span>
+    <span class="kn">from</span> <span class="nn">pymdsetup.command_wrapper</span> <span class="kn">import</span> <span class="n">cmd_wrapper</span>
+    <span class="kn">from</span> <span class="nn">pymdsetup.dummies_pycompss.task</span> <span class="kn">import</span> <span class="n">task</span>
+    <span class="kn">from</span> <span class="nn">pymdsetup.dummies_pycompss.constraint</span> <span class="kn">import</span> <span class="n">constraint</span>
+    <span class="kn">from</span> <span class="nn">pymdsetup.dummies_pycompss.parameter</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="Editconf512"><a class="viewcode-back" href="../../source.html#gromacs_wrapper.editconf.Editconf512">[docs]</a><span class="k">class</span> <span class="nc">Editconf512</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper for the 5.1.2 version of the editconf module</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        structure_gro_path (str): Path to the input GROMACS GRO file.</span>
+<span class="sd">        output_gro_path (str): Path to the output GROMACS GRO file.</span>
+<span class="sd">        distance_to_molecule (float): Distance of the box from the outermost</span>
+<span class="sd">                                      atom in nm. ie 1.0nm = 10 Angstroms.</span>
+<span class="sd">        box_type (str): Geometrical shape of the solvent box.</span>
+<span class="sd">                        Available box types: octahedron, cubic, etc.</span>
+<span class="sd">        center_molecule (bool): Center molecule in the box.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure_gro_path</span><span class="p">,</span> <span class="n">output_gro_path</span><span class="p">,</span>
+                 <span class="n">distance_to_molecule</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">box_type</span><span class="o">=</span><span class="s1">&#39;octahedron&#39;</span><span class="p">,</span>
+                 <span class="n">center_molecule</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">error_path</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+                 <span class="n">gmx_path</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure_gro_path</span> <span class="o">=</span> <span class="n">structure_gro_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_gro_path</span> <span class="o">=</span> <span class="n">output_gro_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_molecule</span> <span class="o">=</span> <span class="n">distance_to_molecule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box_type</span> <span class="o">=</span> <span class="n">box_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center_molecule</span> <span class="o">=</span> <span class="n">center_molecule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gmx_path</span> <span class="o">=</span> <span class="n">gmx_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_path</span> <span class="o">=</span> <span class="n">log_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_path</span> <span class="o">=</span> <span class="n">error_path</span>
+
+<div class="viewcode-block" id="Editconf512.launch"><a class="viewcode-back" href="../../source.html#gromacs_wrapper.editconf.Editconf512.launch">[docs]</a>    <span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Launches the execution of the GROMACS editconf module.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gmx</span> <span class="o">=</span> <span class="s2">&quot;gmx&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gmx_path</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gmx_path</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">gmx</span><span class="p">,</span> <span class="s2">&quot;editconf&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_gro_path</span><span class="p">,</span>
+               <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_gro_path</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span>
+               <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_to_molecule</span><span class="p">),</span> <span class="s2">&quot;-bt&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">box_type</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_molecule</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">)</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="n">cmd_wrapper</span><span class="o">.</span><span class="n">CmdWrapper</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_path</span><span class="p">)</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span></div>
+
+    <span class="nd">@task</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">launchPyCOMPSs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gro_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Launches the GROMACS editconf module using the PyCOMPSs library.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gro_path (str): Path to the input GROMACS GRO structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_gro_path</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Bioexcel.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
