@@ -8,60 +8,85 @@ dynamics simulations.
 This first version is just an example of a functional workflow.
 In v0.1 Pymdsetup uses the following applications:
 
-1. GROMACS: Open source and widely used molecular dynamics simulation package. (http://www.gromacs.org/)
-2. MMBAPI: REST API to access the PDB, UNIPROT and lots of precomputed information about variants, residue mapping, etc. (http://mmb.pcb.ub.es/api/)
-3. SCWRL4: Application to determine the protein side chain conformations. (http://dunbrack.fccc.edu/scwrl4/)
-4. PyCOMPSs: Python library for parallel computing. (https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python)
+1. GROMACS: Open source and widely used molecular dynamics simulation package. 
+(http://www.gromacs.org/)
+2. MMBAPI: REST API to access the PDB, UNIPROT and lots of precomputed 
+information about variants, residue mapping, etc. (http://mmb.pcb.ub.es/api/)
+3. SCWRL4: Application to determine the protein side chain conformations. 
+(http://dunbrack.fccc.edu/scwrl4/)
+4. PyCOMPSs: Python library for parallel computing. 
+(https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python)
 
 ### Installation
 1. Clone this repository in your local machine
 
-        #!bash
-        git clone https://github.com/bioexcel/pymdsetup.git
-        cd pymdsetup
+    ```bash
+    $ git clone https://github.com/bioexcel/pymdsetup.git
+    $ cd pymdsetup
+    ```
 
 2. Download & Install Anaconda5
 
-        #!bash
-        wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.5.0-Linux-x86_64.sh
-        bash Anaconda2-2.5.0-Linux-x86_64.sh
+    ```bash
+    $ wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.5.0-Linux-x86_64.sh
+    $ bash Anaconda2-2.5.0-Linux-x86_64.sh
+    ```
 
 3. Create an Anaconda environment
 
-        #!bash
-        conda create --name pymdsetup --file conda_requirements.txt
-        source activate pymdsetup
+    ```bash
+    $ conda create --name pymdsetup --file conda_requirements.txt
+    $ source activate pymdsetup
+    ```
 
 4. Third party applications installation  
-   In order to install the rest of applications please follow their installation instructions:
+   In order to install the rest of applications please follow their 
+   installation instructions:
   * GROMACS: http://manual.gromacs.org/documentation/5.1/install-guide/index.html
   * SCWRL4: http://dunbrack.fccc.edu/scwrl4/#installation
   * PyCOMPSs: https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python
 
 ### Testing
-A comprehensive set of unitests is provided under the _/data_ directory.  
-All of them are compatible with pytest and nosetests libraries.
+A comprehensive set of unitests is provided under the _/test_ directory.  
+All of them are compatible with pytest and nosetests libraries.  
+   Launch tests with _nosetests_
+
+```bash
+$ nosetests --nocapture test 
+```
+
+launch tests with _pytest_:
+
+```bash
+$ python test/<name_of_the_test_file>.py
+```
 
 ### Usage
-1. Modify the paths of _workflows/conf.yaml_ to point your GROMACS and SCWRL4 binary files.
-2. Still in _conf.yaml_, select the input PDB code. In the current Alpha 0.1 this workflow has been tested with a small set of PDB codes and for demo purposes we recomend to use _1AKI_ the default one.
+1. Modify the paths of _workflows/conf.yaml_ to point your GROMACS and SCWRL4 
+binary files.
+2. Still in _conf.yaml_, select the input PDB code. In the current Alpha 0.1 
+this workflow has been tested with a small set of PDB codes and for demo 
+purposes we recomend to use _1AKI_ the default one.
 3. Launch the serial workflow:
 
-        #!bash
-        python workflows/gromacs_full.py
+    ```bash
+    $ python workflows/gromacs_full.py
+    ```
 
     or the paralel one:
     
-        #!bash
-        python workflows/gromacs_full_pycompss.py
+    ```bash
+    $ python workflows/gromacs_full_pycompss.py
+    ```
 
 ### Copyright & Licensing
 This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the 
-BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/) project.  
+BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/)
+project.  
    
    
    
-![Bioexcel](bioexcel_logo.png "Bioexcel")
+![Bioexcel](docs/images/bioexcel_logo.png "Bioexcel")
 
 
 
