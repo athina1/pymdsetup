@@ -23,7 +23,6 @@ class TestGenion512(unittest.TestCase):
             except Exception, e:
                 print e
 
-    @unittest.skip
     def test_launch(self):
         tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
         input_top = opj(self.data_dir, 'solvate512_gold.top')
@@ -37,15 +36,18 @@ class TestGenion512(unittest.TestCase):
         gio.launch()
         with open(output_gro_path, 'r') as out_file, open(gold_gro_path,
                                                           'r') as gold_file:
-            self.assertMultiLineEqual(out_file.read(), gold_file.read())
+            out_file_list = out_file.readlines()[::100]
+            gold_file_list = gold_file.readlines()[::100]
+            self.assertListEqual(out_file_list, gold_file_list)
 
         with open(output_top, 'r') as out_top, open(gold_top_path,
                                                     'r') as gold_top:
-            out_top_list = " ".join([line if not line.startswith(';')
-                                    else '' for line in out_top])
-            out_top_gold_list = " ".join([line if not line.startswith(';')
-                                         else '' for line in gold_top])
-            self.assertItemsEqual(out_top_list, out_top_gold_list)
+            out_top_list = [line if not line.startswith(';')
+                            else '' for line in out_top]
+            out_top_gold_list = [line if not line.startswith(';')
+                                 else '' for line in gold_top]
+
+            self.assertListEqual(out_top_list, out_top_gold_list)
 
     @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
                          "Skip PyCOMPSs test")

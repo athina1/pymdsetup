@@ -1,5 +1,4 @@
 """Unittests for gromacs_wrapper.editconf module
-
 """
 import unittest
 from pymdsetup.gromacs_wrapper.editconf import Editconf512

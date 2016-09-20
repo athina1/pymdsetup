@@ -76,17 +76,17 @@ class TestGrompp512(unittest.TestCase):
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 
-    def test_launch_nvt(self):
-        mdp_path = opj(self.data_dir, 'gmx_full_nvt.mdp')
-        gro_path = opj(self.data_dir, 'mdrun512_min_gold.gro')
-        top_path = opj(self.data_dir, 'genion512_gold.top')
-        output_tpr_path = opj(self.results, 'grompp512_nvt.tpr')
-        gold_tpr_path = opj(self.data_dir, 'grompp512_nvt_gold.tpr')
-
-        gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
-        gpp.launch()
-
-        self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
+    # def test_launch_nvt(self):
+    #     mdp_path = opj(self.data_dir, 'gmx_full_nvt.mdp')
+    #     gro_path = opj(self.data_dir, 'mdrun512_min_gold.gro')
+    #     top_path = opj(self.data_dir, 'genion512_gold.top')
+    #     output_tpr_path = opj(self.results, 'grompp512_nvt.tpr')
+    #     gold_tpr_path = opj(self.data_dir, 'grompp512_nvt_gold.tpr')
+    #
+    #     gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
+    #     gpp.launch()
+    #
+    #     self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 
 if __name__ == '__main__':
     unittest.main()

@@ -45,5 +45,6 @@
 ; Compound        #mols
 DNA_chain_A         1
 DNA_chain_B         1
-SOL         6307
-NA               22
+SOL         6317
+NA               6
+CL               6
