@@ -140,12 +140,12 @@ def main():
                'Add ions to neutralice the charge')
         p_gppions = conf.step_prop('step7_gppions', mut)
         fu.create_dir(p_gppions.path)
+        shutil.copy(opj(mdp_dir, prop['step7_gppions']['paths']['mdp']), p_gppions.mdp)
         gppions = grompp.Grompp512(p_gppions.mdp, p_sol.gro, p_sol.top,
                                    p_gppions.tpr, gmx_path=gmx_path,
                                    log_path=p_gppions.out,
                                    error_path=p_gppions.err)
-        gppions_compss = gppions.launchPyCOMPSs(sol_compss,
-                                                opj(mdp_dir, prop['step7_gppions']['mdp']))
+        gppions_compss = gppions.launchPyCOMPSs(sol_compss, p_gppions.mdp)
 
         print 'step8:  gio -- Running: Add ions to neutralice the charge'
         p_gio = conf.step_prop('step8_gio', mut)
@@ -160,12 +160,12 @@ def main():
         print 'step9:  gppmin --- Preprocessing: Energy minimization'
         p_gppmin = conf.step_prop('step9_gppmin', mut)
         fu.create_dir(p_gppmin.path)
+        shutil.copy(opj(mdp_dir, prop['step9_gppmin']['paths']['mdp']), p_gppmin.mdp)
         gppmin = grompp.Grompp512(p_gppmin.mdp, p_gio.gro, p_gio.top,
                                   p_gppmin.tpr, gmx_path=gmx_path,
                                   log_path=p_gppmin.out,
                                   error_path=p_gppmin.err)
-        gppmin_compss = gppmin.launchPyCOMPSs(gio_compss,
-                                              opj(mdp_dir, prop['step9_gppmin']['mdp']))
+        gppmin_compss = gppmin.launchPyCOMPSs(gio_compss, p_gppmin.mdp)
 
         print 'step10: mdmin ---- Running: Energy minimization'
         p_mdmin = conf.step_prop('step10_mdmin', mut)
@@ -179,12 +179,12 @@ def main():
                'constant number of molecules, volume and temp')
         p_gppnvt = conf.step_prop('step11_gppnvt', mut)
         fu.create_dir(p_gppnvt.path)
+        shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']), p_gppnvt.mdp)
         gppnvt = grompp.Grompp512(p_gppnvt.mdp, p_mdmin.gro, p_gio.top,
                                   p_gppnvt.tpr, gmx_path=gmx_path,
                                   log_path=p_gppnvt.out,
                                   error_path=p_gppnvt.err)
-        gppnvt_compss = gppnvt.launchPyCOMPSs(mdmin_compss,
-                                              opj(mdp_dir, prop['step11_gppnvt']['mdp']))
+        gppnvt_compss = gppnvt.launchPyCOMPSs(mdmin_compss, p_gppnvt.mdp)
 
         print ('step12: mdnvt ---- Running: nvt '
                'constant number of molecules, volume and temp')
@@ -200,13 +200,13 @@ def main():
                'constant number of molecules, pressure and temp')
         p_gppnpt = conf.step_prop('step13_gppnpt', mut)
         fu.create_dir(p_gppnpt.path)
+        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']), p_gppnpt.mdp)
         gppnpt = grompp.Grompp512(p_gppnpt.mdp, p_mdnvt.gro, p_gio.top,
                                   p_gppnpt.tpr, gmx_path=gmx_path,
                                   cpt_path=p_mdnvt.cpt,
                                   log_path=p_gppnpt.out,
                                   error_path=p_gppnpt.err)
-        gppnvt_compss = gppnpt.launchPyCOMPSs(mdnvt_compss,
-                                              opj(mdp_dir, prop['step13_gppnpt']['mdp']))
+        gppnvt_compss = gppnpt.launchPyCOMPSs(mdnvt_compss, p_gppnpt.mdp)
 
         print ('step14: mdnpt ---- Running: npt '
                'constant number of molecules, pressure and temp')
@@ -222,14 +222,13 @@ def main():
                'Preprocessing: 1ns Molecular dynamics Equilibration')
         p_gppeq = conf.step_prop('step15_gppeq', mut)
         fu.create_dir(p_gppeq.path)
-        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['mdp']), p_gppeq.mdp)
+        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']), p_gppeq.mdp)
         gppeq = grompp.Grompp512(p_gppeq.mdp, p_mdnpt.gro, p_gio.top,
                                  p_gppeq.tpr, cpt_path=p_mdnpt.cpt,
                                  gmx_path=gmx_path,
                                  log_path=p_gppeq.out,
                                  error_path=p_gppeq.err)
-        gppeq_compss = gppeq.launchPyCOMPSs(mdnpt_compss,
-                                            opj(mdp_dir, prop['step15_gppeq']['mdp']))
+        gppeq_compss = gppeq.launchPyCOMPSs(mdnpt_compss, p_gppeq.mdp)
 
         print ('step16: mdeq ----- '
                'Running: 1ns Molecular dynamics Equilibration')
@@ -241,12 +240,12 @@ def main():
                               error_path=p_mdeq.err)
         mdeq_compss = mdeq.launchPyCOMPSs(gppeq_compss)
 
-        print ('step17: rmsd ----- Computing RMSD')
-        p_rmsd = conf.step_prop('step17_rmsd', mut)
-        fu.create_dir(p_rmsd.path)
-        rmsd = rms.Rms512(p_gio.gro, p_mdeq.trr, p_rmsd.xvg,
-                          log_path=p_rmsd.out, error_path=p_rmsd.err)
-        # rmsd_list.append(grorms.launchPyCOMPSs(mdeq_compss))
+        # print ('step17: rmsd ----- Computing RMSD')
+        # p_rmsd = conf.step_prop('step17_rmsd', mut)
+        # fu.create_dir(p_rmsd.path)
+        # rmsd = rms.Rms512(p_gio.gro, p_mdeq.trr, p_rmsd.xvg,
+        #                   log_path=p_rmsd.out, error_path=p_rmsd.err)
+        # # rmsd_list.append(grorms.launchPyCOMPSs(mdeq_compss))
         print '***************************************************************'
         print ''
 

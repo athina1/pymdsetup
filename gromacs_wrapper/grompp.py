@@ -70,6 +70,6 @@ class Grompp512(object):
             mdp_path (str): Path to the input GROMACS parameter input file MDP.
         """
         #fu.copy_ext(itp_path, curr_path, 'itp')
-        shutil.copy(mdp_path, self.mdp_path)
+        # shutil.copy(mdp_path, self.mdp_path)
         self.launch()
         return {'gpp_tpr': self.output_tpr_path}
