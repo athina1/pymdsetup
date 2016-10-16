@@ -44,9 +44,9 @@ class Pdb2gmx512(object):
         self.water_type = water_type
         self.force_field = force_field
         self.ignh = ignh
-        self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
+        self.gmx_path = gmx_path
 
     def launch(self):
         """Launches the execution of the GROMACS pdb2gmx module.
@@ -69,12 +69,20 @@ class Pdb2gmx512(object):
         for f in filelist:
             shutil.move(f, opj(os.path.dirname(self.output_top_path), f))
 
-    @task(returns=dict)
-    def launchPyCOMPSs(self, pdb_path):
-        """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
 
-        Args:
-            pdb_path (str): Path to the input PDB structure.
-        """
-        self.launch()
-        return {'p2g_gro': self.output_path, 'p2g_top': self.output_top_path}
+@task(structure_pdb_path=FILE_IN, output_path=FILE_OUT,
+      output_top_path=FILE_OUT, water_type=IN, force_field=IN, ignh=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
+def launchPyCOMPSs(structure_pdb_path, output_path, output_top_path,
+                   water_type='tip3p', force_field='amber99sb-ildn',
+                   ignh=False, log_path='None', error_path='None',
+                   gmx_path='None'):
+    """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
+
+    Args:
+        pdb_path (str): Path to the input PDB structure.
+    """
+    p2g = Pdb2gmx512(structure_pdb_path, output_path, output_top_path,
+                     water_type, force_field, ignh, log_path, error_path,
+                     gmx_path)
+    p2g.launch()

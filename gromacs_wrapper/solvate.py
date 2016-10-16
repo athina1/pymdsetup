@@ -43,9 +43,9 @@ class Solvate512(object):
         self.solvent_structure_gro_path = solvent_structure_gro_path
         self.toplogy_in = input_top_path
         self.topology_out = output_top_path
-        self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
+        self.gmx_path = gmx_path
 
     def launch(self):
         """Launches the execution of the GROMACS solvate module.
@@ -65,30 +65,33 @@ class Solvate512(object):
         for f in filelist:
             os.remove(f)
 
-    @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
-    def launchPyCOMPSs(self, top, gro, topin, topout):
-        """Launches the GROMACS solvate module using the PyCOMPSs library.
 
-        Args:
-            top (str): Path to the TOP file output from the PyCOMPSs
-                       execution of pdb2gmx.
-            gro (str): Path to the GRO file output from the PyCOMPSs
-                       execution of pdb2gmx.
-            topin (str): Path the input GROMACS TOP file.
-            topout (str): Path the output GROMACS TOP file.
-        """
-        shutil.copy(topin, topout)
-        tempdir = tempfile.mkdtemp()
-        temptop = os.path.join(tempdir, "sol.top")
-        shutil.copy(topout, temptop)
+@task(solute_structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
+      input_top_path=FILE_IN, output_top_path=FILE_OUT,
+      solvent_structure_gro_path=IN, log_path=FILE_OUT, error_path=FILE_OUT,
+      gmx_path=IN)
+def launchPyCOMPSs(solute_structure_gro_path, output_gro_path, input_top_path,
+                   output_top_path, solvent_structure_gro_path="spc216.gro",
+                   log_path='None', error_path='None', gmx_path='None'):
+    """Launches the GROMACS solvate module using the PyCOMPSs library.
 
-        gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
-        cmd = [gmx, "solvate", "-cp", self.solute_structure_gro_path,
-               "-cs", self.solvent_structure_gro_path, "-o",
-               self.output_gro_path, "-p", temptop]
+    Args:
+        top (str): Path to the TOP file output from the PyCOMPSs
+                   execution of pdb2gmx.
+        gro (str): Path to the GRO file output from the PyCOMPSs
+                   execution of pdb2gmx.
+        topin (str): Path the input GROMACS TOP file.
+        topout (str): Path the output GROMACS TOP file.
+    """
+    shutil.copy(input_top_path, output_top_path)
+    tempdir = tempfile.mkdtemp()
+    temptop = os.path.join(tempdir, "sol.top")
 
-        command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
-        command.launch()
-        shutil.copy(temptop, topout)
-        shutil.rmtree(tempdir)
-        return {'sol_gro': self.output_gro_path, 'sol_top': self.topology_out}
+    sol = Solvate512(solute_structure_gro_path, output_gro_path,
+                     input_top_path, output_top_path,
+                     solvent_structure_gro_path="spc216.gro", log_path='None',
+                     error_path='None', gmx_path='None')
+
+    sol.launch()
+    shutil.copy(temptop, output_top_path)
+    shutil.rmtree(tempdir)

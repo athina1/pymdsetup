@@ -39,8 +39,8 @@ class Genion512(object):
 
     def __init__(self, tpr_path, output_gro_path, input_top, output_top,
                  replaced_group="SOL", neutral=False, concentration=0.05,
-                 seed='None', log_path='None',
-                 error_path='None', gmx_path='None'):
+                 seed='None', log_path='None', error_path='None',
+                 gmx_path='None'):
         self.tpr_path = tpr_path
         self.output_gro_path = output_gro_path
         self.input_top = input_top
@@ -49,9 +49,9 @@ class Genion512(object):
         self.neutral = neutral
         self.concentration = concentration
         self.seed = seed
-        self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
+        self.gmx_path = gmx_path
 
     def launch(self):
         """Launches the execution of the GROMACS genion module.
@@ -75,27 +75,24 @@ class Genion512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-    @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
-    def launchPyCOMPSs(self, top, tpr, topin, topout, itp_path, curr_path):
-        """Launches the GROMACS genion module using the PyCOMPSs library.
-        """
-        fu.copy_ext(itp_path, curr_path, 'itp')
-        shutil.copy(topin, topout)
-        tempdir = tempfile.mkdtemp()
-        temptop = os.path.join(tempdir, "gio.top")
-        shutil.copy(topout, temptop)
 
-        gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
-        cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
-               self.tpr_path, "-o", self.output_gro_path,
-               "-p", temptop, "-neutral"]
+@task(tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top=FILE_IN,
+      output_top=FILE_OUT, replaced_group=IN, neutral=IN, concentration=IN,
+      seed=IN, log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN,
+      itp_path=IN, curr_path=IN)
+def launchPyCOMPSs(tpr_path, output_gro_path, input_top, output_top,
+                   replaced_group="SOL", neutral=False, concentration=0.05,
+                   seed='None', log_path='None', error_path='None',
+                   gmx_path='None', itp_path=IN, curr_path=IN):
+    """Launches the GROMACS genion module using the PyCOMPSs library.
+    """
+    fu.copy_ext(itp_path, curr_path, 'itp')
+    shutil.copy(input_top, output_top)
+    tempdir = tempfile.mkdtemp()
+    temptop = os.path.join(tempdir, "gio.top")
 
-        if self.seed != 'None':
-            cmd.append('-seed')
-            cmd.append(str(self.seed))
+    Genion512(tpr_path, output_gro_path, input_top, output_top, replaced_group,
+              neutral, concentration, seed, log_path, error_path, gmx_path)
 
-        command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
-        command.launch()
-        shutil.copy(temptop, topout)
-        shutil.rmtree(tempdir)
-        return {'gio_gro': self.output_gro_path, 'gio_top': self.output_top}
+    shutil.copy(temptop, output_top)
+    shutil.rmtree(tempdir)

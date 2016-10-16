@@ -37,9 +37,9 @@ class Editconf512(object):
         self.distance_to_molecule = distance_to_molecule
         self.box_type = box_type
         self.center_molecule = center_molecule
-        self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
+        self.gmx_path = gmx_path
 
     def launch(self):
         """Launches the execution of the GROMACS editconf module.
@@ -54,12 +54,19 @@ class Editconf512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-    @task(returns=str)
-    def launchPyCOMPSs(self, gro_path):
-        """Launches the GROMACS editconf module using the PyCOMPSs library.
 
-        Args:
-            gro_path (str): Path to the input GROMACS GRO structure.
-        """
-        self.launch()
-        return self.output_gro_path
+@task(structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
+      distance_to_molecule=IN, box_type=IN, center_molecule=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
+def launchPyCOMPSs(structure_gro_path, output_gro_path,
+                   distance_to_molecule=1.0, box_type='octahedron',
+                   center_molecule=True, log_path='None', error_path='None',
+                   gmx_path='None'):
+    """Launches the GROMACS editconf module using the PyCOMPSs library.
+
+    Args:
+        gro_path (str): Path to the input GROMACS GRO structure.
+    """
+    ec = Editconf512(structure_gro_path, output_gro_path, distance_to_molecule,
+                     box_type, center_molecule, log_path, error_path, gmx_path)
+    ec.launch()

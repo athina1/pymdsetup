@@ -43,9 +43,9 @@ class Grompp512(object):
         self.top_path = top_path
         self.output_tpr_path = output_tpr_path
         self.cpt_path = cpt_path
-        self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
+        self.gmx_path = gmx_path
 
     def launch(self):
         """Launches the execution of the GROMACS grompp module.
@@ -61,15 +61,19 @@ class Grompp512(object):
         command.launch()
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
-    @task(returns=dict)
-    def launchPyCOMPSs(self, last_step, mdp_path):
-        """Launches the GROMACS grompp module using the PyCOMPSs library.
 
-        Args:
-            last_step (dict): Output of the last PyCOMPSs step.
-            mdp_path (str): Path to the input GROMACS parameter input file MDP.
-        """
-        #fu.copy_ext(itp_path, curr_path, 'itp')
-        # shutil.copy(mdp_path, self.mdp_path)
-        self.launch()
-        return {'gpp_tpr': self.output_tpr_path}
+@task(mdp_path=FILE_IN, gro_path=FILE_IN, top_path=FILE_IN,
+      output_tpr_path=FILE_OUT, log_path=FILE_OUT, error_path=FILE_OUT,
+      gmx_path=IN)
+def launchPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path,
+                   cpt_path='None', log_path='None', error_path='None',
+                   gmx_path='None'):
+    """Launches the GROMACS grompp module using the PyCOMPSs library.
+
+    Args:
+        last_step (dict): Output of the last PyCOMPSs step.
+        mdp_path (str): Path to the input GROMACS parameter input file MDP.
+    """
+    gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path, cpt_path,
+                    log_path, error_path, gmx_path)
+    gpp.launch()

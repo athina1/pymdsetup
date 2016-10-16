@@ -39,9 +39,9 @@ class Scwrl4(object):
         pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
                               "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(mutation).groupdict()
-        self.scwrl_path = scwrl_path
         self.log_path = log_path
         self.error_path = error_path
+        self.scwrl_path = scwrl_path
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
@@ -94,6 +94,6 @@ class Scwrl4(object):
 def launchPyCOMPSs(pdb_path, output_pdb_path, mutation, log_path='None',
                    error_path='None', scwrl_path='None'):
     """ Launches SCWRL 4 using the PyCOMPSs library."""
-    scw = scwrl.Scwrl4(pdb_path, output_pdb_path, mutation, log_path,
-                       error_path, scwrl_path)
+    scw = Scwrl4(pdb_path, output_pdb_path, mutation, log_path, error_path,
+                 scwrl_path)
     scw.launch()

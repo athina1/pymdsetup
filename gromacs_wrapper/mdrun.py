@@ -14,40 +14,9 @@ except ImportError:
     from pymdsetup.dummies_pycompss.parameter import *
 
 
-@task(returns=int)
-def reduceMDR(a, b):
-    """ Returns (a+b)/2
-    """
-    return (a+b)/2
-
-
-def mergeReduce(function, data):
-    """ Apply function cumulatively to the items of data,
-        from left to right in binary tree structure, so as to
-        reduce the data to a single value.
-
-    Args:
-        function: function to apply to reduce data
-        data (:obj:`list`): List of items to be reduced
-
-    Returns:
-        :obj: Result of reduce the data to a single value
-    """
-    from collections import deque
-    q = deque(xrange(len(data)))
-    while len(q):
-        x = q.popleft()
-        if len(q):
-            y = q.popleft()
-            data[x] = function(data[x], data[y])
-            q.append(x)
-        else:
-            return data[x]
-
-
 class Mdrun512(object):
     """Wrapper for the 5.1.2 version of the mdrun module
-    
+
     Args:
         tpr_path (str): Path to the portable binary run input file TPR.
         output_trr_path (str): Path to the GROMACS uncompressed raw trajectory file TRR.
@@ -91,17 +60,18 @@ class Mdrun512(object):
         command.launch()
         command.move_file_output("md.log", op.dirname(self.output_trr_path))
 
-    @task(returns=dict)
-    def launchPyCOMPSs(self, tpr):
-        """Launches the GROMACS mdrun module using the PyCOMPSs library.
-        Args:
-            tpr (str): Path to the portable binary run input file TPR.
-        """
-        self.launch()
-        return {'md_gro': self.output_gro_path, 'md_trr': self.output_trr_path,
-                'md_edr': self.output_edr_path, 'md_cpt': self.output_cpt_path}
-
-    @classmethod
-    def mergeResults(cls, mdrunList):
-        result = mergeReduce(reduceMDR, mdrunList)
-        return result
+@task(tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT,
+      output_edr_path=FILE_OUT, output_xtc_path=FILE_OUT,
+      output_cpt_path=FILE_OUT, log_path=FILE_OUT, error_path=FILE_OUT,
+      gmx_path=IN)
+def launchPyCOMPSs(tpr_path, output_trr_path, output_gro_path, output_edr_path,
+                   output_xtc_path='None', output_cpt_path='None',
+                   log_path='None', error_path='None', gmx_path='None'):
+    """Launches the GROMACS mdrun module using the PyCOMPSs library.
+    Args:
+        tpr (str): Path to the portable binary run input file TPR.
+    """
+    mdr = Mdrun512(tpr_path, output_trr_path, output_gro_path, output_edr_path,
+                   output_xtc_path, output_cpt_path, log_path, error_path,
+                   gmx_path)
+    mdr.launch()
