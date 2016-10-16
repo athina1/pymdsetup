@@ -88,9 +88,12 @@ class Scwrl4(object):
         if os.path.exists(f):
             shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))
 
-    @task(returns=str)
-    def launchPyCOMPSs(self):
-        """ Launches SCWRL 4 using the PyCOMPSs library.
-        """
-        self.launch()
-        return self.output_pdb_path
+
+@task(pdb_path=FILE_IN, output_pdb_path=FILE_OUT, mutation=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, scwrl_path=IN)
+def launchPyCOMPSs(pdb_path, output_pdb_path, mutation, log_path='None',
+                   error_path='None', scwrl_path='None'):
+    """ Launches SCWRL 4 using the PyCOMPSs library."""
+    scw = scwrl.Scwrl4(pdb_path, output_pdb_path, mutation, log_path,
+                       error_path, scwrl_path)
+    scw.launch()

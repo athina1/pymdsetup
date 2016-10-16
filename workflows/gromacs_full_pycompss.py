@@ -99,10 +99,9 @@ def main():
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         fu.create_dir(p_scw.path)
-        scw = scwrl.Scwrl4(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
+        scwrl.launchPyCOMPSs(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
                            scwrl_path=scwrl_path, log_path=p_scw.out,
                            error_path=p_scw.err)
-        scw_pdb_compss = scw.launchPyCOMPSs()
 
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
