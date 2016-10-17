@@ -96,29 +96,37 @@ def main():
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         fu.create_dir(p_scw.path)
-        scwrl.launchPyCOMPSs(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
-                             log_path=p_scw.out, error_path=p_scw.err,
+        scwrl.launchPyCOMPSs(pdb_path=p_mmbpdb.pdb,
+                             output_pdb_path=p_scw.mut_pdb,
+                             mutation=mut,
+                             log_path=p_scw.out,
+                             error_path=p_scw.err,
                              scwrl_path=scwrl_path)
 
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
-        pdb2gmx.launchPyCOMPSs(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
+        pdb2gmx.launchPyCOMPSs(structure_pdb_path=p_scw.mut_pdb,
+                               output_path=p_p2g.gro,
+                               output_top_path=p_p2g.top,
                                water_type=p_p2g.water_type,
                                force_field=p_p2g.force_field,
                                ignh=settings.str2bool(p_p2g.ignh),
-                               log_path=p_p2g.out, error_path=p_p2g.err,
+                               log_path=p_p2g.out,
+                               error_path=p_p2g.err,
                                gmx_path=gmx_path)
 
         print 'step5:  ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         fu.create_dir(p_ec.path)
-        editconf.launchPyCOMPSs(p_p2g.gro, p_ec.gro,
-                                box_type=p_ec.box_type,
+        editconf.launchPyCOMPSs(structure_gro_path=p_p2g.gro,
+                                output_gro_path=p_ec.gro,
                                 distance_to_molecule=float(p_ec.distance_to_molecule),
+                                box_type=p_ec.box_type,
                                 center_molecule=settings.str2bool(p_ec.center_molecule),
-                                gmx_path=gmx_path,
-                                log_path=p_ec.out, error_path=p_ec.err)
+                                log_path=p_ec.out,
+                                error_path=p_ec.err,
+                                gmx_path=gmx_path)
 
         print 'step6:  sol ------ Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
