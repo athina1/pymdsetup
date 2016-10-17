@@ -2,6 +2,7 @@
 """
 import shutil
 import os.path as op
+import os
 
 try:
     import tools.file_utils as fu
@@ -59,7 +60,7 @@ class Grompp512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-        command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
+        #command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
 
 @task(mdp_path=FILE_IN, gro_path=FILE_IN, top_path=FILE_IN,
@@ -74,6 +75,17 @@ def launchPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path,
         last_step (dict): Output of the last PyCOMPSs step.
         mdp_path (str): Path to the input GROMACS parameter input file MDP.
     """
-    gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path, cpt_path,
+    control = "controlXX.mdp"
+    topology = "topologyXX.top"
+    output = "binaryXX.tpr"
+    os.symlink(mdp_path, control)
+    os.symlink(top_path, topology)
+    os.symlink(output_tpr_path, output)
+
+    gpp = Grompp512(control, gro_path, topology, output, cpt_path,
                     log_path, error_path, gmx_path)
     gpp.launch()
+
+    os.remove(control)
+    os.remove(topology)
+    os.remove(output)
