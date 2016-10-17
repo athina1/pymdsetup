@@ -82,7 +82,13 @@ def launchPyCOMPSs(structure_pdb_path, output_path, output_top_path,
     Args:
         pdb_path (str): Path to the input PDB structure.
     """
-    p2g = Pdb2gmx512(structure_pdb_path, output_path, output_top_path,
+    os.symlink(structure_pdb_path, "structure.pdb")
+    os.symlink(output_path, "output.gro")
+    os.symlink(output_top_path, "output.top")
+    p2g = Pdb2gmx512("structure.pdb", "output.gro", "output.top",
                      water_type, force_field, ignh, log_path, error_path,
                      gmx_path)
     p2g.launch()
+    os.remove("output.gro")
+    os.remove("output.top")
+    os.remove("structure.pdb")

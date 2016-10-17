@@ -1,5 +1,6 @@
 """Python wrapper module for the GROMACS editconf module
 """
+import os
 try:
     import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
@@ -67,6 +68,10 @@ def launchPyCOMPSs(structure_gro_path, output_gro_path,
     Args:
         gro_path (str): Path to the input GROMACS GRO structure.
     """
-    ec = Editconf512(structure_gro_path, output_gro_path, distance_to_molecule,
+    os.symlink(structure_gro_path, "structure.gro")
+    os.symlink(output_gro_path, "structureout.gro")
+    ec = Editconf512("structure.gro", "structureout.gro", distance_to_molecule,
                      box_type, center_molecule, log_path, error_path, gmx_path)
     ec.launch()
+    os.remove("structure.gro")
+    os.remove("structureout.gro")

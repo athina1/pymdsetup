@@ -1,0 +1,63 @@
+                  :-) GROMACS - gmx solvate, VERSION 5.1.2 (-:
+
+                            GROMACS is written by:
+     Emile Apol      Rossen Apostolov  Herman J.C. Berendsen    Par Bjelkmar   
+ Aldert van Buuren   Rudi van Drunen     Anton Feenstra   Sebastian Fritsch 
+  Gerrit Groenhof   Christoph Junghans   Anca Hamuraru    Vincent Hindriksen
+ Dimitrios Karkoulis    Peter Kasson        Jiri Kraus      Carsten Kutzner  
+    Per Larsson      Justin A. Lemkul   Magnus Lundborg   Pieter Meulenhoff 
+   Erik Marklund      Teemu Murtola       Szilard Pall       Sander Pronk   
+   Roland Schulz     Alexey Shvetsov     Michael Shirts     Alfons Sijbers  
+   Peter Tieleman    Teemu Virolainen  Christian Wennberg    Maarten Wolf   
+                           and the project leaders:
+        Mark Abraham, Berk Hess, Erik Lindahl, and David van der Spoel
+
+Copyright (c) 1991-2000, University of Groningen, The Netherlands.
+Copyright (c) 2001-2015, The GROMACS development team at
+Uppsala University, Stockholm University and
+the Royal Institute of Technology, Sweden.
+check out http://www.gromacs.org for more information.
+
+GROMACS is free software; you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
+
+GROMACS:      gmx solvate, VERSION 5.1.2
+Executable:   /usr/local/gromacs/bin/gmx
+Data prefix:  /usr/local/gromacs
+Command line:
+  gmx solvate -cp /home/compss/pymdsetup/solute.gro -cs spc216.gro -o /home/compss/pymdsetup/output.gro -p /home/compss/pymdsetup/topology.top
+
+Reading solute configuration
+Gromacs Runs One Microsecond At Cannonball Speeds
+Containing 1953 atoms in 129 residues
+Reading solvent configuration and velocities
+216H2O,WATJP01,SPC216,SPC-MODEL,300K,BOX(M)=1.86206NM,WFVG,MAR. 1984
+Containing 648 atoms in 216 residues
+
+Initialising inter-atomic distances...
+Generating solvent configuration
+Will generate new solvent configuration of 4x4x4 boxes
+Solvent box contains 38223 atoms in 12741 residues
+Removed 5421 solvent atoms due to solvent-solvent overlap
+Removed 1809 solvent atoms due to solute-solvent overlap
+Sorting configuration
+Found 1 molecule type:
+    SOL (   3 atoms): 10331 residues
+Generated solvent containing 30993 atoms in 10331 residues
+Writing generated configuration to /home/compss/pymdsetup/output.gro
+
+Output configuration contains 32946 atoms in 10460 residues
+Volume                 :     335.833 (nm^3)
+Density                :     995.527 (g/l)
+Number of SOL molecules:  10331   
+
+Processing topology
+
+Back Off! I just backed up temp.topzgZPXo to ./#temp.topzgZPXo.1#
+
+Back Off! I just backed up /home/compss/pymdsetup/topology.top to /home/compss/pymdsetup/#topology.top.1#
+
+gcq#234: "If I Wanted You to Understand This, I Would Explain it Better" (J. Cruijff)
+
