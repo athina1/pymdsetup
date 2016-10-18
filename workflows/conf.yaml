@@ -122,6 +122,8 @@ step10_mdmin:
     gro: mdmin.gro
     trr: mdmin.trr
     edr: mdmin.edr
+    cpt: mdmin.cpt
+    xtc: mdmin.xtc
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules,
 # volume and temp
@@ -143,6 +145,7 @@ step12_mdnvt:
     gro: mdnvt.gro
     edr: mdnvt.edr
     cpt: mdnvt.cpt
+    xtc: mdnvt.xtc
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure
 # and temp
@@ -164,6 +167,7 @@ step14_mdnpt:
     gro: mdnpt.gro
     edr: mdnpt.edr
     cpt: mdnpt.cpt
+    xtc: mdnpt.xtc
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
@@ -180,10 +184,11 @@ step16_mdeq:
     path: step16_mdeq
     out: mdeq.out
     err: mdeq.err
-    trr: md.trr
-    gro: md.gro
-    edr: md.edr
-    cpt: md.cpt
+    trr: mdeq.trr
+    gro: mdeq.gro
+    edr: mdeq.edr
+    cpt: mdeq.cpt
+    xtc: mdeq.xtc
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:

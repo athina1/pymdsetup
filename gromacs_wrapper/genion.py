@@ -3,6 +3,7 @@
 import shutil
 import tempfile
 import os
+import random
 
 try:
     import tools.file_utils as fu
@@ -77,22 +78,45 @@ class Genion512(object):
 
 
 @task(tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top=FILE_IN,
-      output_top=FILE_OUT, replaced_group=IN, neutral=IN, concentration=IN,
-      seed=IN, log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN,
-      itp_path=IN, curr_path=IN)
-def launchPyCOMPSs(tpr_path, output_gro_path, input_top, output_top,
-                   replaced_group="SOL", neutral=False, concentration=0.05,
-                   seed='None', log_path='None', error_path='None',
-                   gmx_path='None', itp_path=IN, curr_path=IN):
+      output_top=FILE_OUT, itp_path=IN, curr_path=IN, replaced_group=IN,
+      neutral=IN, concentration=IN, seed=IN, log_path=FILE_OUT,
+      error_path=FILE_OUT, gmx_path=IN)
+def launchPyCOMPSs(tpr_path, output_gro_path, input_top, output_top, itp_path,
+                   curr_path, replaced_group="SOL", neutral=False,
+                   concentration=0.05, seed='None', log_path='None',
+                   error_path='None', gmx_path='None'):
     """Launches the GROMACS genion module using the PyCOMPSs library.
     """
     fu.copy_ext(itp_path, curr_path, 'itp')
     shutil.copy(input_top, output_top)
     tempdir = tempfile.mkdtemp()
     temptop = os.path.join(tempdir, "gio.top")
+    shutil.copy(output_top, temptop)
 
-    Genion512(tpr_path, output_gro_path, input_top, output_top, replaced_group,
-              neutral, concentration, seed, log_path, error_path, gmx_path)
+    inputtpr = "input" + str(random.randint(0,1000000)) +".tpr"
+    os.symlink(tpr_path, inputtpr)
 
+    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
+    os.symlink(output_gro_path, outputgro)
+
+    gmx = "gmx" if gmx_path == 'None' else gmx_path
+    cmd = ["echo", replaced_group, "|", gmx, "genion", "-s",
+           inputtpr, "-o", outputgro,
+           "-p", temptop]
+
+    if neutral:
+        cmd.append('-neutral')
+    elif concentration:
+        cmd.append('-conc')
+        cmd.append(str(concentration))
+
+    if seed != 'None':
+        cmd.append('-seed')
+        cmd.append(str(seed))
+
+    command = cmd_wrapper.CmdWrapper(cmd, log_path, error_path)
+    command.launch()
     shutil.copy(temptop, output_top)
     shutil.rmtree(tempdir)
+    os.remove(inputtpr)
+    os.remove(outputgro)

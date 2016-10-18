@@ -1,6 +1,8 @@
 """Python wrapper for the GROMACS mdrun module
 """
+import os
 import os.path as op
+import random
 
 try:
     from command_wrapper import cmd_wrapper
@@ -39,39 +41,74 @@ class Mdrun512(object):
         self.output_edr_path = output_edr_path
         self.output_xtc_path = output_xtc_path
         self.output_cpt_path = output_cpt_path
-        self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
+        self.gmx_path = gmx_path
 
     def launch(self):
         """Launches the execution of the GROMACS mdrun module.
         """
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
-        cmd = [gmx, "mdrun", "-s", self.tpr_path, "-o", self.output_trr_path,
-               "-c", self.output_gro_path, "-e", self.output_edr_path]
+        cmd = [gmx, "mdrun", "-s", self.tpr_path, "-o", self.output_trr_path]
+
         if not self.output_xtc_path == 'None':
             cmd.append("-x")
             cmd.append(self.output_xtc_path)
         if not self.output_cpt_path == 'None':
             cmd.append("-cpo")
             cmd.append(self.output_cpt_path)
-
+        cmd.append("-c")
+        cmd.append(self.output_gro_path)
+        cmd.append("-e")
+        cmd.append(self.output_edr_path)
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-        command.move_file_output("md.log", op.dirname(self.output_trr_path))
+        #command.move_file_output("md.log", op.dirname(self.output_trr_path))
 
 @task(tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT,
-      output_edr_path=FILE_OUT, output_xtc_path=FILE_OUT,
+      output_edr_path=FILE_OUT, use_xtc=IN, output_xtc_path=FILE_OUT, use_cpt=IN,
       output_cpt_path=FILE_OUT, log_path=FILE_OUT, error_path=FILE_OUT,
       gmx_path=IN)
 def launchPyCOMPSs(tpr_path, output_trr_path, output_gro_path, output_edr_path,
-                   output_xtc_path='None', output_cpt_path='None',
+                   use_xtc, output_xtc_path, use_cpt, output_cpt_path,
                    log_path='None', error_path='None', gmx_path='None'):
     """Launches the GROMACS mdrun module using the PyCOMPSs library.
     Args:
         tpr (str): Path to the portable binary run input file TPR.
     """
-    mdr = Mdrun512(tpr_path, output_trr_path, output_gro_path, output_edr_path,
-                   output_xtc_path, output_cpt_path, log_path, error_path,
-                   gmx_path)
+    inputtpr = "input" + str(random.randint(0,1000000)) +".tpr"
+    os.symlink(tpr_path, inputtpr)
+
+    outputtrr = "output" + str(random.randint(0,1000000)) +".trr"
+    os.symlink(output_trr_path, outputtrr)
+
+    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
+    os.symlink(output_gro_path, outputgro)
+
+    outputedr = "output" + str(random.randint(0,1000000)) +".edr"
+    os.symlink(output_edr_path, outputedr)
+
+    outputxtc = "output" + str(random.randint(0,1000000)) +".xtc"
+    os.symlink(output_xtc_path, outputxtc)
+
+    outputcpt = "output" + str(random.randint(0,1000000)) +".cpt"
+    os.symlink(output_cpt_path, outputcpt)
+
+    mdr = Mdrun512(tpr_path=inputtpr,
+                   output_trr_path=outputtrr,
+                   output_gro_path=outputgro,
+                   output_edr_path=outputedr,
+                   output_xtc_path=outputxtc,
+                   output_cpt_path=outputcpt,
+                   log_path=log_path,
+                   error_path=error_path,
+                   gmx_path=gmx_path)
     mdr.launch()
+
+    if not use_cpt:
+        with open(outputcpt, 'w+') as dummy_file:
+            dummy_file.write('Useless file. Please, remove it')
+
+    if not use_xtc:
+        with open(outputxtc, 'w+') as dummy_file:
+            dummy_file.write('Useless file. Please, remove it')

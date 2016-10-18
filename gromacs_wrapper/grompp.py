@@ -66,12 +66,14 @@ class Grompp512(object):
 
 @task(mdp_path=FILE_IN, gro_path=FILE_IN, top_path=FILE_IN,
       output_tpr_path=FILE_OUT, use_cpt=IN, cpt_path=FILE_IN, log_path=FILE_OUT,
-      error_path=FILE_OUT, gmx_path=IN)
+      error_path=FILE_OUT, gmx_path=IN, mdp_dir=IN)
 def launchPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path, use_cpt=False,
                    cpt_path='None', log_path='None', error_path='None',
-                   gmx_path='None'):
+                   gmx_path='None', mdp_dir=IN):
     """Launches the GROMACS grompp module using the PyCOMPSs library.
     """
+    shutil.copy(os.path.join(mdp_dir, 'posre.itp'), os.getcwd())
+
     inputmdp = "input" + str(random.randint(0,1000000)) +".mdp"
     os.symlink(mdp_path, inputmdp)
 
