@@ -3,6 +3,7 @@
 import shutil
 import os.path as op
 import os
+import random
 
 try:
     import tools.file_utils as fu
@@ -64,28 +65,38 @@ class Grompp512(object):
 
 
 @task(mdp_path=FILE_IN, gro_path=FILE_IN, top_path=FILE_IN,
-      output_tpr_path=FILE_OUT, log_path=FILE_OUT, error_path=FILE_OUT,
-      gmx_path=IN)
-def launchPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path,
+      output_tpr_path=FILE_OUT, use_cpt=IN, cpt_path=FILE_IN, log_path=FILE_OUT,
+      error_path=FILE_OUT, gmx_path=IN)
+def launchPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path, use_cpt=False,
                    cpt_path='None', log_path='None', error_path='None',
                    gmx_path='None'):
     """Launches the GROMACS grompp module using the PyCOMPSs library.
-
-    Args:
-        last_step (dict): Output of the last PyCOMPSs step.
-        mdp_path (str): Path to the input GROMACS parameter input file MDP.
     """
-    control = "controlXX.mdp"
-    topology = "topologyXX.top"
-    output = "binaryXX.tpr"
-    os.symlink(mdp_path, control)
-    os.symlink(top_path, topology)
-    os.symlink(output_tpr_path, output)
+    inputmdp = "input" + str(random.randint(0,1000000)) +".mdp"
+    os.symlink(mdp_path, inputmdp)
 
-    gpp = Grompp512(control, gro_path, topology, output, cpt_path,
+    inputgro = "input" + str(random.randint(0,1000000)) +".gro"
+    os.symlink(gro_path, inputgro)
+
+    inputtop = "input" + str(random.randint(0,1000000)) +".top"
+    os.symlink(top_path, inputtop)
+
+    outputtpr = "output" + str(random.randint(0,1000000)) +".tpr"
+    os.symlink(output_tpr_path, outputtpr)
+
+    if use_cpt:
+        inputcpt = "input" + str(random.randint(0,1000000)) +".cpt"
+        os.symlink(cpt_path, inputcpt)
+    else:
+        inputcpt = 'None'
+
+    gpp = Grompp512(inputmdp, inputgro, inputtop, outputtpr, inputcpt,
                     log_path, error_path, gmx_path)
     gpp.launch()
 
-    os.remove(control)
-    os.remove(topology)
-    os.remove(output)
+    os.remove(inputmdp)
+    os.remove(inputgro)
+    os.remove(inputtop)
+    os.remove(outputtpr)
+    if use_cpt:
+        os.remove(inputcpt)

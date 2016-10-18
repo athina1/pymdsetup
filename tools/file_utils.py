@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Tools to work with files
-
 """
 import os
 import shutil
 import glob
+import random
 
 
 def create_dir(dir_path):

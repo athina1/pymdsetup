@@ -3,6 +3,7 @@
 import shutil
 import os
 import tempfile
+import random
 
 try:
     import tools.file_utils as fu
@@ -88,20 +89,21 @@ def launchPyCOMPSs(solute_structure_gro_path, output_gro_path, input_top_path,
     temptop = os.path.join(tempdir, "sol.top")
     shutil.copy(output_top_path, temptop)
 
-    os.symlink(solute_structure_gro_path, "solutestructure.gro")
+    inputsolutegro = "inputsolute" + str(random.randint(0,1000000)) +".gro"
+    os.symlink(solute_structure_gro_path, inputsolutegro)
+
+    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
+    os.symlink(output_gro_path, outputgro)
 
     gmx = "gmx" if gmx_path == 'None' else gmx_path
-    cmd = [gmx, "solvate", "-cp", "solutestructure.gro",
-         "-cs", solvent_structure_gro_path, "-o",
-           output_gro_path, "-p", temptop]
+    cmd = [gmx, "solvate", "-cp", inputsolutegro,
+           "-cs", solvent_structure_gro_path, "-o",
+           outputgro, "-p", temptop]
     command = cmd_wrapper.CmdWrapper(cmd, log_path, error_path)
     command.launch()
-    #temptop2 = os.path.join(tempdir, "sol2.top")
-    #sol = Solvate512(solute_structure_gro_path, output_gro_path,
-    #                 temptop, temptop2,
-    #                 solvent_structure_gro_path="spc216.gro", log_path=log_path,
-    #                 error_path=error_path, gmx_path=gmx_path)
-    #sol.launch()
 
     shutil.copy(temptop, output_top_path)
     shutil.rmtree(tempdir)
+
+    os.remove(inputsolutegro)
+    os.remove(outputgro)

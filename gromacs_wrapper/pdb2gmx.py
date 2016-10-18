@@ -3,6 +3,7 @@
 import os
 from os.path import join as opj
 import shutil
+import random
 
 try:
     from command_wrapper import cmd_wrapper
@@ -78,17 +79,21 @@ def launchPyCOMPSs(structure_pdb_path, output_path, output_top_path,
                    ignh=False, log_path='None', error_path='None',
                    gmx_path='None'):
     """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
-
-    Args:
-        pdb_path (str): Path to the input PDB structure.
     """
-    os.symlink(structure_pdb_path, "structure.pdb")
-    os.symlink(output_path, "output.gro")
-    os.symlink(output_top_path, "output.top")
-    p2g = Pdb2gmx512("structure.pdb", "output.gro", "output.top",
-                     water_type, force_field, ignh, log_path, error_path,
-                     gmx_path)
+    inputpdb = "input" + str(random.randint(0,1000000)) +".pdb"
+    os.symlink(structure_pdb_path, inputpdb)
+
+    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
+    os.symlink(output_path, outputgro)
+
+    outputtop = "output" + str(random.randint(0,1000000)) +".top"
+    os.symlink(output_top_path, outputtop)
+
+    p2g = Pdb2gmx512(inputpdb, outputgro, outputtop,water_type, force_field,
+                     ignh, log_path, error_path, gmx_path)
+
     p2g.launch()
-    os.remove("output.gro")
-    os.remove("output.top")
-    os.remove("structure.pdb")
+
+    os.remove(inputpdb)
+    os.remove(outputgro)
+    os.remove(outputtop)
