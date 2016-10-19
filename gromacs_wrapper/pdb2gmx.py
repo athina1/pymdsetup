@@ -74,7 +74,7 @@ class Pdb2gmx512(object):
 @task(structure_pdb_path=FILE_IN, output_path=FILE_OUT,
       output_top_path=FILE_OUT, water_type=IN, force_field=IN, ignh=IN,
       log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
-def launchPyCOMPSs(structure_pdb_path, output_path, output_top_path,
+def pdb2gmxPyCOMPSs(structure_pdb_path, output_path, output_top_path,
                    water_type='tip3p', force_field='amber99sb-ildn',
                    ignh=False, log_path='None', error_path='None',
                    gmx_path='None'):

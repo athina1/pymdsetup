@@ -60,7 +60,7 @@ class Editconf512(object):
 @task(structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
       distance_to_molecule=IN, box_type=IN, center_molecule=IN,
       log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
-def launchPyCOMPSs(structure_gro_path, output_gro_path,
+def editconfPyCOMPSs(structure_gro_path, output_gro_path,
                    distance_to_molecule=1.0, box_type='octahedron',
                    center_molecule=True, log_path='None', error_path='None',
                    gmx_path='None'):

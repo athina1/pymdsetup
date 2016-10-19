@@ -81,7 +81,7 @@ class Genion512(object):
       output_top=FILE_OUT, itp_path=IN, curr_path=IN, replaced_group=IN,
       neutral=IN, concentration=IN, seed=IN, log_path=FILE_OUT,
       error_path=FILE_OUT, gmx_path=IN)
-def launchPyCOMPSs(tpr_path, output_gro_path, input_top, output_top, itp_path,
+def genionPyCOMPSs(tpr_path, output_gro_path, input_top, output_top, itp_path,
                    curr_path, replaced_group="SOL", neutral=False,
                    concentration=0.05, seed='None', log_path='None',
                    error_path='None', gmx_path='None'):

@@ -71,7 +71,7 @@ class Solvate512(object):
       input_top_path=FILE_IN, output_top_path=FILE_OUT,
       solvent_structure_gro_path=IN, log_path=FILE_OUT, error_path=FILE_OUT,
       gmx_path=IN)
-def launchPyCOMPSs(solute_structure_gro_path, output_gro_path, input_top_path,
+def solvatePyCOMPSs(solute_structure_gro_path, output_gro_path, input_top_path,
                    output_top_path, solvent_structure_gro_path="spc216.gro",
                    log_path='None', error_path='None', gmx_path='None'):
     """Launches the GROMACS solvate module using the PyCOMPSs library.
