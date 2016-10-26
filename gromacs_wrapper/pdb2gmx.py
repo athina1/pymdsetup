@@ -3,18 +3,11 @@
 import os
 from os.path import join as opj
 import shutil
-import random
 
 try:
     from command_wrapper import cmd_wrapper
-    from pycompss.api.task import task
-    from pycompss.api.parameter import *
-    from pycompss.api.constraint import constraint
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Pdb2gmx512(object):
@@ -69,31 +62,3 @@ class Pdb2gmx512(object):
 
         for f in filelist:
             shutil.move(f, opj(os.path.dirname(self.output_top_path), f))
-
-
-@task(structure_pdb_path=FILE_IN, output_path=FILE_OUT,
-      output_top_path=FILE_OUT, water_type=IN, force_field=IN, ignh=IN,
-      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
-def pdb2gmxPyCOMPSs(structure_pdb_path, output_path, output_top_path,
-                   water_type='tip3p', force_field='amber99sb-ildn',
-                   ignh=False, log_path='None', error_path='None',
-                   gmx_path='None'):
-    """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
-    """
-    inputpdb = "input" + str(random.randint(0,1000000)) +".pdb"
-    os.symlink(structure_pdb_path, inputpdb)
-
-    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
-    os.symlink(output_path, outputgro)
-
-    outputtop = "output" + str(random.randint(0,1000000)) +".top"
-    os.symlink(output_top_path, outputtop)
-
-    p2g = Pdb2gmx512(inputpdb, outputgro, outputtop,water_type, force_field,
-                     ignh, log_path, error_path, gmx_path)
-
-    p2g.launch()
-
-    os.remove(inputpdb)
-    os.remove(outputgro)
-    os.remove(outputtop)

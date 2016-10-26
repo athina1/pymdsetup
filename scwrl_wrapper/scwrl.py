@@ -9,14 +9,8 @@ from Bio.PDB import PDBIO
 
 try:
     from command_wrapper import cmd_wrapper
-    from pycompss.api.task import task
-    from pycompss.api.parameter import *
-    from pycompss.api.constraint import constraint
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Scwrl4(object):
@@ -84,16 +78,6 @@ class Scwrl4(object):
         command.launch()
 
         # Move hot.grp file
-        f = 'hot.grp'
-        if os.path.exists(f):
-            shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))
-
-
-@task(pdb_path=FILE_IN, output_pdb_path=FILE_OUT, mutation=IN,
-      log_path=FILE_OUT, error_path=FILE_OUT, scwrl_path=IN)
-def scwrlPyCOMPSs(pdb_path, output_pdb_path, mutation, log_path='None',
-                   error_path='None', scwrl_path='None'):
-    """ Launches SCWRL 4 using the PyCOMPSs library."""
-    scw = Scwrl4(pdb_path, output_pdb_path, mutation, log_path, error_path,
-                 scwrl_path)
-    scw.launch()
+        #f = 'hot.grp'
+        #if os.path.exists(f):
+        #    shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))

@@ -1,20 +1,9 @@
 """Python wrapper module for the GROMACS editconf module
 """
-import os
-import random
 try:
-    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
-    from pycompss.api.task import task
-    from pycompss.api.parameter import *
-    from pycompss.api.task import task
-    from pycompss.api.constraint import constraint
 except ImportError:
-    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Editconf512(object):
@@ -55,25 +44,3 @@ class Editconf512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-
-
-@task(structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
-      distance_to_molecule=IN, box_type=IN, center_molecule=IN,
-      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
-def editconfPyCOMPSs(structure_gro_path, output_gro_path,
-                   distance_to_molecule=1.0, box_type='octahedron',
-                   center_molecule=True, log_path='None', error_path='None',
-                   gmx_path='None'):
-    """Launches the GROMACS editconf module using the PyCOMPSs library.
-    """
-    inputgro = "input" + str(random.randint(0,1000000)) +".gro"
-    os.symlink(structure_gro_path, inputgro)
-
-    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
-    os.symlink(output_gro_path, outputgro)
-
-    ec = Editconf512(inputgro, outputgro, distance_to_molecule, box_type,
-                     center_molecule, log_path, error_path, gmx_path)
-    ec.launch()
-    os.remove(inputgro)
-    os.remove(outputgro)

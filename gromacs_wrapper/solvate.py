@@ -2,21 +2,10 @@
 """
 import shutil
 import os
-import tempfile
-import random
-
 try:
-    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
-    from pycompss.api.task import task
-    from pycompss.api.parameter import *
-    from pycompss.api.constraint import constraint
 except ImportError:
-    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Solvate512(object):
@@ -65,45 +54,3 @@ class Solvate512(object):
 
         for f in filelist:
             os.remove(f)
-
-
-@task(solute_structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
-      input_top_path=FILE_IN, output_top_path=FILE_OUT,
-      solvent_structure_gro_path=IN, log_path=FILE_OUT, error_path=FILE_OUT,
-      gmx_path=IN)
-def solvatePyCOMPSs(solute_structure_gro_path, output_gro_path, input_top_path,
-                   output_top_path, solvent_structure_gro_path="spc216.gro",
-                   log_path='None', error_path='None', gmx_path='None'):
-    """Launches the GROMACS solvate module using the PyCOMPSs library.
-
-    Args:
-        top (str): Path to the TOP file output from the PyCOMPSs
-                   execution of pdb2gmx.
-        gro (str): Path to the GRO file output from the PyCOMPSs
-                   execution of pdb2gmx.
-        topin (str): Path the input GROMACS TOP file.
-        topout (str): Path the output GROMACS TOP file.
-    """
-    shutil.copy(input_top_path, output_top_path)
-    tempdir = tempfile.mkdtemp()
-    temptop = os.path.join(tempdir, "sol.top")
-    shutil.copy(output_top_path, temptop)
-
-    inputsolutegro = "inputsolute" + str(random.randint(0,1000000)) +".gro"
-    os.symlink(solute_structure_gro_path, inputsolutegro)
-
-    outputgro = "output" + str(random.randint(0,1000000)) +".gro"
-    os.symlink(output_gro_path, outputgro)
-
-    gmx = "gmx" if gmx_path == 'None' else gmx_path
-    cmd = [gmx, "solvate", "-cp", inputsolutegro,
-           "-cs", solvent_structure_gro_path, "-o",
-           outputgro, "-p", temptop]
-    command = cmd_wrapper.CmdWrapper(cmd, log_path, error_path)
-    command.launch()
-
-    shutil.copy(temptop, output_top_path)
-    shutil.rmtree(tempdir)
-
-    os.remove(inputsolutegro)
-    os.remove(outputgro)

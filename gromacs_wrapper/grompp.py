@@ -1,22 +1,9 @@
 """Python wrapper for the GROMACS grompp module
 """
-import shutil
-import os.path as op
-import os
-import random
-
 try:
-    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
-    from pycompss.api.task import task
-    from pycompss.api.parameter import *
-    from pycompss.api.constraint import constraint
 except ImportError:
-    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Grompp512(object):
@@ -62,43 +49,3 @@ class Grompp512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
         #command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
-
-
-@task(mdp_path=FILE_IN, gro_path=FILE_IN, top_path=FILE_IN,
-      output_tpr_path=FILE_OUT, use_cpt=IN, cpt_path=FILE_IN, log_path=FILE_OUT,
-      error_path=FILE_OUT, gmx_path=IN, mdp_dir=IN)
-def gromppPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path, use_cpt=False,
-                   cpt_path='None', log_path='None', error_path='None',
-                   gmx_path='None', mdp_dir=IN):
-    """Launches the GROMACS grompp module using the PyCOMPSs library.
-    """
-    shutil.copy(os.path.join(mdp_dir, 'posre.itp'), os.getcwd())
-
-    inputmdp = "input" + str(random.randint(0,1000000)) +".mdp"
-    os.symlink(mdp_path, inputmdp)
-
-    inputgro = "input" + str(random.randint(0,1000000)) +".gro"
-    os.symlink(gro_path, inputgro)
-
-    inputtop = "input" + str(random.randint(0,1000000)) +".top"
-    os.symlink(top_path, inputtop)
-
-    outputtpr = "output" + str(random.randint(0,1000000)) +".tpr"
-    os.symlink(output_tpr_path, outputtpr)
-
-    if use_cpt:
-        inputcpt = "input" + str(random.randint(0,1000000)) +".cpt"
-        os.symlink(cpt_path, inputcpt)
-    else:
-        inputcpt = 'None'
-
-    gpp = Grompp512(inputmdp, inputgro, inputtop, outputtpr, inputcpt,
-                    log_path, error_path, gmx_path)
-    gpp.launch()
-
-    os.remove(inputmdp)
-    os.remove(inputgro)
-    os.remove(inputtop)
-    os.remove(outputtpr)
-    if use_cpt:
-        os.remove(inputcpt)

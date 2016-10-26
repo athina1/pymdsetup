@@ -39,7 +39,11 @@ class MmbVariants(object):
         url_uniprot_mut = ("http://mmb.irbbarcelona.org"
                            "/api/uniprot/"+self._uniprot+"/entry"
                            "/variants/vardata/mut/?varorig=humsavar")
-        return requests.get(url_uniprot_mut).json()['variants.vardata.mut']
+        variants = requests.get(url_uniprot_mut).json()['variants.vardata.mut']
+        if variants is None:
+            return []
+        else:
+            return variants
 
     def get_pdb_variants(self):
         """Returns the variants of the `self._uniprot` mapped to the
@@ -62,8 +66,8 @@ class MmbVariants(object):
         mapdic = requests.get(url_mapPDBRes).json()
         mutations = []
         uniprot_var = self.get_variants()
-        # print "VARIANTS: " + str(uniprot_var)
-        # print ""
+        if uniprot_var is None:
+            return []
         for var in uniprot_var:
             # print "VAR: " + var
             uni_mut = pattern.match(var).groupdict()

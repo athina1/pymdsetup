@@ -21,6 +21,10 @@ try:
     import mmb_api.pdb as pdb
     import mmb_api.uniprot as uniprot
     import gromacs_wrapper.rms as rms
+    from command_wrapper import cmd_wrapper
+    from pycompss.api.task import task
+    from pycompss.api.parameter import *
+    from pycompss.api.constraint import constraint
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
@@ -34,6 +38,10 @@ except ImportError:
     from pymdsetup.mmb_api import pdb
     from pymdsetup.mmb_api import uniprot
     from pymdsetup.gromacs_wrapper import rms
+    from pymdsetup.command_wrapper import cmd_wrapper
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 def main():
@@ -67,9 +75,13 @@ def main():
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
 
-
     mutations = mmbuniprot.get_pdb_variants()
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+
+########################### DEMO #############################
+    if mmbuniprot.get_uniprot() == 'P00698':
+        mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
+##############################################################
 
     if mutations is None or len(mutations) == 0:
         print (prop['pdb_code'] +
@@ -86,7 +98,7 @@ def main():
     else:
         mutations_limit = min(len(mutations), int(prop['mutations_limit']))
 
-    print 'Number of mutations to be modelled: ' + mutations_limit
+    print 'Number of mutations to be modelled: ' + str(mutations_limit)
     mutations_counter = 0
     for mut in mutations:
         if mutations_counter == mutations_limit:
@@ -94,216 +106,446 @@ def main():
         mutations_counter += 1
         print ''
         print '___________'
-        print mutations_counter + '/' + mutations_limit + ' ' + mut
+        print str(mutations_counter) + '/' + str(mutations_limit) + ' ' + mut
         print '-----------'
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         fu.create_dir(p_scw.path)
-        scwrl.scwrlPyCOMPSs(pdb_path=p_mmbpdb.pdb,
-                             output_pdb_path=p_scw.mut_pdb,
-                             mutation=mut,
-                             log_path=p_scw.out,
-                             error_path=p_scw.err,
-                             scwrl_path=scwrl_path)
+        scwrlPyCOMPSs(pdb_path=p_mmbpdb.pdb,
+                      output_pdb_path=p_scw.mut_pdb,
+                      mutation=mut,
+                      log_path=p_scw.out,
+                      error_path=p_scw.err,
+                      scwrl_path=scwrl_path)
 
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
-        pdb2gmx.pdb2gmxPyCOMPSs(structure_pdb_path=p_scw.mut_pdb,
-                               output_path=p_p2g.gro,
-                               output_top_path=p_p2g.top,
-                               water_type=p_p2g.water_type,
-                               force_field=p_p2g.force_field,
-                               ignh=settings.str2bool(p_p2g.ignh),
-                               log_path=p_p2g.out,
-                               error_path=p_p2g.err,
-                               gmx_path=gmx_path)
+        pdb2gmxPyCOMPSs(structure_pdb_path=p_scw.mut_pdb,
+                        output_path=p_p2g.gro,
+                        output_top_path=p_p2g.top,
+                        water_type=p_p2g.water_type,
+                        force_field=p_p2g.force_field,
+                        ignh=settings.str2bool(p_p2g.ignh),
+                        log_path=p_p2g.out,
+                        error_path=p_p2g.err,
+                        gmx_path=gmx_path)
 
         print 'step5:  ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         fu.create_dir(p_ec.path)
-        editconf.editconfPyCOMPSs(structure_gro_path=p_p2g.gro,
-                                output_gro_path=p_ec.gro,
-                                distance_to_molecule=float(p_ec.distance_to_molecule),
-                                box_type=p_ec.box_type,
-                                center_molecule=settings.str2bool(p_ec.center_molecule),
-                                log_path=p_ec.out,
-                                error_path=p_ec.err,
-                                gmx_path=gmx_path)
+        editconfPyCOMPSs(structure_gro_path=p_p2g.gro,
+                         output_gro_path=p_ec.gro,
+                         distance_to_molecule=float(p_ec.distance_to_molecule),
+                         box_type=p_ec.box_type,
+                         center_molecule=settings.str2bool(p_ec.center_molecule),
+                         log_path=p_ec.out,
+                         error_path=p_ec.err,
+                         gmx_path=gmx_path)
 
         print 'step6:  sol ------ Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
         fu.create_dir(p_sol.path)
-        solvate.solvatePyCOMPSs(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
-                               log_path=p_sol.out, error_path=p_sol.err,
-                               gmx_path=gmx_path)
+        solvatePyCOMPSs(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
+                        log_path=p_sol.out, error_path=p_sol.err,
+                        gmx_path=gmx_path)
 
         print ('step7:  gppions -- Preprocessing: '
                'Add ions to neutralice the charge')
         p_gppions = conf.step_prop('step7_gppions', mut)
         fu.create_dir(p_gppions.path)
         dummy_cpt_path = opj(p_gppions.path,
-                             'dummy' + str(random.randint(0,1000000)) + '.cpt')
+                             'dummy' + str(random.randint(0, 1000000)) +
+                             '.cpt')
         with open(dummy_cpt_path, 'w+') as dummy_file:
             dummy_file.write('Useless file. Please, remove it')
 
-        shutil.copy(opj(mdp_dir, prop['step7_gppions']['paths']['mdp']), p_gppions.mdp)
-        grompp.gromppPyCOMPSs(mdp_path=p_gppions.mdp,
-                              gro_path=p_sol.gro,
-                              top_path=p_sol.top,
-                              output_tpr_path=p_gppions.tpr,
-                              use_cpt=False,
-                              cpt_path=dummy_cpt_path,
-                              log_path=p_gppions.out,
-                              error_path=p_gppions.err,
-                              gmx_path=gmx_path,
-                              mdp_dir=mdp_dir)
+        shutil.copy(opj(mdp_dir, prop['step7_gppions']['paths']['mdp']),
+                    p_gppions.mdp)
+        gromppPyCOMPSs(mdp_path=p_gppions.mdp,
+                       gro_path=p_sol.gro,
+                       top_path=p_sol.top,
+                       output_tpr_path=p_gppions.tpr,
+                       use_cpt=False,
+                       cpt_path=dummy_cpt_path,
+                       log_path=p_gppions.out,
+                       error_path=p_gppions.err,
+                       gmx_path=gmx_path,
+                       mdp_dir=mdp_dir)
 
         print 'step8:  gio -- Running: Add ions to neutralice the charge'
         p_gio = conf.step_prop('step8_gio', mut)
         fu.create_dir(p_gio.path)
-        genion.genionPyCOMPSs(tpr_path=p_gppions.tpr,
-                              output_gro_path=p_gio.gro,
-                              input_top=p_sol.top,
-                              output_top=p_gio.top,
-                              itp_path=p_p2g.path,
-                              curr_path=p_gio.path,
-                              replaced_group='SOL',
-                              neutral=False,
-                              concentration=0.05,
-                              seed='None',
-                              log_path=p_gio.out,
-                              error_path=p_gio.err,
-                              gmx_path=gmx_path)
+        genionPyCOMPSs(tpr_path=p_gppions.tpr,
+                       output_gro_path=p_gio.gro,
+                       input_top=p_sol.top,
+                       output_top=p_gio.top,
+                       itp_path=p_p2g.path,
+                       curr_path=p_gio.path,
+                       replaced_group='SOL',
+                       neutral=False,
+                       concentration=0.05,
+                       seed='None',
+                       log_path=p_gio.out,
+                       error_path=p_gio.err,
+                       gmx_path=gmx_path)
 
         print 'step9:  gppmin --- Preprocessing: Energy minimization'
         p_gppmin = conf.step_prop('step9_gppmin', mut)
         fu.create_dir(p_gppmin.path)
         dummy_cpt_path = opj(p_gppmin.path,
-                             'dummy' + str(random.randint(0,1000000)) + '.cpt')
+                             'dummy' + str(random.randint(0, 1000000)) +
+                             '.cpt')
         with open(dummy_cpt_path, 'w+') as dummy_file:
             dummy_file.write('Useless file. Please, remove it')
-        shutil.copy(opj(mdp_dir, prop['step9_gppmin']['paths']['mdp']), p_gppmin.mdp)
-        grompp.gromppPyCOMPSs(mdp_path=p_gppmin.mdp,
-                              gro_path=p_gio.gro,
-                              top_path=p_gio.top,
-                              output_tpr_path=p_gppmin.tpr,
-                              use_cpt=False,
-                              cpt_path=dummy_cpt_path,
-                              gmx_path=gmx_path,
-                              log_path=p_gppmin.out,
-                              error_path=p_gppmin.err,
-                              mdp_dir=mdp_dir)
+        shutil.copy(opj(mdp_dir, prop['step9_gppmin']['paths']['mdp']),
+                    p_gppmin.mdp)
+        gromppPyCOMPSs(mdp_path=p_gppmin.mdp,
+                       gro_path=p_gio.gro,
+                       top_path=p_gio.top,
+                       output_tpr_path=p_gppmin.tpr,
+                       use_cpt=False,
+                       cpt_path=dummy_cpt_path,
+                       gmx_path=gmx_path,
+                       log_path=p_gppmin.out,
+                       error_path=p_gppmin.err,
+                       mdp_dir=mdp_dir)
 
         print 'step10: mdmin ---- Running: Energy minimization'
         p_mdmin = conf.step_prop('step10_mdmin', mut)
         fu.create_dir(p_mdmin.path)
-        mdrun.mdrunPyCOMPSs(tpr_path=p_gppmin.tpr,
-                             output_trr_path=p_mdmin.trr,
-                             output_gro_path=p_mdmin.gro,
-                             output_edr_path=p_mdmin.edr,
-                             output_xtc_path='None',
-                             output_cpt_path='None',
-                             log_path=p_mdmin.out,
-                             error_path=p_mdmin.err,
-                             gmx_path=gmx_path)
+        mdrunPyCOMPSs(tpr_path=p_gppmin.tpr,
+                      output_trr_path=p_mdmin.trr,
+                      output_gro_path=p_mdmin.gro,
+                      output_edr_path=p_mdmin.edr,
+                      output_xtc_path='None',
+                      output_cpt_path='None',
+                      log_path=p_mdmin.out,
+                      error_path=p_mdmin.err,
+                      gmx_path=gmx_path)
 
         print ('step11: gppnvt --- Preprocessing: nvt '
                'constant number of molecules, volume and temp')
         p_gppnvt = conf.step_prop('step11_gppnvt', mut)
         fu.create_dir(p_gppnvt.path)
         dummy_cpt_path = opj(p_gppmin.path,
-                             'dummy' + str(random.randint(0,1000000)) + '.cpt')
+                             'dummy' + str(random.randint(0, 1000000)) +
+                             '.cpt')
         with open(dummy_cpt_path, 'w+') as dummy_file:
             dummy_file.write('Useless file. Please, remove it')
-        shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']), p_gppnvt.mdp)
-        grompp.gromppPyCOMPSs(mdp_path=p_gppnvt.mdp,
-                              gro_path=p_mdmin.gro,
-                              top_path=p_gio.top,
-                              output_tpr_path=p_gppnvt.tpr,
-                              use_cpt=False,
-                              cpt_path=dummy_cpt_path,
-                              gmx_path=gmx_path,
-                              log_path=p_gppnvt.out,
-                              error_path=p_gppnvt.err,
-                              mdp_dir=mdp_dir)
-
+        shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']),
+                    p_gppnvt.mdp)
+        gromppPyCOMPSs(mdp_path=p_gppnvt.mdp,
+                       gro_path=p_mdmin.gro,
+                       top_path=p_gio.top,
+                       output_tpr_path=p_gppnvt.tpr,
+                       use_cpt=False,
+                       cpt_path=dummy_cpt_path,
+                       gmx_path=gmx_path,
+                       log_path=p_gppnvt.out,
+                       error_path=p_gppnvt.err,
+                       mdp_dir=mdp_dir)
 
         print ('step12: mdnvt ---- Running: nvt '
                'constant number of molecules, volume and temp')
         p_mdnvt = conf.step_prop('step12_mdnvt', mut)
         fu.create_dir(p_mdnvt.path)
-        mdrun.mdrunPyCOMPSs(tpr_path=p_gppnvt.tpr,
-                             output_trr_path=p_mdnvt.trr,
-                             output_gro_path=p_mdnvt.gro,
-                             output_edr_path=p_mdnvt.edr,
-                             output_xtc_path=p_mdnvt.xtc,
-                             output_cpt_path=p_mdnvt.cpt,
-                             log_path=p_mdnvt.out,
-                             error_path=p_mdnvt.err,
-                             gmx_path=gmx_path)
+        mdrunPyCOMPSs(tpr_path=p_gppnvt.tpr,
+                      output_trr_path=p_mdnvt.trr,
+                      output_gro_path=p_mdnvt.gro,
+                      output_edr_path=p_mdnvt.edr,
+                      output_xtc_path=p_mdnvt.xtc,
+                      output_cpt_path=p_mdnvt.cpt,
+                      log_path=p_mdnvt.out,
+                      error_path=p_mdnvt.err,
+                      gmx_path=gmx_path)
 
         print ('step13: gppnpt --- Preprocessing: npt '
                'constant number of molecules, pressure and temp')
         p_gppnpt = conf.step_prop('step13_gppnpt', mut)
         fu.create_dir(p_gppnpt.path)
-        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']), p_gppnpt.mdp)
-        grompp.gromppPyCOMPSs(mdp_path=p_gppnpt.mdp,
-                              gro_path=p_mdnvt.gro,
-                              top_path=p_gio.top,
-                              output_tpr_path=p_gppnpt.tpr,
-                              use_cpt=True,
-                              cpt_path=p_mdnvt.cpt,
-                              gmx_path=gmx_path,
-                              log_path=p_gppnpt.out,
-                              error_path=p_gppnpt.err,
-                              mdp_dir=mdp_dir)
+        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']),
+                    p_gppnpt.mdp)
+        gromppPyCOMPSs(mdp_path=p_gppnpt.mdp,
+                       gro_path=p_mdnvt.gro,
+                       top_path=p_gio.top,
+                       output_tpr_path=p_gppnpt.tpr,
+                       use_cpt=True,
+                       cpt_path=p_mdnvt.cpt,
+                       gmx_path=gmx_path,
+                       log_path=p_gppnpt.out,
+                       error_path=p_gppnpt.err,
+                       mdp_dir=mdp_dir)
 
         print ('step14: mdnpt ---- Running: npt '
                'constant number of molecules, pressure and temp')
         p_mdnpt = conf.step_prop('step14_mdnpt', mut)
         fu.create_dir(p_mdnpt.path)
-        mdrun.mdrunPyCOMPSs(tpr_path=p_gppnpt.tpr,
-                             output_trr_path=p_mdnpt.trr,
-                             output_gro_path=p_mdnpt.gro,
-                             output_edr_path=p_mdnpt.edr,
-                             output_xtc_path=p_mdnpt.xtc,
-                             output_cpt_path=p_mdnpt.cpt,
-                             log_path=p_mdnpt.out,
-                             error_path=p_mdnpt.err,
-                             gmx_path=gmx_path)
+        mdrunPyCOMPSs(tpr_path=p_gppnpt.tpr,
+                      output_trr_path=p_mdnpt.trr,
+                      output_gro_path=p_mdnpt.gro,
+                      output_edr_path=p_mdnpt.edr,
+                      output_xtc_path=p_mdnpt.xtc,
+                      output_cpt_path=p_mdnpt.cpt,
+                      log_path=p_mdnpt.out,
+                      error_path=p_mdnpt.err,
+                      gmx_path=gmx_path)
 
         print ('step15: gppeq ---- '
                'Preprocessing: 1ns Molecular dynamics Equilibration')
         p_gppeq = conf.step_prop('step15_gppeq', mut)
         fu.create_dir(p_gppeq.path)
-        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']), p_gppeq.mdp)
-        grompp.gromppPyCOMPSs(mdp_path=p_gppeq.mdp,
-                              gro_path=p_mdnpt.gro,
-                              top_path=p_gio.top,
-                              output_tpr_path=p_gppeq.tpr,
-                              use_cpt=True,
-                              cpt_path=p_mdnpt.cpt,
-                              gmx_path=gmx_path,
-                              log_path=p_gppeq.out,
-                              error_path=p_gppeq.err,
-                              mdp_dir=mdp_dir)
+        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']),
+                    p_gppeq.mdp)
+        gromppPyCOMPSs(mdp_path=p_gppeq.mdp,
+                       gro_path=p_mdnpt.gro,
+                       top_path=p_gio.top,
+                       output_tpr_path=p_gppeq.tpr,
+                       use_cpt=True,
+                       cpt_path=p_mdnpt.cpt,
+                       gmx_path=gmx_path,
+                       log_path=p_gppeq.out,
+                       error_path=p_gppeq.err,
+                       mdp_dir=mdp_dir)
 
         print ('step16: mdeq ----- '
                'Running: 1ns Molecular dynamics Equilibration')
         p_mdeq = conf.step_prop('step16_mdeq', mut)
         fu.create_dir(p_mdeq.path)
-        mdrun.mdrunPyCOMPSs(tpr_path=p_gppeq.tpr,
-                             output_trr_path=p_mdeq.trr,
-                             output_gro_path=p_mdeq.gro,
-                             output_edr_path=p_mdeq.edr,
-                             output_xtc_path=p_mdeq.xtc,
-                             output_cpt_path=p_mdeq.cpt,
-                             log_path=p_mdeq.out,
-                             error_path=p_mdeq.err,
-                             gmx_path=gmx_path)
+        mdrunPyCOMPSs(tpr_path=p_gppeq.tpr,
+                      output_trr_path=p_mdeq.trr,
+                      output_gro_path=p_mdeq.gro,
+                      output_edr_path=p_mdeq.edr,
+                      output_xtc_path=p_mdeq.xtc,
+                      output_cpt_path=p_mdeq.cpt,
+                      log_path=p_mdeq.out,
+                      error_path=p_mdeq.err,
+                      gmx_path=gmx_path)
 
         fu.rm_temp()
 
 if __name__ == '__main__':
     main()
+
+
+############################## PyCOMPSs functions #############################
+
+@task(pdb_path=FILE_IN, output_pdb_path=FILE_OUT, mutation=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, scwrl_path=IN)
+def scwrlPyCOMPSs(pdb_path, output_pdb_path, mutation, log_path='None',
+                  error_path='None', scwrl_path='None'):
+    """ Launches SCWRL 4 using the PyCOMPSs library."""
+    scwrl.Scwrl4(pdb_path, output_pdb_path, mutation, log_path, error_path,
+                 scwrl_path).launch()
+
+
+@task(structure_pdb_path=FILE_IN, output_path=FILE_OUT,
+      output_top_path=FILE_OUT, water_type=IN, force_field=IN, ignh=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
+def pdb2gmxPyCOMPSs(structure_pdb_path, output_path, output_top_path,
+                    water_type='tip3p', force_field='amber99sb-ildn',
+                    ignh=False, log_path='None', error_path='None',
+                    gmx_path='None'):
+    """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
+    """
+    inputpdb = "input" + str(random.randint(0, 1000000)) + ".pdb"
+    os.symlink(structure_pdb_path, inputpdb)
+
+    outputgro = "output" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(output_path, outputgro)
+
+    outputtop = "output" + str(random.randint(0, 1000000)) + ".top"
+    os.symlink(output_top_path, outputtop)
+
+    pdb2gmx.Pdb2gmx512(inputpdb, outputgro, outputtop, water_type, force_field,
+                       ignh, log_path, error_path, gmx_path).launch()
+
+    os.remove(inputpdb)
+    os.remove(outputgro)
+    os.remove(outputtop)
+
+
+@task(structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
+      distance_to_molecule=IN, box_type=IN, center_molecule=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
+def editconfPyCOMPSs(structure_gro_path, output_gro_path,
+                     distance_to_molecule=1.0, box_type='octahedron',
+                     center_molecule=True, log_path='None', error_path='None',
+                     gmx_path='None'):
+    """Launches the GROMACS editconf module using the PyCOMPSs library.
+    """
+    inputgro = "input" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(structure_gro_path, inputgro)
+
+    outputgro = "output" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(output_gro_path, outputgro)
+
+    editconf.Editconf512(inputgro, outputgro, distance_to_molecule, box_type,
+                         center_molecule, log_path, error_path,
+                         gmx_path).launch()
+    os.remove(inputgro)
+    os.remove(outputgro)
+
+
+@task(solute_structure_gro_path=FILE_IN, output_gro_path=FILE_OUT,
+      input_top_path=FILE_IN, output_top_path=FILE_OUT,
+      solvent_structure_gro_path=IN, log_path=FILE_OUT, error_path=FILE_OUT,
+      gmx_path=IN)
+def solvatePyCOMPSs(solute_structure_gro_path, output_gro_path, input_top_path,
+                    output_top_path, solvent_structure_gro_path="spc216.gro",
+                    log_path='None', error_path='None', gmx_path='None'):
+    """Launches the GROMACS solvate module using the PyCOMPSs library.
+
+    Args:
+        top (str): Path to the TOP file output from the PyCOMPSs
+                   execution of pdb2gmx.
+        gro (str): Path to the GRO file output from the PyCOMPSs
+                   execution of pdb2gmx.
+        topin (str): Path the input GROMACS TOP file.
+        topout (str): Path the output GROMACS TOP file.
+    """
+    shutil.copy(input_top_path, output_top_path)
+    tempdir = tempfile.mkdtemp()
+    temptop = os.path.join(tempdir, "sol.top")
+    shutil.copy(output_top_path, temptop)
+
+    inputsolutegro = "inputsolute" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(solute_structure_gro_path, inputsolutegro)
+
+    outputgro = "output" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(output_gro_path, outputgro)
+
+    gmx = "gmx" if gmx_path == 'None' else gmx_path
+    cmd = [gmx, "solvate", "-cp", inputsolutegro,
+           "-cs", solvent_structure_gro_path, "-o",
+           outputgro, "-p", temptop]
+    command = cmd_wrapper.CmdWrapper(cmd, log_path, error_path)
+    command.launch()
+
+    shutil.copy(temptop, output_top_path)
+    shutil.rmtree(tempdir)
+
+    os.remove(inputsolutegro)
+    os.remove(outputgro)
+
+    @task(mdp_path=FILE_IN, gro_path=FILE_IN, top_path=FILE_IN,
+          output_tpr_path=FILE_OUT, use_cpt=IN, cpt_path=FILE_IN,
+          log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN, mdp_dir=IN)
+    def gromppPyCOMPSs(mdp_path, gro_path, top_path, output_tpr_path,
+                       use_cpt=False, cpt_path='None', log_path='None',
+                       error_path='None', gmx_path='None', mdp_dir=IN):
+        """Launches the GROMACS grompp module using the PyCOMPSs library.
+        """
+        shutil.copy(os.path.join(mdp_dir, 'posre.itp'), os.getcwd())
+
+        inputmdp = "input" + str(random.randint(0, 1000000)) + ".mdp"
+        os.symlink(mdp_path, inputmdp)
+
+        inputgro = "input" + str(random.randint(0, 1000000)) + ".gro"
+        os.symlink(gro_path, inputgro)
+
+        inputtop = "input" + str(random.randint(0, 1000000)) + ".top"
+        os.symlink(top_path, inputtop)
+
+        outputtpr = "output" + str(random.randint(0, 1000000)) + ".tpr"
+        os.symlink(output_tpr_path, outputtpr)
+
+        if use_cpt:
+            inputcpt = "input" + str(random.randint(0, 1000000)) + ".cpt"
+            os.symlink(cpt_path, inputcpt)
+        else:
+            inputcpt = 'None'
+
+        grompp.Grompp512(inputmdp, inputgro, inputtop, outputtpr, inputcpt,
+                         log_path, error_path, gmx_path).launch()
+
+        os.remove(inputmdp)
+        os.remove(inputgro)
+        os.remove(inputtop)
+        os.remove(outputtpr)
+        if use_cpt:
+            os.remove(inputcpt)
+
+
+@task(tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top=FILE_IN,
+      output_top=FILE_OUT, itp_path=IN, curr_path=IN, replaced_group=IN,
+      neutral=IN, concentration=IN, seed=IN, log_path=FILE_OUT,
+      error_path=FILE_OUT, gmx_path=IN)
+def genionPyCOMPSs(tpr_path, output_gro_path, input_top, output_top, itp_path,
+                   curr_path, replaced_group="SOL", neutral=False,
+                   concentration=0.05, seed='None', log_path='None',
+                   error_path='None', gmx_path='None'):
+    """Launches the GROMACS genion module using the PyCOMPSs library.
+    """
+    fu.copy_ext(itp_path, curr_path, 'itp')
+    shutil.copy(input_top, output_top)
+    tempdir = tempfile.mkdtemp()
+    temptop = os.path.join(tempdir, "gio.top")
+    shutil.copy(output_top, temptop)
+
+    inputtpr = "input" + str(random.randint(0, 1000000)) + ".tpr"
+    os.symlink(tpr_path, inputtpr)
+
+    outputgro = "output" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(output_gro_path, outputgro)
+
+    gmx = "gmx" if gmx_path == 'None' else gmx_path
+    cmd = ["echo", replaced_group, "|", gmx, "genion", "-s",
+           inputtpr, "-o", outputgro,
+           "-p", temptop]
+
+    if neutral:
+        cmd.append('-neutral')
+    elif concentration:
+        cmd.append('-conc')
+        cmd.append(str(concentration))
+
+    if seed != 'None':
+        cmd.append('-seed')
+        cmd.append(str(seed))
+
+    command = cmd_wrapper.CmdWrapper(cmd, log_path, error_path)
+    command.launch()
+    shutil.copy(temptop, output_top)
+    shutil.rmtree(tempdir)
+    os.remove(inputtpr)
+    os.remove(outputgro)
+
+
+@task(tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT,
+      output_edr_path=FILE_OUT, output_xtc_path=IN, output_cpt_path=IN,
+      log_path=FILE_OUT, error_path=FILE_OUT, gmx_path=IN)
+def mdrunPyCOMPSs(tpr_path, output_trr_path, output_gro_path, output_edr_path,
+                  output_xtc_path, output_cpt_path,
+                  log_path='None', error_path='None', gmx_path='None'):
+    """Launches the GROMACS mdrun module using the PyCOMPSs library.
+    Args:
+        tpr (str): Path to the portable binary run input file TPR.
+    """
+    inputtpr = "input" + str(random.randint(0, 1000000)) + ".tpr"
+    os.symlink(tpr_path, inputtpr)
+
+    outputtrr = "output" + str(random.randint(0, 1000000)) + ".trr"
+    os.symlink(output_trr_path, outputtrr)
+
+    outputgro = "output" + str(random.randint(0, 1000000)) + ".gro"
+    os.symlink(output_gro_path, outputgro)
+
+    outputedr = "output" + str(random.randint(0, 1000000)) + ".edr"
+    os.symlink(output_edr_path, outputedr)
+
+    # outputxtc = "output" + str(random.randint(0,1000000)) +".xtc"
+    # os.symlink(output_xtc_path, outputxtc)
+    #
+    # outputcpt = "output" + str(random.randint(0,1000000)) +".cpt"
+    # os.symlink(output_cpt_path, outputcpt)
+
+    mdrun.Mdrun512(tpr_path=inputtpr,
+                   output_trr_path=outputtrr,
+                   output_gro_path=outputgro,
+                   output_edr_path=outputedr,
+                   output_xtc_path=output_xtc_path,
+                   output_cpt_path=output_cpt_path,
+                   log_path=log_path,
+                   error_path=error_path,
+                   gmx_path=gmx_path).launch()

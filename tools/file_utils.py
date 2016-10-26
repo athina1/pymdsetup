@@ -25,9 +25,13 @@ def rm_temp():
     for f in os.listdir('.'):
         try:
             # Not removing directories
-            if os.path.isfile(f) and (f.startswith('#') or
-               f.startswith('temp') or f.startswith('None') or
-               f.startswith('step')):
+            if os.path.isfile(f) and
+            (f.startswith('#') or
+             f.startswith('temp') or
+             f.startswith('None') or
+             f.startswith('step') or
+             f == 'mdout.mdp' or
+             f == 'md.log'):
                 os.unlink(f)
             # elif os.path.isdir(f) and (f.startswith('pycompss')):
             #     shutil.rmtree(f)

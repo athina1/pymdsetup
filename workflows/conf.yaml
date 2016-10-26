@@ -2,10 +2,10 @@
 
 ########################## System dependent paths ############################
 # Linux
-# gmx_path: /usr/local/gromacs/bin/gmx
-# scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
-# workflow_path: /home/pau/projects/pymdsetup/testworkflow
-# mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
+gmx_path: /usr/local/gromacs/bin/gmx
+scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+workflow_path: /home/pau/projects/pymdsetup/testworkflow
+mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
 
 # MACOS
 # gmx_path: /usr/local/bin/gmx
@@ -14,10 +14,10 @@
 # mdp_path: /Users/pau/projects/pymdsetup/workflows/mdp
 
 # PyCOMPSs VM
-gmx_path: /usr/local/gromacs/bin/gmx
-scwrl4_path: /home/compss/scwrl4/Scwrl4
-workflow_path: /home/compss/pymdsetup/testworkflow
-mdp_path: /home/compss/pymdsetup/workflows/mdp/
+# gmx_path: /usr/local/gromacs/bin/gmx
+# scwrl4_path: /home/compss/scwrl4/Scwrl4
+# workflow_path: /home/compss/pymdsetup/testworkflow
+# mdp_path: /home/compss/pymdsetup/workflows/mdp/
 ##############################################################################
 
 # PDB code
