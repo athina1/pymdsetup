@@ -1,8 +1,6 @@
 ######################## pymdsetup configuration file ########################
 
-# PDB code
-pdb_code: 1aki
-
+########################## System dependent paths ############################
 # Linux
 # gmx_path: /usr/local/gromacs/bin/gmx
 # scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
@@ -20,9 +18,17 @@ gmx_path: /usr/local/gromacs/bin/gmx
 scwrl4_path: /home/compss/scwrl4/Scwrl4
 workflow_path: /home/compss/pymdsetup/testworkflow
 mdp_path: /home/compss/pymdsetup/workflows/mdp/
+##############################################################################
+
+# PDB code
+pdb_code: 1aki
+
+# Max number of mutations
+# Available values None, Integer
+mutations_limit: 3
+
 
 ########################## Step paths & properties ##########################
-
 # Step 1: mmbpdb -- Get PDB
 step1_mmbpdb:
   paths:

@@ -70,36 +70,33 @@ def main():
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
 
-    #Is it a Demo?
-    if mmbuniprot.get_uniprot() != 'P00698':
-        mutations = mmbuniprot.get_pdb_variants()
-        print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+    mutations = mmbuniprot.get_pdb_variants()
+    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-        if mutations is None or len(mutations) == 0:
-            print (prop['pdb_code'] +
-                   " " + mmbuniprot.get_uniprot() + ": No variants")
-            return
-        else:
-            print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-                   ' uniprot variants')
-            print ('     Mapped to ' + str(len(mutations)) + ' ' +
-                   input_pdb_code + ' PDB variants')
-
-    # Demo purposes
-    ########################################################################
+    if mutations is None or len(mutations) == 0:
+        print (prop['pdb_code'] +
+               " " + mmbuniprot.get_uniprot() + ": No variants")
+        return
     else:
-            # mutations = ['A.VAL2GLY']
-            mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
-            # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS',
-            #              'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS',
-            #              'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
+        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+               ' uniprot variants')
+        print ('     Mapped to ' + str(len(mutations)) + ' ' +
+               input_pdb_code + ' PDB variants')
 
-    ########################################################################
+    if prop['mutations_limit'] == 'None':
+        mutations_limit = len(mutations)
+    else:
+        mutations_limit = min(len(mutations), int(prop['mutations_limit']))
 
+    print 'Number of mutations to be modelled: ' + mutations_limit
+    mutations_counter = 0
     for mut in mutations:
+        if mutations_counter == mutations_limit:
+            break
+        mutations_counter += 1
         print ''
         print '___________'
-        print mut
+        print mutations_counter + '/' + mutations_limit + ' ' + mut
         print '-----------'
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)

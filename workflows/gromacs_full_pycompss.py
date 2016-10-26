@@ -5,7 +5,6 @@
 """
 import os
 import shutil
-import tempfile
 from os.path import join as opj
 import random
 
@@ -47,10 +46,11 @@ def main():
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
     input_pdb_code = prop['pdb_code']
-    fu.create_dir(os.path.abspath(prop['workflow_path']))
-
     # Testing purposes: Remove last Test
-    shutil.rmtree(prop['workflow_path'])
+    if os.path.exists(prop['workflow_path']):
+        shutil.rmtree(prop['workflow_path'])
+    # Create the wokflow working dir
+    fu.create_dir(os.path.abspath(prop['workflow_path']))
 
     print ''
     print ''
@@ -67,33 +67,34 @@ def main():
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
 
-    #if it is a Demo.
-    if mmbuniprot.get_uniprot() != 'P00698':
-        mutations = mmbuniprot.get_pdb_variants()
-        print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-        if mutations is None or len(mutations) == 0:
-            print (prop['pdb_code'] +
-                   " " + mmbuniprot.get_uniprot() + ": No variants")
-            return
-        else:
-            print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-                   ' uniprot variants')
-            print ('     Mapped to ' + str(len(mutations)) + ' ' +
-                   input_pdb_code + ' PDB variants')
+    mutations = mmbuniprot.get_pdb_variants()
+    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-    # Demo purposes
-    ########################################################################
+    if mutations is None or len(mutations) == 0:
+        print (prop['pdb_code'] +
+               " " + mmbuniprot.get_uniprot() + ": No variants")
+        return
     else:
-            mutations = ['A.VAL2GLY']
-            #mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
+        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+               ' uniprot variants')
+        print ('     Mapped to ' + str(len(mutations)) + ' ' +
+               input_pdb_code + ' PDB variants')
 
-    ########################################################################
+    if prop['mutations_limit'] == 'None':
+        mutations_limit = len(mutations)
+    else:
+        mutations_limit = min(len(mutations), int(prop['mutations_limit']))
 
+    print 'Number of mutations to be modelled: ' + mutations_limit
+    mutations_counter = 0
     for mut in mutations:
+        if mutations_counter == mutations_limit:
+            break
+        mutations_counter += 1
         print ''
         print '___________'
-        print mut
+        print mutations_counter + '/' + mutations_limit + ' ' + mut
         print '-----------'
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
