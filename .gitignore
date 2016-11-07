@@ -102,5 +102,5 @@ pycompss*/
 
 # Gromacs
 \#*
-.mdout.mdp
-.traj_comp.xtc
+mdout.mdp
+traj_comp.xtc
