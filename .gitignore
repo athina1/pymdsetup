@@ -99,3 +99,8 @@ testworkflow/
 
 # PyCOMPSs
 pycompss*/
+
+# Gromacs
+\#*
+.mdout.mdp
+.traj_comp.xtc
