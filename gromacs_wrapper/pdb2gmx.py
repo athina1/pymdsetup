@@ -1,13 +1,15 @@
 """Python wrapper module for the GROMACS pdb2gmx module
 """
 import os
-from os.path import join as opj
+#from os.path import join as opj
 import shutil
 
 try:
     from command_wrapper import cmd_wrapper
+    from tools import file_utils as fu
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
+    from pymdsetup.tools import file_utils as fu
 
 
 class Pdb2gmx512(object):
@@ -29,12 +31,14 @@ class Pdb2gmx512(object):
         gmx_path (str): Path to the GROMACS executable binary.
     """
 
-    def __init__(self, structure_pdb_path, output_path, output_top_path,
-                 water_type='tip3p', force_field='amber99sb-ildn', ignh=False,
-                 log_path='None', error_path='None', gmx_path='None'):
+    def __init__(self, structure_pdb_path, output_gro_path, output_top_path,
+                 output_top_tar_path, water_type='tip3p',
+                 force_field='amber99sb-ildn', ignh=False, log_path='None',
+                 error_path='None', gmx_path='None'):
         self.structure_pdb_path = structure_pdb_path
-        self.output_path = output_path
+        self.output_gro_path = output_gro_path
         self.output_top_path = output_top_path
+        self.output_top_tar_path = output_top_tar_path
         self.water_type = water_type
         self.force_field = force_field
         self.ignh = ignh
@@ -47,8 +51,8 @@ class Pdb2gmx512(object):
         """
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "pdb2gmx", "-f", self.structure_pdb_path,
-               "-o", self.output_path, "-p", self.output_top_path, "-water",
-               self.water_type, "-ff", self.force_field]
+               "-o", self.output_gro_path, "-p", self.output_top_path,
+               "-water", self.water_type, "-ff", self.force_field]
 
         if self.ignh:
             cmd.append("-ignh")
@@ -56,9 +60,10 @@ class Pdb2gmx512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-        # Move posre itp files to the topology directory
-        filelist = [f for f in os.listdir(".") if f.startswith("posre") and
-                    f.endswith(".itp")]
+        # Move itp files from current directory to the topology directory
+        fu.copy_ext(os.getcwd(),
+                    os.path.dirname(self.output_top_path),
+                    "itp")
 
-        for f in filelist:
-            shutil.move(f, opj(os.path.dirname(self.output_top_path), f))
+        # Tar topology
+        fu.tar_top(self.output_top_path, self.output_top_tar_path)

@@ -2,10 +2,13 @@
 """
 import shutil
 import os
+
 try:
     from command_wrapper import cmd_wrapper
+    from tools import file_utils as fu
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
+    from pymdsetup.tools import file_utils as fu
 
 
 class Solvate512(object):
@@ -25,14 +28,15 @@ class Solvate512(object):
     """
 
     def __init__(self, solute_structure_gro_path, output_gro_path,
-                 input_top_path, output_top_path,
+                 input_top_tar_path, output_top_path, output_top_tar_path,
                  solvent_structure_gro_path="spc216.gro",
                  log_path='None', error_path='None', gmx_path='None'):
         self.solute_structure_gro_path = solute_structure_gro_path
         self.output_gro_path = output_gro_path
         self.solvent_structure_gro_path = solvent_structure_gro_path
-        self.topology_in = input_top_path
+        self.topology_in_tar = input_top_tar_path
         self.topology_out = output_top_path
+        self.topology_out_tar = output_top_tar_path
         self.log_path = log_path
         self.error_path = error_path
         self.gmx_path = gmx_path
@@ -40,7 +44,16 @@ class Solvate512(object):
     def launch(self):
         """Launches the execution of the GROMACS solvate module.
         """
-        shutil.copy(self.topology_in, self.topology_out)
+        #Copy itp files
+        # fu.copy_ext(os.path.dirname(self.topology_in),
+        #             os.path.dirname(self.topology_out),
+        #             "itp")
+        #
+        # shutil.copy(self.topology_in, self.topology_out)
+
+        # Untar topology to topology_out
+        fu.untar(self.topology_in_tar, self.topology_out)
+
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "solvate", "-cp", self.solute_structure_gro_path,
                "-cs", self.solvent_structure_gro_path, "-o",
@@ -48,9 +61,9 @@ class Solvate512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-        # Remove temp files
-        filelist = [f for f in os.listdir(".") if f.startswith("#temp.") and
-                    f.endswith("#")]
 
-        for f in filelist:
-            os.remove(f)
+        # Tar new_topology
+        fu.tar_top(self.topology_out, self.topology_out_tar_path)
+
+        # Remove temp files
+        fu.rm_hash_bakup()

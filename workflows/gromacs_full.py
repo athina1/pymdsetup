@@ -114,7 +114,10 @@ def main():
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
-        p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
+        p2g = pdb2gmx.Pdb2gmx512(structure_pdb_path=p_scw.mut_pdb,
+                                 output_gro_path=p_p2g.gro,
+                                 output_top_path=p_p2g.top,
+                                 output_top_tar_path=p_p2g.tar,
                                  water_type=p_p2g.water_type,
                                  force_field=p_p2g.force_field,
                                  ignh=settings.str2bool(p_p2g.ignh),
@@ -125,7 +128,8 @@ def main():
         print 'step5:  ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         fu.create_dir(p_ec.path)
-        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro,
+        ec = editconf.Editconf512(structure_gro_path=p_p2g.gro,
+                                  output_gro_path=p_ec.gro,
                                   box_type=p_ec.box_type,
                                   distance_to_molecule=float(p_ec.distance_to_molecule),
                                   center_molecule=settings.str2bool(p_ec.center_molecule),
