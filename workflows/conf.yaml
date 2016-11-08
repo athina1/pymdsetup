@@ -85,8 +85,9 @@ step6_sol:
     err: sol.err
     gro: sol.gro
     top: sol.top
+    tar: sol_top.tar
   properties:
-    solute_structure_gro_path: spc216.gro
+    input_solvent_gro_path: spc216.gro
 
 # Step7: gppions -- Preprocessing: Add ions to neutralice the charge
 step7_gppions:
@@ -106,6 +107,7 @@ step8_gio:
     err: gio.err
     gro: gio.gro
     top: gio.top
+    tar: gio_top.tar
   properties:
     neutral: True
     # If neutral is True concentration value is not used

@@ -6,36 +6,81 @@ import shutil
 import glob
 import tarfile
 
-
 def create_dir(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     return dir_path
 
+def create_change_dir(dir_path):
+    create_dir(dir_path)
+    os.chdir(dir_path)
+    return dir_path
 
-def copy_ext(source_dir, dest_dir, ext):
+
+def rm_ext(ext, source_dir=None):
+    if source_dir is None:
+        source_dir = os.getcwd()
+    files = glob.iglob(os.path.join(source_dir, "*." + ext))
+    for f in files:
+        if os.path.isfile(f):
+            os.remove(f)
+
+
+def backup_ext(ext, source_dir=None):
+    if source_dir is None:
+        source_dir = os.getcwd()
+    files = glob.iglob(os.path.join(source_dir, "*." + ext))
+    for f in files:
+        if os.path.isfile(f):
+            shutil.move(f, f+".bkp")
+
+
+def copy_ext(dest_dir, ext, source_dir=None):
+    if not os.path.isdir(dest_dir):
+        dest_dir = os.path.dirname(dest_dir)
+    if source_dir is None:
+        source_dir = os.getcwd()
     files = glob.iglob(os.path.join(source_dir, "*." + ext))
     for f in files:
         if os.path.isfile(f):
             shutil.copy2(f, dest_dir)
 
 
+def mv_ext(dest_dir, ext, source_dir=None):
+    if not os.path.isdir(dest_dir):
+        dest_dir = os.path.dirname(dest_dir)
+    if source_dir is None:
+        source_dir = os.getcwd()
+    files = glob.iglob(os.path.join(source_dir, "*." + ext))
+    for f in files:
+        if os.path.isfile(f):
+            shutil.move(f, dest_dir)
+
+
 def tar_top(top_file, tar_file):
     files = glob.iglob(os.path.join(os.path.dirname(top_file), "*.itp"))
     with tarfile.open(tar_file, 'w') as tar:
         for f in files:
-            tar.add(f)
-        tar.add(top_file)
+            tar.add(f, arcname=os.path.basename(f))
+        tar.add(top_file, arcname=os.path.basename(top_file))
 
 
-def untar(tar_file, top_file):
-    dest_dir = os.path.diname(top_file)
+def untar_top(tar_file, dest_dir=None, top_file=None):
+    if dest_dir is None:
+        if top_file is not None:
+            dest_dir = os.path.dirname(top_file)
+    else:
+        if not os.path.isdir(dest_dir):
+            dest_dir = os.path.dirname(dest_dir)
+
     shutil.copy2(tar_file, dest_dir)
     new_tar_file = os.path.join(dest_dir, tar_file)
     with tarfile.open(new_tar_file) as tar:
         tar_name = next(name for name in tar.getnames() if name.endswith(".top"))
         tar.extractall(path=dest_dir)
-    shutil.copyfile(os.path.join(dest_dir, tar_name), top_file)
+    if top_file is not None:
+        shutil.copyfile(os.path.join(dest_dir, tar_name), top_file)
+    return os.path.join(dest_dir, tar_name)
 
 
 def rm_hash_bakup():

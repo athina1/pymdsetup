@@ -1,20 +1,22 @@
 """Python wrapper for the GROMACS genion module
 """
-import shutil
+
 try:
     from command_wrapper import cmd_wrapper
+    from tools import file_utils as fu
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
+    from pymdsetup.tools import file_utils as fu
 
 
 class Genion512(object):
     """Wrapper for the 5.1.2 version of the genion module
 
     Args:
-        tpr_path (str): Path to the input GROMACS portable run input TPR file.
-        output_gro_path (str): Path to the input GROMACS structure GRO file.
-        input_top (str): Path the input GROMACS topology TOP file.
-        output_top (str): Path the output GROMACS topology TOP file.
+        input_tpr_path (str): Path to the input portable run input TPR file.
+        output_gro_path (str): Path to the input structure GRO file.
+        input_top_tar_path (str): Path the input TOP topology in TAR format.
+        output_top_path (str): Path the output topology TOP file.
         replaced_group (str): Group of molecules that will be replaced by the
                               solvent.
         neutral (bool): Neutralize the charge of the system.
@@ -26,14 +28,15 @@ class Genion512(object):
         gmx_path (str): Path to the GROMACS executable binary.
     """
 
-    def __init__(self, tpr_path, output_gro_path, input_top, output_top,
-                 replaced_group="SOL", neutral=False, concentration=0.05,
-                 seed='None', log_path='None', error_path='None',
-                 gmx_path='None'):
-        self.tpr_path = tpr_path
+    def __init__(self, input_tpr_path, output_gro_path, input_top_tar_path,
+                 output_top_path, output_top_tar_path, replaced_group='SOL',
+                 neutral=False, concentration=0.05, seed=None,
+                 log_path=None, error_path=None, gmx_path=None):
+        self.input_tpr_path = input_tpr_path
         self.output_gro_path = output_gro_path
-        self.input_top = input_top
-        self.output_top = output_top
+        self.input_top_tar_path = input_top_tar_path
+        self.output_top_path = output_top_path
+        self.output_top_tar_path = output_top_tar_path
         self.replaced_group = replaced_group
         self.neutral = neutral
         self.concentration = concentration
@@ -45,11 +48,14 @@ class Genion512(object):
     def launch(self):
         """Launches the execution of the GROMACS genion module.
         """
-        shutil.copy(self.input_top, self.output_top)
-        gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
-        cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
-               self.tpr_path, "-o", self.output_gro_path,
-               "-p", self.output_top]
+        # Untar topology to topology_out
+        fu.untar_top(self.input_top_tar_path, top_file=self.output_top_path)
+
+        gmx = 'gmx' if self.gmx_path is None else self.gmx_path
+        cmd = ['echo', self.replaced_group, '|', gmx, 'genion',
+               '-s', self.input_tpr_path,
+               '-o', self.output_gro_path,
+               '-p', self.output_top_path]
 
         if self.neutral:
             cmd.append('-neutral')
@@ -57,9 +63,12 @@ class Genion512(object):
             cmd.append('-conc')
             cmd.append(str(self.concentration))
 
-        if self.seed != 'None':
+        if self.seed is not None:
             cmd.append('-seed')
             cmd.append(str(self.seed))
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+        # Tar new_topology
+        fu.tar_top(self.output_top_path, self.output_top_tar_path)

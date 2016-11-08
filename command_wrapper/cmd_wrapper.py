@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 """Python wrapper for command line
-
-@author: pau
 """
 import subprocess
-import os.path as op
-import shutil
 import os
 
 
@@ -14,13 +10,10 @@ class CmdWrapper(object):
     """
 
     def __init__(self, cmd, log_path=None, error_path=None):
-        self.log_path = log_path
-        if self.log_path == 'None':
-            self.log_path = None
-        self.error_path = error_path
-        if self.error_path == 'None':
-            self.error_path = None
+
         self.cmd = cmd
+        self.log_path = log_path
+        self.error_path = error_path
 
     def launch(self):
         cmd = " ".join(self.cmd)
@@ -49,15 +42,3 @@ class CmdWrapper(object):
             with open(self.error_path, 'w') as error_file:
                 if err is not None:
                     error_file.write(err)
-
-    def move_file_output(self, file_name, dest_dir):
-        if op.exists(file_name):
-                if not op.exists(op.join(dest_dir, file_name)):
-                    shutil.move(file_name, dest_dir)
-                else:
-                    n = 1
-                    while op.exists(op.join(dest_dir,
-                                            file_name + '.' + str(n))):
-                        n += 1
-                    shutil.move(file_name, op.join(dest_dir,
-                                                   file_name + '.' + str(n)))

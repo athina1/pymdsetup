@@ -1,16 +1,15 @@
 """Python wrapper module for SCWRL
 """
 import re
-import os
-from os.path import join as opj
-import shutil
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
 
 try:
     from command_wrapper import cmd_wrapper
+    from tools import file_utils as fu
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
+    from pymdsetup.tools import file_utils as fu
 
 
 class Scwrl4(object):
@@ -26,8 +25,8 @@ class Scwrl4(object):
         scwrl_path (str): Path to the SCWRL executable binary.
     """
 
-    def __init__(self, pdb_path, output_pdb_path, mutation, log_path='None',
-                 error_path='None', scwrl_path='None'):
+    def __init__(self, pdb_path, output_pdb_path, mutation,
+                 log_path=None, error_path=None, scwrl_path=None):
         self.pdb_path = pdb_path
         self.output_pdb_path = output_pdb_path
         pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
@@ -71,13 +70,8 @@ class Scwrl4(object):
         prepared_file_path = self.output_pdb_path + '.scwrl4.prepared.pdb'
         w.save(prepared_file_path)
 
-        scrwl = "Scwrl4" if self.scwrl_path == 'None' else self.scwrl_path
-        cmd = [scrwl, "-i", prepared_file_path, "-o", self.output_pdb_path]
+        scrwl = 'Scwrl4' if self.scwrl_path is None else self.scwrl_path
+        cmd = [scrwl, '-i', prepared_file_path, '-o', self.output_pdb_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-
-        # Move hot.grp file
-        #f = 'hot.grp'
-        #if os.path.exists(f):
-        #    shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))
