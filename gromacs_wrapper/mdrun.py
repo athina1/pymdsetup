@@ -48,7 +48,7 @@ class Mdrun512(object):
         if not self.output_cpt_path is None:
             cmd.append('-cpo')
             cmd.append(self.output_cpt_path)
-        cmd + ['-c', self.output_gro_path, '-e', self.output_edr_path]
+        cmd += ['-c', self.output_gro_path, '-e', self.output_edr_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()

@@ -18,6 +18,7 @@ try:
     import mmb_api.pdb as pdb
     import mmb_api.uniprot as uniprot
     import gromacs_wrapper.rms as rms
+    import gnuplot_wrapper.gnuplot as gnuplot
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
@@ -31,6 +32,7 @@ except ImportError:
     from pymdsetup.mmb_api import pdb
     from pymdsetup.mmb_api import uniprot
     from pymdsetup.scwrl_wrapper import scwrl
+    from pymdsetup.gnuplot_wrapper import gnuplot
 
 
 def main():
@@ -42,6 +44,7 @@ def main():
     mdp_dir = os.path.join(root_dir, 'mdp')
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
+    gnuplot_path = prop['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     # Testing purposes: Remove last Test
     if os.path.exists(prop['workflow_path']):
@@ -85,7 +88,7 @@ def main():
         mutations_limit = min(len(mutations), int(prop['mutations_limit']))
     print 'Number of mutations to be modelled: ' + str(mutations_limit)
 
-    rmsd_xvg_path_list = []
+    rmsd_xvg_path_dict = {}
     mutations_counter = 0
     for mut in mutations:
         if mutations_counter == mutations_limit:
@@ -99,9 +102,10 @@ def main():
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         fu.create_change_dir(p_scw.path)
-        scw = scwrl.Scwrl4(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
-                           scwrl_path=scwrl_path, log_path=p_scw.out,
-                           error_path=p_scw.err)
+        scw = scwrl.Scwrl4(input_pdb_path=p_mmbpdb.pdb,
+                           output_pdb_path=p_scw.mut_pdb,
+                           mutation=mut,
+                           error_path=p_scw.err, log_path=p_scw.out, scwrl_path=scwrl_path)
         scw.launch()
 
         print 'step4:  p2g ------ Create gromacs topology'
@@ -267,10 +271,19 @@ def main():
                           output_xvg_path=p_rmsd.xvg,
                           log_path=p_rmsd.out, error_path=p_rmsd.err, gmx_path=gmx_path)
         rmsd.launch()
-        rmsd_xvg_path_list.append(p_rmsd.xvg)
+        rmsd_xvg_path_dict[mut] = p_rmsd.xvg
 
         print '***************************************************************'
         print ''
+
+    print ('step18: gnuplot ----- Creating RMSD plot')
+    p_gnuplot = conf.step_prop('step18_gnuplot')
+    fu.create_change_dir(p_gnuplot.path)
+    gplot = gnuplot.Gnuplot46(input_xvg_path_dict=rmsd_xvg_path_dict,
+                              output_png_path=p_gnuplot.png,
+                              output_plotscript_path=p_gnuplot.plotscript,
+                              log_path=p_gnuplot.out, error_path=p_gnuplot.err, gnuplot_path=gnuplot_path)
+    gplot.launch()
 
 
 if __name__ == '__main__':

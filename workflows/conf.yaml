@@ -6,18 +6,21 @@ gmx_path: /usr/local/gromacs/bin/gmx
 scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
 workflow_path: /home/pau/projects/pymdsetup/testworkflow
 mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
+gnuplot_path: /usr/bin/gnuplot
 
 # MACOS
 # gmx_path: /usr/local/bin/gmx
 # scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
 # workflow_path: /Users/pau/Desktop/test
 # mdp_path: /Users/pau/projects/pymdsetup/workflows/mdp
+# gnuplot_path: /usr/bin/gnuplot
 
 # PyCOMPSs VM
 # gmx_path: /usr/local/gromacs/bin/gmx
 # scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
 # workflow_path: /home/compss/pymdsetup/testworkflow
 # mdp_path: /home/compss/pymdsetup/workflows/mdp/
+# gnuplot_path: /usr/bin/gnuplot
 ##############################################################################
 
 # PDB code
@@ -206,3 +209,12 @@ step17_rmsd:
     out: rmsd.out
     err: rmsd.err
     xvg: rmsd.xvg
+
+# Step18: gnuplot ----- Creating RMSD plot
+step18_gnuplot:
+  paths:
+    path: step18_gnuplot
+    out: gplot.out
+    err: gplot.err
+    png: gplot.png
+    plotscript: gplot.plotscript

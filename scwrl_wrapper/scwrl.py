@@ -16,7 +16,7 @@ class Scwrl4(object):
     """Wrapper class for the 4.0 version of SCWRL.
 
     Args:
-        pdb_path (str): Path to the input PDB file.
+        input_pdb_path (str): Path to the input PDB file.
         output_pdb_path (srt): Path to the output mutated PDB file.
         mutation (str): String representing the mutation. ie: A.His11Asp
         log_path (str): Path to the file where the SCWRL log will be stored.
@@ -25,9 +25,9 @@ class Scwrl4(object):
         scwrl_path (str): Path to the SCWRL executable binary.
     """
 
-    def __init__(self, pdb_path, output_pdb_path, mutation,
+    def __init__(self, input_pdb_path, output_pdb_path, mutation,
                  log_path=None, error_path=None, scwrl_path=None):
-        self.pdb_path = pdb_path
+        self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
         pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
                               "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
@@ -41,7 +41,7 @@ class Scwrl4(object):
         """
         # Read structure with Biopython
         parser = PDBParser(PERMISSIVE=1)
-        st = parser.get_structure('s', self.pdb_path)  # s random id never used
+        st = parser.get_structure('s', self.input_pdb_path)  # s random id never used
 
         # Remove the side chain of the AA to be mutated
         chain = self.mutation['chain']
