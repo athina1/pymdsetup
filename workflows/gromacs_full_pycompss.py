@@ -2,10 +2,9 @@
 """Gromacs full setup from a pdb
 """
 import os
+import sys
 import shutil
 from os.path import join as opj
-import random
-import tempfile
 
 try:
     import tools.file_utils as fu
@@ -44,44 +43,41 @@ except ImportError:
 
 
 def main():
-    # COMPSS VM
-    conf = settings.YamlReader(yaml_path=('/home/compss'
-                                          '/pymdsetup/workflows/conf.yaml'))
 
+    root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
+    conf_file_path = os.path.join(root_dir, 'conf.yaml')
+    conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
-    mdp_dir = prop['mdp_path']
+    mdp_dir = os.path.join(root_dir, 'mdp')
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
+    gnuplot_path = prop['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     # Testing purposes: Remove last Test
     if os.path.exists(prop['workflow_path']):
         shutil.rmtree(prop['workflow_path'])
     # Create the wokflow working dir
-    fu.create_dir(os.path.abspath(prop['workflow_path']))
+    fu.create_change_dir(os.path.abspath(prop['workflow_path']))
 
     print ''
     print ''
     print '_______GROMACS FULL WORKFLOW_______'
     print ''
     print ''
+
     print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
     p_mmbpdb = conf.step_prop('step1_mmbpdb')
-    fu.create_dir(p_mmbpdb.path)
+    fu.create_change_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
 
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-
     mutations = mmbuniprot.get_pdb_variants()
+
+    # This is part of the code prints some feedback to the user
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
-
-########################### DEMO #############################
-    if mmbuniprot.get_uniprot() == 'P00698':
-        mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
-##############################################################
-
     if mutations is None or len(mutations) == 0:
         print (prop['pdb_code'] +
                " " + mmbuniprot.get_uniprot() + ": No variants")
@@ -92,12 +88,14 @@ def main():
         print ('     Mapped to ' + str(len(mutations)) + ' ' +
                input_pdb_code + ' PDB variants')
 
-    if prop['mutations_limit'] == 'None':
+    # Number of mutations to be modelled
+    if prop['mutations_limit'] is None:
         mutations_limit = len(mutations)
     else:
         mutations_limit = min(len(mutations), int(prop['mutations_limit']))
-
     print 'Number of mutations to be modelled: ' + str(mutations_limit)
+
+    rmsd_xvg_path_dict = {}
     mutations_counter = 0
     for mut in mutations:
         if mutations_counter == mutations_limit:
@@ -107,10 +105,11 @@ def main():
         print '___________'
         print str(mutations_counter) + '/' + str(mutations_limit) + ' ' + mut
         print '-----------'
+
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
-        fu.create_dir(p_scw.path)
-        scwrlPyCOMPSs(pdb_path=p_mmbpdb.pdb,
+        scwrlPyCOMPSs(task_path=p_scw.path,
+                      pdb_path=p_mmbpdb.pdb,
                       output_pdb_path=p_scw.mut_pdb,
                       mutation=mut,
                       log_path=p_scw.out,
@@ -317,14 +316,13 @@ def main():
         fu.rm_temp()
 
 
-
-
 ############################## PyCOMPSs functions #############################
-
-@task(pdb_path=FILE_IN, output_pdb_path=FILE_OUT, mutation=IN,
+@task(task_path=IN, pdb_path=FILE_IN, output_pdb_path=FILE_OUT, mutation=IN,
       log_path=FILE_OUT, error_path=FILE_OUT, scwrl_path=IN)
-def scwrlPyCOMPSs(pdb_path, output_pdb_path, mutation, log_path='None',
-                  error_path='None', scwrl_path='None'):
+def scwrlPyCOMPSs(task_path, pdb_path, output_pdb_path, mutation,
+                  log_path='None', error_path='None', scwrl_path='None'):
+
+    fu.create_change_dir(p_scw.path)
     """ Launches SCWRL 4 using the PyCOMPSs library."""
     scwrl.Scwrl4(pdb_path, output_pdb_path, mutation, log_path, error_path,
                  scwrl_path).launch()
