@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Gromacs full setup from a pdb
 """
 import os
@@ -43,15 +42,15 @@ except ImportError:
 
 
 def main():
-
+    sys_paths = 'pycompss_vm'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
-    mdp_dir = os.path.join(root_dir, 'mdp')
-    gmx_path = prop['gmx_path']
-    scwrl_path = prop['scwrl4_path']
-    gnuplot_path = prop['gnuplot_path']
+    mdp_dir = prop[sys_paths]['mdp_path']
+    gmx_path = prop[sys_paths]['gmx_path']
+    scwrl_path = prop[sys_paths]['scwrl4_path']
+    gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     # Testing purposes: Remove last Test
     if os.path.exists(prop['workflow_path']):
