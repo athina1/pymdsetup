@@ -46,6 +46,7 @@ def main():
     scwrl_path = prop['scwrl4_path']
     gnuplot_path = prop['gnuplot_path']
     input_pdb_code = prop['pdb_code']
+    workflow_path = prop[sys_paths]['workflow_path']
     # Testing purposes: Remove last Test
     if os.path.exists(prop['workflow_path']):
         shutil.rmtree(prop['workflow_path'])

@@ -37,7 +37,7 @@ class YamlReader(object):
         with open(self.yaml_path, 'r') as stream:
             return yaml.load(stream)
 
-    def step_prop(self, step, mut=None):
+    def step_prop(self, step, workflow_path, mut=None):
 
         class Dict2Obj(object):
             def __init__(self, dictionary):
@@ -48,9 +48,9 @@ class YamlReader(object):
         dp = self.properties[step]
         if 'paths' in dp:
             if mut is None:
-                dp['path'] = opj(self.properties['workflow_path'], dp['paths']['path'])
+                dp['path'] = opj(workflow_path, dp['paths']['path'])
             else:
-                dp['path'] = opj(self.properties['workflow_path'], mut, dp['paths']['path'])
+                dp['path'] = opj(workflow_path, mut, dp['paths']['path'])
             for key in dp['paths']:
                 if key != 'path':
                     dp[key] = opj(dp['path'], dp['paths'][key])
