@@ -171,7 +171,7 @@ def main():
                        input_cpt_path='None',
                        log_path=p_gppions.out, error_path=p_gppions.err, gmx_path=gmx_path)
 
-        print 'step8:  gio -- Running: Add ions to neutralice the charge'
+        print 'step8:  gio ------ Running: Add ions to neutralice the charge'
         p_gio = conf.step_prop('step8_gio', workflow_path, mut)
         genionPyCOMPSs(dependency_file_in=opj(p_gppions.path, 'step7_gppions.task'),
                        dependency_file_out=opj(p_gppions.path, 'step8_gio.task'),
@@ -200,7 +200,7 @@ def main():
                        log_path=p_gppmin.out, error_path=p_gppmin.err, gmx_path=gmx_path)
 
         print 'step10: mdmin ---- Running: Energy minimization'
-        p_mdmin = conf.step_prop('step10_mdmin',workflow_path, mut)
+        p_mdmin = conf.step_prop('step10_mdmin', workflow_path, mut)
         mdrunPyCOMPSs(dependency_file_in=opj(p_gppmin.path, 'step9_gppmin.task'),
                       dependency_file_out=opj(p_mdmin.path, 'step10_mdmin.task'),
                       task_path=p_mdmin.path,
@@ -212,103 +212,87 @@ def main():
                       output_cpt_path='None',
                       log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path)
 
-        #
-        # print ('step11: gppnvt --- Preprocessing: nvt '
-        #        'constant number of molecules, volume and temp')
-        # p_gppnvt = conf.step_prop('step11_gppnvt', mut)
-        # fu.create_dir(p_gppnvt.path)
-        # dummy_cpt_path = opj(p_gppmin.path,
-        #                      'dummy' + str(random.randint(0, 1000000)) +
-        #                      '.cpt')
-        # with open(dummy_cpt_path, 'w+') as dummy_file:
-        #     dummy_file.write('Useless file. Please, remove it')
-        # shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']),
-        #             p_gppnvt.mdp)
-        # gromppPyCOMPSs(mdp_path=p_gppnvt.mdp,
-        #                gro_path=p_mdmin.gro,
-        #                top_path=p_gio.top,
-        #                output_tpr_path=p_gppnvt.tpr,
-        #                use_cpt=False,
-        #                cpt_path=dummy_cpt_path,
-        #                gmx_path=gmx_path,
-        #                log_path=p_gppnvt.out,
-        #                error_path=p_gppnvt.err)
-        #
-        # print ('step12: mdnvt ---- Running: nvt '
-        #        'constant number of molecules, volume and temp')
-        # p_mdnvt = conf.step_prop('step12_mdnvt', mut)
-        # fu.create_dir(p_mdnvt.path)
-        # mdrunPyCOMPSs(tpr_path=p_gppnvt.tpr,
-        #               output_trr_path=p_mdnvt.trr,
-        #               output_gro_path=p_mdnvt.gro,
-        #               output_edr_path=p_mdnvt.edr,
-        #               output_xtc_path=p_mdnvt.xtc,
-        #               output_cpt_path=p_mdnvt.cpt,
-        #               log_path=p_mdnvt.out,
-        #               error_path=p_mdnvt.err,
-        #               gmx_path=gmx_path)
-        #
-        # print ('step13: gppnpt --- Preprocessing: npt '
-        #        'constant number of molecules, pressure and temp')
-        # p_gppnpt = conf.step_prop('step13_gppnpt', mut)
-        # fu.create_dir(p_gppnpt.path)
-        # shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']),
-        #             p_gppnpt.mdp)
-        # gromppPyCOMPSs(mdp_path=p_gppnpt.mdp,
-        #                gro_path=p_mdnvt.gro,
-        #                top_path=p_gio.top,
-        #                output_tpr_path=p_gppnpt.tpr,
-        #                use_cpt=True,
-        #                cpt_path=p_mdnvt.cpt,
-        #                gmx_path=gmx_path,
-        #                log_path=p_gppnpt.out,
-        #                error_path=p_gppnpt.err)
-        #
-        # print ('step14: mdnpt ---- Running: npt '
-        #        'constant number of molecules, pressure and temp')
-        # p_mdnpt = conf.step_prop('step14_mdnpt', mut)
-        # fu.create_dir(p_mdnpt.path)
-        # mdrunPyCOMPSs(tpr_path=p_gppnpt.tpr,
-        #               output_trr_path=p_mdnpt.trr,
-        #               output_gro_path=p_mdnpt.gro,
-        #               output_edr_path=p_mdnpt.edr,
-        #               output_xtc_path=p_mdnpt.xtc,
-        #               output_cpt_path=p_mdnpt.cpt,
-        #               log_path=p_mdnpt.out,
-        #               error_path=p_mdnpt.err,
-        #               gmx_path=gmx_path)
-        #
-        # print ('step15: gppeq ---- '
-        #        'Preprocessing: 1ns Molecular dynamics Equilibration')
-        # p_gppeq = conf.step_prop('step15_gppeq', mut)
-        # fu.create_dir(p_gppeq.path)
-        # shutil.copy(opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']),
-        #             p_gppeq.mdp)
-        # gromppPyCOMPSs(mdp_path=p_gppeq.mdp,
-        #                gro_path=p_mdnpt.gro,
-        #                top_path=p_gio.top,
-        #                output_tpr_path=p_gppeq.tpr,
-        #                use_cpt=True,
-        #                cpt_path=p_mdnpt.cpt,
-        #                gmx_path=gmx_path,
-        #                log_path=p_gppeq.out,
-        #                error_path=p_gppeq.err)
-        #
-        # print ('step16: mdeq ----- '
-        #        'Running: 1ns Molecular dynamics Equilibration')
-        # p_mdeq = conf.step_prop('step16_mdeq', mut)
-        # fu.create_dir(p_mdeq.path)
-        # mdrunPyCOMPSs(tpr_path=p_gppeq.tpr,
-        #               output_trr_path=p_mdeq.trr,
-        #               output_gro_path=p_mdeq.gro,
-        #               output_edr_path=p_mdeq.edr,
-        #               output_xtc_path=p_mdeq.xtc,
-        #               output_cpt_path=p_mdeq.cpt,
-        #               log_path=p_mdeq.out,
-        #               error_path=p_mdeq.err,
-        #               gmx_path=gmx_path)
-        #
-        # fu.rm_temp()
+        print ('step11: gppnvt --- Preprocessing: nvt '
+               'constant number of molecules, volume and temp')
+        p_gppnvt = conf.step_prop('step11_gppnvt', workflow_path, mut)
+        gromppPyCOMPSs(dependency_file_in=opj(p_mdmin.path, 'step10_mdmin.task'),
+                       dependency_file_out=opj(p_gppnvt.path, 'step11_gppnvt.task'),
+                       task_path=p_gppnvt.path,
+                       input_mdp_path=opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']),
+                       input_gro_path=p_mdmin.gro,
+                       input_top_tar_path=p_gio.tar,
+                       output_tpr_path=p_gppnvt.tpr,
+                       input_cpt_path='None',
+                       log_path=p_gppnvt.out, error_path=p_gppnvt.err, gmx_path=gmx_path)
+
+        print ('step12: mdnvt ---- Running: nvt '
+               'constant number of molecules, volume and temp')
+        p_mdnvt = conf.step_prop('step12_mdnvt', workflow_path, mut)
+        mdrunPyCOMPSs(dependency_file_in=opj(p_gppnvt.path, 'step11_gppnvt.task'),
+                      dependency_file_out=opj(p_mdnvt.path, 'step12_mdnvt.task'),
+                      task_path=p_mdnvt.path,
+                      input_tpr_path=p_gppnvt.tpr,
+                      output_gro_path=p_mdnvt.gro,
+                      output_trr_path=p_mdnvt.trr,
+                      output_edr_path=p_mdnvt.edr,
+                      output_xtc_path=p_mdnvt.xtc,
+                      output_cpt_path=p_mdnvt.cpt,
+                      log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path)
+
+        print ('step13: gppnpt --- Preprocessing: npt '
+               'constant number of molecules, pressure and temp')
+        p_gppnpt = conf.step_prop('step13_gppnpt', workflow_path, mut)
+        gromppPyCOMPSs(dependency_file_in=opj(p_mdnvt.path, 'step12_mdnvt.task'),
+                       dependency_file_out=opj(p_gppnpt.path, 'step13_gppnpt.task'),
+                       task_path=p_gppnpt.path,
+                       input_mdp_path=opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']),
+                       input_gro_path=p_mdnvt.gro,
+                       input_top_tar_path=p_gio.tar,
+                       output_tpr_path=p_gppnpt.tpr,
+                       input_cpt_path=p_mdnvt.cpt,
+                       log_path=p_gppnpt.out, error_path=p_gppnpt.err, gmx_path=gmx_path,)
+
+        print ('step14: mdnpt ---- Running: npt '
+               'constant number of molecules, pressure and temp')
+        p_mdnpt = conf.step_prop('step14_mdnpt', workflow_path, mut)
+        mdrunPyCOMPSs(dependency_file_in=opj(p_gppnpt.path, 'step13_gppnpt.task'),
+                      dependency_file_out=opj(p_mdnpt.path, 'step14_mdnpt.task'),
+                      task_path=p_mdnpt.path,
+                      input_tpr_path=p_gppnpt.tpr,
+                      output_gro_path=p_mdnpt.gro,
+                      output_trr_path=p_mdnpt.trr,
+                      output_edr_path=p_mdnpt.edr,
+                      output_xtc_path=p_mdnpt.xtc,
+                      output_cpt_path=p_mdnpt.cpt,
+                      log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path)
+
+        print ('step15: gppeq ---- '
+               'Preprocessing: 1ns Molecular dynamics Equilibration')
+        p_gppeq = conf.step_prop('step15_gppeq', workflow_path, mut)
+        gromppPyCOMPSs(dependency_file_in=opj(p_mdnpt.path, 'step14_mdnpt.task'),
+                       dependency_file_out=opj(p_gppeq.path, 'step15_gppeq.task'),
+                       task_path=p_gppeq.path,
+                       input_mdp_path=opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']),
+                       input_gro_path=p_mdnpt.gro,
+                       input_top_tar_path=p_gio.tar,
+                       output_tpr_path=p_gppeq.tpr,
+                       input_cpt_path=p_mdnpt.cpt,
+                       log_path=p_gppeq.out, error_path=p_gppeq.err, gmx_path=gmx_path)
+
+        print ('step16: mdeq ----- '
+               'Running: 1ns Molecular dynamics Equilibration')
+        p_mdeq = conf.step_prop('step16_mdeq', workflow_path, mut)
+        mdrunPyCOMPSs(dependency_file_in=opj(p_gppeq.path, 'step15_gppeq.task'),
+                      dependency_file_out=opj(p_mdeq.path, 'step16_mdeq.task'),
+                      task_path=p_mdeq.path,
+                      input_tpr_path=p_gppeq.tpr,
+                      output_gro_path=p_mdeq.gro,
+                      output_trr_path=p_mdeq.trr,
+                      output_edr_path=p_mdeq.edr,
+                      output_xtc_path=p_mdeq.xtc,
+                      output_cpt_path=p_mdeq.cpt,
+                      log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path)
+
 
 
 ############################## PyCOMPSs functions #############################
@@ -502,13 +486,13 @@ def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
     output_xtc_path = None if output_xtc_path.lower() == 'none' else output_xtc_path
     output_cpt_path = None if output_cpt_path.lower() == 'none' else output_cpt_path
     fu.create_change_dir(task_path)
-    mdrun.Mdrun512(input_tpr_path,
-                   output_gro_path,
-                   output_trr_path,
-                   output_edr_path,
-                   output_xtc_path,
-                   output_cpt_path,
-                   log_path, error_path, gmx_path).launch()
+    mdrun.Mdrun512(input_tpr_path=input_tpr_path,
+                   output_gro_path=output_gro_path,
+                   output_trr_path=output_trr_path,
+                   output_edr_path=output_edr_path,
+                   output_xtc_path=output_xtc_path,
+                   output_cpt_path=output_cpt_path,
+                   log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
     open(dependency_file_out, 'a').close()
 
 ##############################################################################
