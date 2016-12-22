@@ -36,22 +36,22 @@ except ImportError:
 
 
 def main():
-
+    sys_paths = 'linux'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
-    mdp_dir = os.path.join(root_dir, 'mdp')
-    gmx_path = prop['gmx_path']
-    scwrl_path = prop['scwrl4_path']
-    gnuplot_path = prop['gnuplot_path']
+    mdp_dir = prop[sys_paths]['mdp_path']
+    gmx_path = prop[sys_paths]['gmx_path']
+    scwrl_path = prop[sys_paths]['scwrl4_path']
+    gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     workflow_path = prop[sys_paths]['workflow_path']
     # Testing purposes: Remove last Test
-    if os.path.exists(prop['workflow_path']):
-        shutil.rmtree(prop['workflow_path'])
+    if os.path.exists(workflow_path):
+        shutil.rmtree(workflow_path)
     # Create the wokflow working dir
-    fu.create_change_dir(os.path.abspath(prop['workflow_path']))
+    fu.create_change_dir(os.path.abspath(workflow_path))
 
     print ''
     print ''
@@ -160,7 +160,6 @@ def main():
         print 'step8:  gio ------ Running: Add ions to neutralice the charge'
         p_gio = conf.step_prop('step8_gio', mut)
         fu.create_change_dir(p_gio.path)
-        fu.copy_ext(p_p2g.path, p_gio.path, 'itp')
         gio = genion.Genion512(input_tpr_path=p_gppions.tpr,
                                output_gro_path=p_gio.gro,
                                input_top_tar_path=p_sol.tar,
@@ -218,8 +217,6 @@ def main():
                'constant number of molecules, pressure and temp')
         p_gppnpt = conf.step_prop('step13_gppnpt', mut)
         fu.create_change_dir(p_gppnpt.path)
-        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']),
-                    p_gppnpt.mdp)
         gppnpt = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']),
                                   input_gro_path=p_mdnvt.gro,
                                   input_top_tar_path=p_gio.tar,
