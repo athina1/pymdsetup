@@ -124,7 +124,6 @@ def main():
 
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', workflow_path, mut)
-
         pdb2gmxPyCOMPSs(dependency_file_in=opj(p_scw.path, 'step3_scw.task'),
                         dependency_file_out=opj(p_p2g.path, 'step4_p2g.task'),
                         task_path=p_p2g.path,
@@ -299,8 +298,8 @@ def main():
 
         print ('step17: rmsd ----- Computing RMSD')
         p_rmsd = conf.step_prop('step17_rmsd', workflow_path, mut)
-        rmsdPyCOMPSs(dependency_file_in=opj(p_gppeq.path, 'step16_mdeq.task'),
-                     dependency_file_out=opj(p_mdeq.path, 'step17_rmsd.task'),
+        rmsdPyCOMPSs(dependency_file_in=opj(p_mdeq.path, 'step16_mdeq.task'),
+                     dependency_file_out=opj(p_rmsd.path, 'step17_rmsd.task'),
                      task_path=p_rmsd.path,
                      input_gro_path=p_gio.gro,
                      input_trr_path=p_mdeq.trr,
@@ -517,11 +516,11 @@ def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                  input_trr_path,
                  output_xvg_path,
                  log_path, error_path, gmx_path):
+    fu.create_change_dir(task_path)
     rms.Rms512(input_gro_path=input_gro_path,
                input_trr_path=input_trr_path,
                output_xvg_path=output_xvg_path,
                log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
-
     open(dependency_file_out, 'a').close()
 
 ##############################################################################
