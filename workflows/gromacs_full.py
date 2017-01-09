@@ -46,11 +46,12 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
+    workflow_path = prop[sys_paths]['workflow_path']
     # Testing purposes: Remove last Test
-    if os.path.exists(prop['workflow_path']):
-        shutil.rmtree(prop['workflow_path'])
+    if os.path.exists(workflow_path):
+        shutil.rmtree(workflow_path)
     # Create the wokflow working dir
-    fu.create_change_dir(os.path.abspath(prop['workflow_path']))
+    fu.create_change_dir(os.path.abspath(workflow_path))
 
     print ''
     print ''
@@ -60,7 +61,7 @@ def main():
 
     print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
-    p_mmbpdb = conf.step_prop('step1_mmbpdb')
+    p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
     fu.create_change_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
@@ -100,7 +101,7 @@ def main():
         print '-----------'
 
         print 'step3:  scw ------ Model mutation'
-        p_scw = conf.step_prop('step3_scw', mut)
+        p_scw = conf.step_prop('step3_scw', workflow_path, mut)
         fu.create_change_dir(p_scw.path)
         scw = scwrl.Scwrl4(input_pdb_path=p_mmbpdb.pdb,
                            output_pdb_path=p_scw.mut_pdb,
@@ -109,7 +110,7 @@ def main():
         scw.launch()
 
         print 'step4:  p2g ------ Create gromacs topology'
-        p_p2g = conf.step_prop('step4_p2g', mut)
+        p_p2g = conf.step_prop('step4_p2g', workflow_path, mut)
         fu.create_change_dir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(structure_pdb_path=p_scw.mut_pdb,
                                  output_gro_path=p_p2g.gro,
@@ -123,7 +124,7 @@ def main():
         p2g.launch()
 
         print 'step5:  ec ------- Define box dimensions'
-        p_ec = conf.step_prop('step5_ec', mut)
+        p_ec = conf.step_prop('step5_ec', workflow_path, mut)
         fu.create_change_dir(p_ec.path)
         ec = editconf.Editconf512(input_gro_path=p_p2g.gro,
                                   output_gro_path=p_ec.gro,
@@ -134,7 +135,7 @@ def main():
         ec.launch()
 
         print 'step6:  sol ------ Fill the box with water molecules'
-        p_sol = conf.step_prop('step6_sol', mut)
+        p_sol = conf.step_prop('step6_sol', workflow_path, mut)
         fu.create_change_dir(p_sol.path)
         sol = solvate.Solvate512(input_solute_gro_path=p_ec.gro,
                                  output_gro_path=p_sol.gro,
@@ -147,7 +148,7 @@ def main():
 
         print ('step7:  gppions -- Preprocessing: '
                'Add ions to neutralice the charge')
-        p_gppions = conf.step_prop('step7_gppions', mut)
+        p_gppions = conf.step_prop('step7_gppions', workflow_path, mut)
         fu.create_change_dir(p_gppions.path)
         gppions = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step7_gppions']['paths']['mdp']),
                                    input_gro_path=p_sol.gro,
@@ -157,7 +158,7 @@ def main():
         gppions.launch()
 
         print 'step8:  gio ------ Running: Add ions to neutralice the charge'
-        p_gio = conf.step_prop('step8_gio', mut)
+        p_gio = conf.step_prop('step8_gio', workflow_path, mut)
         fu.create_change_dir(p_gio.path)
         gio = genion.Genion512(input_tpr_path=p_gppions.tpr,
                                output_gro_path=p_gio.gro,
@@ -170,7 +171,7 @@ def main():
         gio.launch()
 
         print 'step9:  gppmin --- Preprocessing: Energy minimization'
-        p_gppmin = conf.step_prop('step9_gppmin', mut)
+        p_gppmin = conf.step_prop('step9_gppmin', workflow_path, mut)
         fu.create_change_dir(p_gppmin.path)
         gppmin = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step9_gppmin']['paths']['mdp']),
                                   input_gro_path=p_gio.gro,
@@ -180,7 +181,7 @@ def main():
         gppmin.launch()
 
         print 'step10: mdmin ---- Running: Energy minimization'
-        p_mdmin = conf.step_prop('step10_mdmin', mut)
+        p_mdmin = conf.step_prop('step10_mdmin', workflow_path, mut)
         fu.create_change_dir(p_mdmin.path)
         mdmin = mdrun.Mdrun512(input_tpr_path=p_gppmin.tpr,
                                output_trr_path=p_mdmin.trr,
@@ -191,7 +192,7 @@ def main():
 
         print ('step11: gppnvt --- Preprocessing: nvt '
                'constant number of molecules, volume and temp')
-        p_gppnvt = conf.step_prop('step11_gppnvt', mut)
+        p_gppnvt = conf.step_prop('step11_gppnvt', workflow_path, mut)
         fu.create_change_dir(p_gppnvt.path)
         gppnvt = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']),
                                   input_gro_path=p_mdmin.gro,
@@ -202,7 +203,7 @@ def main():
 
         print ('step12: mdnvt ---- Running: nvt '
                'constant number of molecules, volume and temp')
-        p_mdnvt = conf.step_prop('step12_mdnvt', mut)
+        p_mdnvt = conf.step_prop('step12_mdnvt', workflow_path, mut)
         fu.create_change_dir(p_mdnvt.path)
         mdnvt = mdrun.Mdrun512(input_tpr_path=p_gppnvt.tpr,
                                output_trr_path=p_mdnvt.trr,
@@ -214,7 +215,7 @@ def main():
 
         print ('step13: gppnpt --- Preprocessing: npt '
                'constant number of molecules, pressure and temp')
-        p_gppnpt = conf.step_prop('step13_gppnpt', mut)
+        p_gppnpt = conf.step_prop('step13_gppnpt', workflow_path, mut)
         fu.create_change_dir(p_gppnpt.path)
         gppnpt = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']),
                                   input_gro_path=p_mdnvt.gro,
@@ -226,7 +227,7 @@ def main():
 
         print ('step14: mdnpt ---- Running: npt '
                'constant number of molecules, pressure and temp')
-        p_mdnpt = conf.step_prop('step14_mdnpt', mut)
+        p_mdnpt = conf.step_prop('step14_mdnpt', workflow_path, mut)
         fu.create_change_dir(p_mdnpt.path)
         mdnpt = mdrun.Mdrun512(input_tpr_path=p_gppnpt.tpr,
                                output_trr_path=p_mdnpt.trr,
@@ -238,7 +239,7 @@ def main():
 
         print ('step15: gppeq ---- '
                'Preprocessing: 1ns Molecular dynamics Equilibration')
-        p_gppeq = conf.step_prop('step15_gppeq', mut)
+        p_gppeq = conf.step_prop('step15_gppeq', workflow_path, mut)
         fu.create_change_dir(p_gppeq.path)
         gppeq = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']),
                                  input_gro_path=p_mdnpt.gro,
@@ -250,7 +251,7 @@ def main():
 
         print ('step16: mdeq ----- '
                'Running: 1ns Molecular dynamics Equilibration')
-        p_mdeq = conf.step_prop('step16_mdeq', mut)
+        p_mdeq = conf.step_prop('step16_mdeq', workflow_path, mut)
         fu.create_change_dir(p_mdeq.path)
         mdeq = mdrun.Mdrun512(input_tpr_path=p_gppeq.tpr,
                               output_trr_path=p_mdeq.trr,
@@ -261,7 +262,7 @@ def main():
         mdeq.launch()
 
         print ('step17: rmsd ----- Computing RMSD')
-        p_rmsd = conf.step_prop('step17_rmsd', mut)
+        p_rmsd = conf.step_prop('step17_rmsd', workflow_path, mut)
         fu.create_change_dir(p_rmsd.path)
         rmsd = rms.Rms512(input_gro_path=p_gio.gro,
                           input_trr_path=p_mdeq.trr,
@@ -274,7 +275,7 @@ def main():
         print ''
 
     print ('step18: gnuplot ----- Creating RMSD plot')
-    p_gnuplot = conf.step_prop('step18_gnuplot')
+    p_gnuplot = conf.step_prop('step18_gnuplot', workflow_path)
     fu.create_change_dir(p_gnuplot.path)
     gplot = gnuplot.Gnuplot46(input_xvg_path_dict=rmsd_xvg_path_dict,
                               output_png_path=p_gnuplot.png,

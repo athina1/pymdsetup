@@ -43,7 +43,7 @@ except ImportError:
 
 def main():
     sys_paths = 'pycompss_vm'
-    root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
+    root_dir = "/home/compss/pymdsetup/workflows"
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
@@ -52,11 +52,12 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
+    workflow_path = prop[sys_paths]['workflow_path']
     # Testing purposes: Remove last Test
-    if os.path.exists(prop['workflow_path']):
-        shutil.rmtree(prop['workflow_path'])
+    if os.path.exists(workflow_path):
+        shutil.rmtree(workflow_path)
     # Create the wokflow working dir
-    fu.create_change_dir(os.path.abspath(prop['workflow_path']))
+    fu.create_change_dir(os.path.abspath(workflow_path))
 
     print ''
     print ''
@@ -66,7 +67,7 @@ def main():
 
     print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
-    p_mmbpdb = conf.step_prop('step1_mmbpdb')
+    p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
     fu.create_change_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
@@ -106,7 +107,7 @@ def main():
         print '-----------'
 
         print 'step3:  scw ------ Model mutation'
-        p_scw = conf.step_prop('step3_scw', mut)
+        p_scw = conf.step_prop('step3_scw', workflow_path, mut)
         scwrlPyCOMPSs(task_path=p_scw.path,
                       pdb_path=p_mmbpdb.pdb,
                       output_pdb_path=p_scw.mut_pdb,
@@ -116,7 +117,7 @@ def main():
                       scwrl_path=scwrl_path)
 
         print 'step4:  p2g ------ Create gromacs topology'
-        p_p2g = conf.step_prop('step4_p2g', mut)
+        p_p2g = conf.step_prop('step4_p2g', workflow_path, mut)
         fu.create_dir(p_p2g.path)
         pdb2gmxPyCOMPSs(structure_pdb_path=p_scw.mut_pdb,
                         output_path=p_p2g.gro,
