@@ -18,6 +18,7 @@ try:
     import mmb_api.pdb as pdb
     import mmb_api.uniprot as uniprot
     import gromacs_wrapper.rms as rms
+    import gnuplot_wrapper.gnuplot as gnuplot
     from command_wrapper import cmd_wrapper
     from dummies_pycompss.task import task
     from dummies_pycompss.parameter import *
@@ -36,6 +37,7 @@ except ImportError:
     from pymdsetup.mmb_api import uniprot
     from pymdsetup.gromacs_wrapper import rms
     from pymdsetup.command_wrapper import cmd_wrapper
+    from pymdsetup.gnuplot_wrapper import gnuplot
     from pymdsetup.dummies_pycompss.task import task
     from pymdsetup.dummies_pycompss.constraint import constraint
     from pymdsetup.dummies_pycompss.parameter import *
@@ -293,7 +295,15 @@ def main():
                       output_cpt_path=p_mdeq.cpt,
                       log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path)
 
-
+        print ('step17: rmsd ----- Computing RMSD')
+        p_rmsd = conf.step_prop('step17_rmsd', workflow_path, mut)
+        rmsdPyCOMPSs(dependency_file_in=opj(p_gppeq.path, 'step16_mdeq.task'),
+                     dependency_file_out=opj(p_mdeq.path, 'step17_rmsd.task'),
+                     task_path=p_rmsd.path,
+                     input_gro_path=p_gio.gro,
+                     input_trr_path=p_mdeq.trr,
+                     output_xvg_path=p_rmsd.xvg,
+                     log_path=p_rmsd.out, error_path=p_rmsd.err, gmx_path=gmx_path)
 
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
@@ -493,6 +503,23 @@ def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                    output_xtc_path=output_xtc_path,
                    output_cpt_path=output_cpt_path,
                    log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
+    open(dependency_file_out, 'a').close()
+
+@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+      input_gro_path=IN,
+      input_trr_path=IN,
+      output_xvg_path=IN,
+      log_path=IN, error_path=IN, gmx_path=IN)
+def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+                 input_gro_path,
+                 input_trr_path,
+                 output_xvg_path,
+                 log_path, error_path, gmx_path):
+    rms.Rms512(input_gro_path=input_gro_path,
+               input_trr_path=input_trr_path,
+               output_xvg_path=output_xvg_path,
+               log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
+
     open(dependency_file_out, 'a').close()
 
 ##############################################################################
