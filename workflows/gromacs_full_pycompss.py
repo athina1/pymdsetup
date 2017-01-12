@@ -20,9 +20,9 @@ try:
     import gromacs_wrapper.rms as rms
     import gnuplot_wrapper.gnuplot as gnuplot
     from command_wrapper import cmd_wrapper
-    from dummies_pycompss.task import task
-    from dummies_pycompss.parameter import *
-    from dummies_pycompss.constraint import constraint
+    from pycompss.api.parameter import *
+    from pycompss.api.task import task
+    from pycompss.api.constraint import constraint
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
@@ -79,7 +79,7 @@ def main():
 #    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
 #    mutations = mmbuniprot.get_pdb_variants()
     mutations = ['A.ALA1VAL','A.ARG2VAL']
-    open(opj(workflow_path, 'step2_mmbuniprot'), 'a').close()
+    open(opj(workflow_path, 'step2_mmbuniprot.task'), 'a').close()
 
     # This is part of the code prints some feedback to the user
     # print '     Uniprot code: ' + mmbuniprot.get_uniprot()
