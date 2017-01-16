@@ -1,4 +1,7 @@
-"""Gromacs full setup from a pdb
+"""
+Use only with systems with no internet access:
+Gromacs full setup from a pdb, using PyCOMPSs and preset values for the PDB
+structure and mutations.
 """
 import os
 import sys
@@ -44,7 +47,7 @@ except ImportError:
 
 
 def main():
-    sys_paths = 'pycompss_vm'
+    sys_paths = 'pycompss_MN'
     root_dir = "/home/compss/pymdsetup/workflows"
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
@@ -72,24 +75,26 @@ def main():
     p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
     fu.create_change_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
-    mmbpdb.get_pdb()
+#    mmbpdb.get_pdb()
+    shutil.copy('/home/compss/Downloads/2nsx.pdb', p_mmbpdb.pdb)
 
     print 'step2:  mmbuniprot -- Get mutations'
-    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.get_pdb_variants()
+#    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
+#    mutations = mmbuniprot.get_pdb_variants()
+    mutations = ['A.LYS58GLU','A.THR74ALA']
     open(opj(workflow_path, 'step2_mmbuniprot.task'), 'a').close()
 
-    This is part of the code prints some feedback to the user
-    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
-    if mutations is None or len(mutations) == 0:
-        print (prop['pdb_code'] +
-               " " + mmbuniprot.get_uniprot() + ": No variants")
-        return
-    else:
-        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-               ' uniprot variants')
-        print ('     Mapped to ' + str(len(mutations)) + ' ' +
-               input_pdb_code + ' PDB variants')
+    # This is part of the code prints some feedback to the user
+    # print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+    # if mutations is None or len(mutations) == 0:
+    #     print (prop['pdb_code'] +
+    #            " " + mmbuniprot.get_uniprot() + ": No variants")
+    #     return
+    # else:
+    #     print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+    #            ' uniprot variants')
+    #     print ('     Mapped to ' + str(len(mutations)) + ' ' +
+    #            input_pdb_code + ' PDB variants')
 
     # Number of mutations to be modelled
     if prop['mutations_limit'] is None:

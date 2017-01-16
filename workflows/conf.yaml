@@ -21,6 +21,13 @@ pycompss_vm:
   workflow_path: /home/compss/pymdsetup/testworkflow
   mdp_path: /home/compss/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
+
+pycompss_MN:
+  gmx_path: /usr/local/gromacs/bin/gmx
+  scwrl4_path: /home/compss/scwrl/scwrl4/Scwrl4
+  workflow_path: /home/compss/pymdsetup/testworkflow
+  mdp_path: /home/compss/pymdsetup/workflows/mdp/
+  gnuplot_path: /usr/bin/gnuplot
 ##############################################################################
 
 # PDB code
