@@ -23,11 +23,11 @@ pycompss_vm:
   gnuplot_path: /usr/bin/gnuplot
 
 pycompss_MN:
-  gmx_path: /usr/local/gromacs/bin/gmx
-  scwrl4_path: /home/compss/scwrl/scwrl4/Scwrl4
-  workflow_path: /home/compss/pymdsetup/testworkflow
-  mdp_path: /home/compss/pymdsetup/workflows/mdp/
-  gnuplot_path: /usr/bin/gnuplot
+  gmx_path: /gpfs/apps/MN3/GROMACS/5.1.2/INTEL/SERIAL/bin/gmx
+  scwrl4_path: /gpfs/home/bsc51/bsc51210/scwrl4/Scwrl4
+  workflow_path: /gpfs/home/bsc51/bsc51210/pymdsetup/testworkflow
+  mdp_path: /gpfs/home/bsc51/bsc51210/pymdsetup/workflows/mdp/
+  gnuplot_path: /gpfs/apps/MN3/GNUPLOT/5.0.1/bin/gnuplot
 ##############################################################################
 
 # PDB code
