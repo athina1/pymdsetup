@@ -48,7 +48,7 @@ except ImportError:
 
 def main():
     sys_paths = 'pycompss_MN'
-    root_dir = "/home/compss/pymdsetup/workflows"
+    root_dir = "/gpfs/home/bsc51/bsc51210/pymdsetup/workflows"
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
@@ -76,7 +76,7 @@ def main():
     fu.create_change_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
 #    mmbpdb.get_pdb()
-    shutil.copy('/home/compss/Downloads/2nsx.pdb', p_mmbpdb.pdb)
+    shutil.copy('/gpfs/home/bsc51/bsc51210/structure.pdb', p_mmbpdb.pdb)
 
     print 'step2:  mmbuniprot -- Get mutations'
 #    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
@@ -479,7 +479,7 @@ def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
     open(dependency_file_out, 'a').close()
 
 
-
+#@constraint(ComputingUnits="16")
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_tpr_path=IN,
       output_gro_path=IN,

@@ -23,7 +23,7 @@ pycompss_vm:
   gnuplot_path: /usr/bin/gnuplot
 
 pycompss_MN:
-  gmx_path: /gpfs/apps/MN3/GROMACS/5.1.2/INTEL/SERIAL/bin/gmx
+  gmx_path: /gpfs/home/bsc51/bsc51210/gromacs/bin/gmx
   scwrl4_path: /gpfs/home/bsc51/bsc51210/scwrl4/Scwrl4
   workflow_path: /gpfs/home/bsc51/bsc51210/pymdsetup/testworkflow
   mdp_path: /gpfs/home/bsc51/bsc51210/pymdsetup/workflows/mdp/
