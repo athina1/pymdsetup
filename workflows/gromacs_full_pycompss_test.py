@@ -309,6 +309,15 @@ def main():
                      output_xvg_path=p_rmsd.xvg,
                      log_path=p_rmsd.out, error_path=p_rmsd.err, gmx_path=gmx_path)
 
+    print ('step18: gnuplot ----- Creating RMSD plot')
+    p_gnuplot = conf.step_prop('step18_gnuplot', workflow_path)
+    gnuplotPyCOMPSs(dependency_file_in=opj(p_rmsd.path, 'step17_rmsd.task'),
+                    dependency_file_out=opj(p_gnuplot.path, 'step18_gnuplot.task'),
+                    task_path=p_gnuplot.path,
+                    input_xvg_path_dict=p_gio.gro,
+                    log_path=p_rmsd.out, error_path=p_rmsd.err, gnuplot_path=gnuplot_path)
+
+
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       pdb_path=IN,
@@ -388,6 +397,7 @@ def editconfPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
 
     open(dependency_file_out, 'a').close()
 
+
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_solute_gro_path=IN,
       output_gro_path=IN,
@@ -416,6 +426,7 @@ def solvatePyCOMPSs(dependency_file_in, dependency_file_out, task_path,
 
     open(dependency_file_out, 'a').close()
 
+
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_mdp_path=IN,
       input_gro_path=IN,
@@ -440,6 +451,7 @@ def gromppPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                      input_cpt_path,
                      log_path, error_path, gmx_path).launch()
     open(dependency_file_out, 'a').close()
+
 
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_tpr_path=IN,
@@ -509,6 +521,7 @@ def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                    log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
     open(dependency_file_out, 'a').close()
 
+
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_gro_path=IN,
       input_trr_path=IN,
@@ -524,6 +537,18 @@ def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                input_trr_path=input_trr_path,
                output_xvg_path=output_xvg_path,
                log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
+    open(dependency_file_out, 'a').close()
+
+
+@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+      input_xvg_path_dict=IN,
+      log_path=IN, error_path=IN, gnuplot_path=IN)
+def gnuplotPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+                    input_xvg_path_dict,
+                    log_path, error_path, gnuplot_path):
+    fu.create_change_dir(task_path)
+    gnuplot.Gnuplot46(input_xvg_path_dict=input_xvg_path_dict,
+                      log_path=log_path, error_path=error_path, gnuplot_path=gnuplot_path).launch()
     open(dependency_file_out, 'a').close()
 
 ##############################################################################
