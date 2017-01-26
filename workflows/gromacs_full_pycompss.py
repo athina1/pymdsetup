@@ -3,6 +3,7 @@
 import os
 import sys
 import shutil
+import time
 from os.path import join as opj
 
 try:
@@ -23,6 +24,7 @@ try:
     from pycompss.api.parameter import *
     from pycompss.api.task import task
     from pycompss.api.constraint import constraint
+    from pycompss.api.api import waitForAllTasks
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
@@ -44,6 +46,7 @@ except ImportError:
 
 
 def main():
+    start_time= time.time()
     sys_paths = 'pycompss_vm'
     root_dir = "/home/compss/pymdsetup/workflows"
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
@@ -304,15 +307,18 @@ def main():
                      output_xvg_path=p_rmsd.xvg,
                      log_path=p_rmsd.out, error_path=p_rmsd.err, gmx_path=gmx_path)
 
+        rmsd_xvg_path_dict[mut] = p_rmsd.xvg
+
+    waitForAllTasks()
     print ('step18: gnuplot ----- Creating RMSD plot')
     p_gnuplot = conf.step_prop('step18_gnuplot', workflow_path)
-    gnuplotPyCOMPSs(dependency_file_in=opj(p_rmsd.path, 'step17_rmsd.task'),
-                    dependency_file_out=opj(p_gnuplot.path, 'step18_gnuplot.task'),
-                    task_path=p_gnuplot.path,
-                    input_xvg_path_dict=p_gio.gro,
+    gnuplotPyCOMPSs(task_path=p_gnuplot.path,
+                    input_xvg_path_dict=rmsd_xvg_path_dict,
+                    output_png_path=p_gnuplot.png,
                     log_path=p_rmsd.out, error_path=p_rmsd.err, gnuplot_path=gnuplot_path)
-
-
+    png=compss_wait_on(p_gnuplot.png)
+    elapsed_time = time.time() - start_time
+    print "Tiempos: ", elapsed_time
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       pdb_path=IN,
@@ -534,16 +540,17 @@ def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
     open(dependency_file_out, 'a').close()
 
 
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+@task(task_path=IN,
       input_xvg_path_dict=IN,
+      output_png_path=FILE_OUT,
       log_path=IN, error_path=IN, gnuplot_path=IN)
-def gnuplotPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+def gnuplotPyCOMPSs(task_path,
                     input_xvg_path_dict,
+                    output_png_path,
                     log_path, error_path, gnuplot_path):
     fu.create_change_dir(task_path)
     gnuplot.Gnuplot46(input_xvg_path_dict=input_xvg_path_dict,
                       log_path=log_path, error_path=error_path, gnuplot_path=gnuplot_path).launch()
-    open(dependency_file_out, 'a').close()
 
 ##############################################################################
 
