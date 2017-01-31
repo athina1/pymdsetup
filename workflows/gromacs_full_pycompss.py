@@ -82,7 +82,7 @@ def main():
     mutations = mmbuniprot.get_pdb_variants()
     open(opj(workflow_path, 'step2_mmbuniprot.task'), 'a').close()
 
-    This is part of the code prints some feedback to the user
+#    This is part of the code prints some feedback to the user
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
     if mutations is None or len(mutations) == 0:
         print (prop['pdb_code'] +
