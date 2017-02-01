@@ -25,6 +25,7 @@ try:
     from pycompss.api.task import task
     from pycompss.api.constraint import constraint
     from pycompss.api.api import waitForAllTasks
+    from pycompss.api.api import compss_wait_on
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
@@ -312,13 +313,15 @@ def main():
     waitForAllTasks()
     print ('step18: gnuplot ----- Creating RMSD plot')
     p_gnuplot = conf.step_prop('step18_gnuplot', workflow_path)
-    gnuplotPyCOMPSs(task_path=p_gnuplot.path,
+    gnuplotPyCOMPSs(dependency_file_out=opj(p_gnuplot.path, 'step18_gnuplot.task'),
+                    task_path=p_gnuplot.path,
                     input_xvg_path_dict=rmsd_xvg_path_dict,
                     output_png_path=p_gnuplot.png,
-                    log_path=p_rmsd.out, error_path=p_rmsd.err, gnuplot_path=gnuplot_path)
-    png=compss_wait_on(p_gnuplot.png)
+                    output_plotscript_path=p_gnuplot.plotscript,
+                    log_path=p_gnuplot.out, error_path=p_gnuplot.err, gnuplot_path=gnuplot_path)
+    png=compss_wait_on(opj(p_gnuplot.path, 'step18_gnuplot.task'))
     elapsed_time = time.time() - start_time
-    print "Tiempos: ", elapsed_time
+    print "Elapsed time: ", elapsed_time
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       pdb_path=IN,
@@ -540,17 +543,24 @@ def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
     open(dependency_file_out, 'a').close()
 
 
-@task(task_path=IN,
+@task(dependency_file_out=FILE_OUT,
+      task_path=IN,
       input_xvg_path_dict=IN,
-      output_png_path=FILE_OUT,
+      output_png_path=IN,
+      output_plotscript_path=IN,
       log_path=IN, error_path=IN, gnuplot_path=IN)
-def gnuplotPyCOMPSs(task_path,
+def gnuplotPyCOMPSs(dependency_file_out,
+                    task_path,
                     input_xvg_path_dict,
                     output_png_path,
+                    output_plotscript_path,
                     log_path, error_path, gnuplot_path):
     fu.create_change_dir(task_path)
     gnuplot.Gnuplot46(input_xvg_path_dict=input_xvg_path_dict,
+                      output_png_path=output_png_path,
+                      output_plotscript_path=output_plotscript_path,
                       log_path=log_path, error_path=error_path, gnuplot_path=gnuplot_path).launch()
+    open(dependency_file_out, 'a').close()
 
 ##############################################################################
 
