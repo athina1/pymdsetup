@@ -494,7 +494,7 @@ def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                      log_path, error_path, gmx_path).launch()
     open(dependency_file_out, 'a').close()
 
-
+#@constraint(ComputingUnits = "16")
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_tpr_path=IN,
       output_gro_path=IN,
