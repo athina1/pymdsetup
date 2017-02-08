@@ -6,6 +6,7 @@ structure and mutations.
 import os
 import sys
 import shutil
+import time
 from os.path import join as opj
 
 try:
@@ -26,6 +27,8 @@ try:
     from pycompss.api.parameter import *
     from pycompss.api.task import task
     from pycompss.api.constraint import constraint
+    from pycompss.api.api import waitForAllTasks
+    from pycompss.api.api import compss_wait_on
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
@@ -47,6 +50,7 @@ except ImportError:
 
 
 def main():
+    start_time= time.time()
     sys_paths = 'pycompss_MN'
     root_dir = "/gpfs/home/bsc51/bsc51210/pymdsetup/workflows"
     conf_file_path = os.path.join(root_dir, 'conf.yaml')
@@ -57,11 +61,7 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
-    workflow_path = prop[sys_paths]['workflow_path']
-    # Testing purposes: Remove last Test
-    if os.path.exists(workflow_path):
-        shutil.rmtree(workflow_path)
-    # Create the wokflow working dir
+    workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
     fu.create_change_dir(os.path.abspath(workflow_path))
 
     print ''

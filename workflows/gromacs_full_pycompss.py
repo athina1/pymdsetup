@@ -1,5 +1,8 @@
-"""Gromacs full setup from a pdb
 """
+Gromacs full setup from a pdb
+"""
+
+
 import os
 import sys
 import shutil
@@ -58,11 +61,7 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
-    workflow_path = prop[sys_paths]['workflow_path']
-    # Testing purposes: Remove last Test
-    if os.path.exists(workflow_path):
-        shutil.rmtree(workflow_path)
-    # Create the wokflow working dir
+    workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
     fu.create_change_dir(os.path.abspath(workflow_path))
 
     print ''
@@ -494,7 +493,7 @@ def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                      log_path, error_path, gmx_path).launch()
     open(dependency_file_out, 'a').close()
 
-#@constraint(ComputingUnits = "16")
+#@constraint(ComputingUnits="16")
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       input_tpr_path=IN,
       output_gro_path=IN,

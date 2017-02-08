@@ -1,5 +1,8 @@
-"""Gromacs full setup from a PDB code
 """
+Gromacs full setup from a PDB code
+"""
+
+
 import os
 import sys
 import shutil
@@ -46,11 +49,7 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
-    workflow_path = prop[sys_paths]['workflow_path']
-    # Testing purposes: Remove last Test
-    if os.path.exists(workflow_path):
-        shutil.rmtree(workflow_path)
-    # Create the wokflow working dir
+    workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
     fu.create_change_dir(os.path.abspath(workflow_path))
 
     print ''

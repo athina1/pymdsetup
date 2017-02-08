@@ -16,6 +16,17 @@ def create_change_dir(dir_path):
     os.chdir(dir_path)
     return dir_path
 
+def get_workflow_path(dir_path):
+
+    if not os.path.exists(dir_path):
+        return dir_path
+
+    cont = 1
+    while os.path.exists(dir_path):
+        dir_path = dir_path.rstrip('\\/0123456789_') + '_' + str(cont)
+        cont += 1
+    return dir_path
+
 
 def rm_ext(ext, source_dir=None):
     if source_dir is None:
