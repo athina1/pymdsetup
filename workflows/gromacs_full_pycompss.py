@@ -53,7 +53,7 @@ def main():
     start_time= time.time()
     sys_paths = 'pycompss_vm'
     root_dir = "/home/compss/pymdsetup/workflows"
-    conf_file_path = os.path.join(root_dir, 'conf.yaml')
+    conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
     mdp_dir = prop[sys_paths]['mdp_path']
