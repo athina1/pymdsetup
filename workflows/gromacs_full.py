@@ -50,7 +50,7 @@ def main():
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
-    fu.create_change_dir(os.path.abspath(workflow_path))
+    fu.create_dir(os.path.abspath(workflow_path))
 
     print ''
     print ''
@@ -61,7 +61,7 @@ def main():
     print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
     p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
-    fu.create_change_dir(p_mmbpdb.path)
+    fu.create_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
 

@@ -1,8 +1,6 @@
 """
 Gromacs full setup from a pdb
 """
-
-
 import os
 import sys
 import shutil
@@ -62,7 +60,7 @@ def main():
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
-    fu.create_change_dir(os.path.abspath(workflow_path))
+    fu.create_dir(os.path.abspath(workflow_path))
 
     print ''
     print ''
@@ -73,7 +71,7 @@ def main():
     print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
     p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
-    fu.create_change_dir(p_mmbpdb.path)
+    fu.create_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
 
@@ -321,6 +319,7 @@ def main():
     png=compss_wait_on(opj(p_gnuplot.path, 'step18_gnuplot.task'))
     elapsed_time = time.time() - start_time
     print "Elapsed time: ", elapsed_time
+
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
       pdb_path=IN,
@@ -492,6 +491,7 @@ def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                      seed,
                      log_path, error_path, gmx_path).launch()
     open(dependency_file_out, 'a').close()
+
 
 #@constraint(ComputingUnits="16")
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,

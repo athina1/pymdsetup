@@ -9,48 +9,30 @@ import shutil
 import time
 from os.path import join as opj
 
-try:
-    import tools.file_utils as fu
-    import configuration.settings as settings
-    import gromacs_wrapper.pdb2gmx as pdb2gmx
-    import gromacs_wrapper.grompp as grompp
-    import scwrl_wrapper.scwrl as scwrl
-    import gromacs_wrapper.solvate as solvate
-    import gromacs_wrapper.editconf as editconf
-    import gromacs_wrapper.genion as genion
-    import gromacs_wrapper.mdrun as mdrun
-    import mmb_api.pdb as pdb
-    import mmb_api.uniprot as uniprot
-    import gromacs_wrapper.rms as rms
-    import gnuplot_wrapper.gnuplot as gnuplot
-    from command_wrapper import cmd_wrapper
-    from pycompss.api.parameter import *
-    from pycompss.api.task import task
-    from pycompss.api.constraint import constraint
-    from pycompss.api.api import waitForAllTasks
-    from pycompss.api.api import compss_wait_on
-except ImportError:
-    from pymdsetup.tools import file_utils as fu
-    from pymdsetup.configuration import settings
-    from pymdsetup.gromacs_wrapper import pdb2gmx
-    from pymdsetup.gromacs_wrapper import grompp
-    from pymdsetup.scwrl_wrapper import scwrl
-    from pymdsetup.gromacs_wrapper import solvate
-    from pymdsetup.gromacs_wrapper import editconf
-    from pymdsetup.gromacs_wrapper import genion
-    from pymdsetup.gromacs_wrapper import mdrun
-    from pymdsetup.mmb_api import pdb
-    from pymdsetup.mmb_api import uniprot
-    from pymdsetup.gromacs_wrapper import rms
-    from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.gnuplot_wrapper import gnuplot
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
+import tools.file_utils as fu
+import configuration.settings as settings
+import gromacs_wrapper.pdb2gmx as pdb2gmx
+import gromacs_wrapper.grompp as grompp
+import scwrl_wrapper.scwrl as scwrl
+import gromacs_wrapper.solvate as solvate
+import gromacs_wrapper.editconf as editconf
+import gromacs_wrapper.genion as genion
+import gromacs_wrapper.mdrun as mdrun
+import mmb_api.pdb as pdb
+import mmb_api.uniprot as uniprot
+import gromacs_wrapper.rms as rms
+import gnuplot_wrapper.gnuplot as gnuplot
+from command_wrapper import cmd_wrapper
+from pycompss.api.parameter import *
+from pycompss.api.task import task
+from pycompss.api.constraint import constraint
 
 
 def main():
-    start_time= time.time()
+    from pycompss.api.api import waitForAllTasks
+    from pycompss.api.api import compss_wait_on
+
+    start_time = time.time()
     sys_paths = 'pycompss_MN'
     root_dir = "/gpfs/home/bsc51/bsc51210/pymdsetup/workflows"
     conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
@@ -62,7 +44,7 @@ def main():
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
     workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
-    fu.create_change_dir(os.path.abspath(workflow_path))
+    fu.create_dir(os.path.abspath(workflow_path))
 
     print ''
     print ''
@@ -73,14 +55,14 @@ def main():
     print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
     p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
-    fu.create_change_dir(p_mmbpdb.path)
+    fu.create_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
-#    mmbpdb.get_pdb()
+#   mmbpdb.get_pdb()
     shutil.copy('/gpfs/home/bsc51/bsc51210/structure.pdb', p_mmbpdb.pdb)
 
     print 'step2:  mmbuniprot -- Get mutations'
-#    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-#    mutations = mmbuniprot.get_pdb_variants()
+#   mmbuniprot = uniprot.MmbVariants(input_pdb_code)
+#   mutations = mmbuniprot.get_pdb_variants()
     mutations = ['A.LYS58GLU','A.THR74ALA']
     open(opj(workflow_path, 'step2_mmbuniprot.task'), 'a').close()
 
@@ -564,6 +546,7 @@ def gnuplotPyCOMPSs(dependency_file_out,
                       output_plotscript_path=output_plotscript_path,
                       log_path=log_path, error_path=error_path, gnuplot_path=gnuplot_path).launch()
     open(dependency_file_out, 'a').close()
+
 ##############################################################################
 
 
