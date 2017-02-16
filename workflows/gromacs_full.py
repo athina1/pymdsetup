@@ -5,6 +5,7 @@ Gromacs full setup from a PDB code
 
 import os
 import sys
+import time
 import shutil
 from os.path import join as opj
 
@@ -39,6 +40,7 @@ except ImportError:
 
 
 def main():
+    start_time = time.time()
     sys_paths = 'pycompss_open_nebula'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
@@ -282,6 +284,8 @@ def main():
                               log_path=p_gnuplot.out, error_path=p_gnuplot.err, gnuplot_path=gnuplot_path)
     gplot.launch()
 
+    elapsed_time = time.time() - start_time
+    print "Elapsed time: ", elapsed_time
 
 if __name__ == '__main__':
     main()
