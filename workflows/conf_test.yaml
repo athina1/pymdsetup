@@ -22,6 +22,14 @@ pycompss_vm:
   mdp_path: /home/compss/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
 
+pycompss_open_nebula:
+  gmx_path: /usr/local/gromacs/bin/gmx
+  scwrl4_path: /home/user/scwrl4/Scwrl4
+  workflow_path: /home/user/pymdsetup/testworkflow
+  mdp_path: /home/user/pymdsetup/workflows/mdp/
+  gnuplot_path: /usr/bin/gnuplot
+
+
 pycompss_MN:
   gmx_path: /gpfs/home/bsc51/bsc51210/gromacs/bin/gmx
   scwrl4_path: /gpfs/home/bsc51/bsc51210/scwrl4/Scwrl4

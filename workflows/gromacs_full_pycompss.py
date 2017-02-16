@@ -7,51 +7,31 @@ import shutil
 import time
 from os.path import join as opj
 
-try:
-    import tools.file_utils as fu
-    import configuration.settings as settings
-    import gromacs_wrapper.pdb2gmx as pdb2gmx
-    import gromacs_wrapper.grompp as grompp
-    import scwrl_wrapper.scwrl as scwrl
-    import gromacs_wrapper.solvate as solvate
-    import gromacs_wrapper.editconf as editconf
-    import gromacs_wrapper.genion as genion
-    import gromacs_wrapper.mdrun as mdrun
-    import mmb_api.pdb as pdb
-    import mmb_api.uniprot as uniprot
-    import gromacs_wrapper.rms as rms
-    import gnuplot_wrapper.gnuplot as gnuplot
-    from command_wrapper import cmd_wrapper
-    from pycompss.api.parameter import *
-    from pycompss.api.task import task
-    from pycompss.api.constraint import constraint
-    from pycompss.api.api import waitForAllTasks
-    from pycompss.api.api import compss_wait_on
-except ImportError:
-    from pymdsetup.tools import file_utils as fu
-    from pymdsetup.configuration import settings
-    from pymdsetup.gromacs_wrapper import pdb2gmx
-    from pymdsetup.gromacs_wrapper import grompp
-    from pymdsetup.scwrl_wrapper import scwrl
-    from pymdsetup.gromacs_wrapper import solvate
-    from pymdsetup.gromacs_wrapper import editconf
-    from pymdsetup.gromacs_wrapper import genion
-    from pymdsetup.gromacs_wrapper import mdrun
-    from pymdsetup.mmb_api import pdb
-    from pymdsetup.mmb_api import uniprot
-    from pymdsetup.gromacs_wrapper import rms
-    from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.gnuplot_wrapper import gnuplot
-    from pymdsetup.dummies_pycompss.task import task
-    from pymdsetup.dummies_pycompss.constraint import constraint
-    from pymdsetup.dummies_pycompss.parameter import *
-
+import tools.file_utils as fu
+import configuration.settings as settings
+import gromacs_wrapper.pdb2gmx as pdb2gmx
+import gromacs_wrapper.grompp as grompp
+import scwrl_wrapper.scwrl as scwrl
+import gromacs_wrapper.solvate as solvate
+import gromacs_wrapper.editconf as editconf
+import gromacs_wrapper.genion as genion
+import gromacs_wrapper.mdrun as mdrun
+import mmb_api.pdb as pdb
+import mmb_api.uniprot as uniprot
+import gromacs_wrapper.rms as rms
+import gnuplot_wrapper.gnuplot as gnuplot
+from command_wrapper import cmd_wrapper
+from pycompss.api.parameter import *
+from pycompss.api.task import task
+from pycompss.api.constraint import constraint
 
 def main():
+    from pycompss.api.api import waitForAllTasks
+    from pycompss.api.api import compss_wait_on
     start_time= time.time()
-    sys_paths = 'pycompss_vm'
-    root_dir = "/home/compss/pymdsetup/workflows"
-    conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
+    sys_paths = 'pycompss_open_nebula'
+    root_dir = "/home/user/pymdsetup/workflows"
+    conf_file_path = os.path.join(root_dir, 'conf.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
     mdp_dir = prop[sys_paths]['mdp_path']
