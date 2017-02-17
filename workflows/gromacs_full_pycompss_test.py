@@ -302,9 +302,11 @@ def main():
                     output_png_path=p_gnuplot.png,
                     output_plotscript_path=p_gnuplot.plotscript,
                     log_path=p_gnuplot.out, error_path=p_gnuplot.err, gnuplot_path=gnuplot_path)
-    png=compss_wait_on(opj(p_gnuplot.path, 'step18_gnuplot.task'))
+    png = compss_wait_on(opj(p_gnuplot.path, 'step18_gnuplot.task'))
     elapsed_time = time.time() - start_time
     print "Elapsed time: ", elapsed_time
+    with open(opj(workflow_path, 'time.txt'), 'a') as time_file:
+        time_file.write(str(elapsed_time))
 
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
