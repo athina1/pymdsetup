@@ -1,5 +1,6 @@
 """Python wrapper module for the GROMACS editconf module
 """
+import sys
 try:
     from command_wrapper import cmd_wrapper
 except ImportError:
@@ -45,3 +46,17 @@ class Editconf512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+#Creating a main function to be compatible with CWL
+def main():
+    Editconf512(input_gro_path=sys.argv[1],
+                output_gro_path=sys.argv[2],
+                box_type=sys.argv[3],
+                distance_to_molecule=float(sys.argv[4]),
+                center_molecule=True,
+                gmx_path=sys.argv[5],
+                log_path='/Users/pau/projects/pymdsetup/cwltest/ec.log',
+                error_path='/Users/pau/projects/pymdsetup/cwltest/ec.err').launch()
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,36 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
+class: CommandLineTool
+
+requirements:
+  - class: InitialWorkDirRequirement
+    listing:
+      - entry: $(inputs.gromacs_structure)
+        entryname: structure.gro
+
+baseCommand:
+  - python
+inputs:
+  script:
+    type: File
+    inputBinding:
+      position: 1
+
+  gromacs_structure: File
+arguments:
+  - valueFrom: structure.gro
+    position: 2
+  - valueFrom: editconf.gro
+    position: 3
+  - valueFrom: octahedron
+    position: 4
+  - valueFrom: '1.0'
+    position: 5
+  - valueFrom: /usr/local/bin/gmx
+    position: 6
+outputs:
+  gromacs_structure:
+    type: File
+    outputBinding:
+      glob: editconf.gro

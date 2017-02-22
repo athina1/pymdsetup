@@ -1,5 +1,7 @@
 """Python wrapper module for the GROMACS pdb2gmx module
 """
+import sys
+
 try:
     from command_wrapper import cmd_wrapper
     from tools import file_utils as fu
@@ -60,3 +62,20 @@ class Pdb2gmx512(object):
 
         # Tar topology
         fu.tar_top(self.output_top_path, self.output_top_tar_path)
+
+
+#Creating a main function to be compatible with CWL
+def main():
+    Pdb2gmx512(structure_pdb_path=sys.argv[1],
+               output_gro_path=sys.argv[2],
+               output_top_path=sys.argv[3],
+               output_top_tar_path=sys.argv[4],
+               water_type=sys.argv[5],
+               force_field=sys.argv[6],
+               ignh=True,
+               gmx_path=sys.argv[7],
+               log_path='/Users/pau/projects/pymdsetup/cwltest/pdb2gmx.log',
+               error_path='/Users/pau/projects/pymdsetup/cwltest/pdb2gmx.err').launch()
+
+if __name__ == '__main__':
+    main()

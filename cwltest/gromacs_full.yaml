@@ -1,0 +1,30 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
+class: Workflow
+
+inputs:
+  pdb2gmx_script: File
+  editconf_script: File
+  pdb_structure: File
+
+
+
+outputs:
+  topology_box:
+    type: File
+    outputSource: editconf/gromacs_structure
+
+steps:
+  pdb2gmx:
+    run: pdb2gmx.yaml
+    in:
+      pdb_structure: pdb_structure
+    out: [gromacs_structure]
+
+  editconf:
+    run: editconf.yaml
+    in:
+      script: editconf_script
+      gromacs_structure: pdb2gmx/gromacs_structure
+    out: [gromacs_structure]
