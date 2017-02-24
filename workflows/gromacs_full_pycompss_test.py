@@ -112,7 +112,7 @@ def main():
         pdb2gmxPyCOMPSs(dependency_file_in=opj(p_scw.path, 'step3_scw.task'),
                         dependency_file_out=opj(p_p2g.path, 'step4_p2g.task'),
                         task_path=p_p2g.path,
-                        structure_pdb_path=p_scw.mut_pdb,
+                        input_structure_pdb_path=p_scw.mut_pdb,
                         output_gro_path=p_p2g.gro,
                         output_top_path=p_p2g.top,
                         output_top_tar_path=p_p2g.tar,

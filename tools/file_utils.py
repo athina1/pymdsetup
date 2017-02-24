@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tools to work with files
 """
 import os
@@ -6,15 +5,18 @@ import shutil
 import glob
 import tarfile
 
+
 def create_dir(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     return dir_path
 
+
 def create_change_dir(dir_path):
     create_dir(dir_path)
     os.chdir(dir_path)
     return dir_path
+
 
 def get_workflow_path(dir_path):
 

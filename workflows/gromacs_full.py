@@ -41,7 +41,7 @@ except ImportError:
 
 def main():
     start_time = time.time()
-    sys_paths = 'macos'
+    sys_paths = 'linux'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
@@ -113,7 +113,7 @@ def main():
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', workflow_path, mut)
         fu.create_change_dir(p_p2g.path)
-        p2g = pdb2gmx.Pdb2gmx512(structure_pdb_path=p_scw.mut_pdb,
+        p2g = pdb2gmx.Pdb2gmx512(input_structure_pdb_path=p_scw.mut_pdb,
                                  output_gro_path=p_p2g.gro,
                                  output_top_path=p_p2g.top,
                                  output_top_tar_path=p_p2g.tar,
