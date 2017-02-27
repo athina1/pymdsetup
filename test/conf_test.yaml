@@ -2,6 +2,8 @@
 
 ########################## System dependent paths ############################
 linux:
+  pymdsetup_path: /home/pau/projects/pymdsetup
+  test_path: /home/pau/projects/pymdsetup/test
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
   workflow_path: /home/pau/projects/pymdsetup/testworkflow
@@ -44,9 +46,14 @@ step3_scw:
     mut_pdb: mutated.pdb
 
 # Step4: p2g -- Create gromacs topology
-step4_p2g:
+p2g:
   paths:
-    path: p2g_results
+    path: test/p2g_results
+    script: gromacs_wrapper/pdb2gmx.py
+    in_pdb: test/data/pdb2gmx/input_structure.pdb
+    gold_gro: test/data/pdb2gmx/p2g_gold.gro
+    gold_top: test/data/pdb2gmx/p2g_gold.top
+    gold_itp: test/data/pdb2gmx/posre_gold.itp
     out: p2g.out
     err: p2g.err
     gro: p2g.gro
