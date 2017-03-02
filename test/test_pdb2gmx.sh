@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #setup
-
 test_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $test_dir/yaml_parser.sh
 eval $(parse_yaml $test_dir/conf_test.yaml)
@@ -24,6 +23,14 @@ $wd/$p2g_paths_out \
 $wd/$p2g_paths_err
 
 #Run tests
+test1=$(diff $wd/$p2g_paths_gro $pymdsetup_path/$p2g_paths_gold_gro)
+test2=$(diff $wd/$p2g_paths_top $pymdsetup_path/$p2g_paths_gold_top)
+test3=$(diff $wd/$p2g_paths_ipt $pymdsetup_path/$p2g_paths_gold_itp)
+
+echo $test1
+echo $test2
+echo $test3
+
 
 #teardown
 rm -rf $wd
