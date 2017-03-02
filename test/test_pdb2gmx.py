@@ -15,12 +15,11 @@ class TestPdb2gmx512(unittest.TestCase):
     """
 
     def setUp(self):
-        self.sys_paths = 'linux'
         conf_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
         conf = settings.YamlReader(yaml_path=(os.path.join(conf_dir, 'conf_test.yaml')))
         self.prop = conf.properties
-        self.root_dir=self.prop[self.sys_paths]['pymdsetup_path']
-        self.p_p2g = conf.step_prop('p2g', self.prop[self.sys_paths]['test_path'])
+        self.root_dir = self.prop['pymdsetup_path']
+        self.p_p2g = conf.step_prop('p2g', self.prop['test_path'])
         fu.create_change_dir(self.p_p2g.path)
 
     def tearDown(self):
@@ -35,7 +34,7 @@ class TestPdb2gmx512(unittest.TestCase):
                    water_type=self.p_p2g.water_type,
                    force_field=self.p_p2g.force_field,
                    ignh=settings.str2bool(self.p_p2g.ignh),
-                   gmx_path=self.prop[self.sys_paths]['gmx_path'],
+                   gmx_path=self.prop['gmx_path'],
                    log_path=self.p_p2g.out, error_path=self.p_p2g.err).launch()
 
         print self.p_p2g.out

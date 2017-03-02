@@ -1,22 +1,14 @@
 ######################## pymdsetup configuration file ########################
 
 ########################## System dependent paths ############################
-linux:
-  pymdsetup_path: /home/pau/projects/pymdsetup
-  test_path: /home/pau/projects/pymdsetup/test
-  gmx_path: /usr/local/gromacs/bin/gmx
-  scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
-  workflow_path: /home/pau/projects/pymdsetup/testworkflow
-  mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
-  gnuplot_path: /usr/bin/gnuplot
 
-macos:
-  gmx_path: /usr/local/bin/gmx
-  scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
-  workflow_path: /Users/pau/projects/pymdsetup/testworkflow
-  mdp_path: /Users/pau/projects/pymdsetup/workflows/mdp
-  gnuplot_path: /usr/bin/gnuplot
-
+pymdsetup_path: /home/pau/projects/pymdsetup
+test_path: /home/pau/projects/pymdsetup/test
+gmx_path: /usr/local/gromacs/bin/gmx
+scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+workflow_path: /home/pau/projects/pymdsetup/testworkflow
+mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
+gnuplot_path: /usr/bin/gnuplot
 ##############################################################################
 
 # PDB code
