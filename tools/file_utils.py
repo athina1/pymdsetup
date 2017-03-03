@@ -71,7 +71,10 @@ def mv_ext(dest_dir, ext, source_dir=None):
 
 
 def tar_top(top_file, tar_file):
-    files = glob.iglob(os.path.join(os.path.dirname(top_file), "*.itp"))
+    top_dir = os.path.abspath(os.path.dirname(top_file))
+    files = glob.iglob(os.path.join(top_dir, "*.itp"))
+    if os.path.abspath(os.getcwd()) != top_dir:
+        files = glob.iglob(os.path.join(os.getcwd(), "*.itp"))
     with tarfile.open(tar_file, 'w') as tar:
         for f in files:
             tar.add(f, arcname=os.path.basename(f))
