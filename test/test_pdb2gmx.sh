@@ -14,6 +14,7 @@ $pymdsetup_path/$p2g_paths_script \
 $pymdsetup_path/$p2g_paths_in_pdb \
 $wd/$p2g_paths_gro \
 $wd/$p2g_paths_top \
+$p2g_paths_itp \
 $wd/$p2g_paths_tar \
 $p2g_properties_water_type \
 $p2g_properties_force_field \
@@ -24,13 +25,21 @@ $wd/$p2g_paths_err
 
 #Run tests
 test1=$(diff $wd/$p2g_paths_gro $pymdsetup_path/$p2g_paths_gold_gro)
-test2=$(diff $wd/$p2g_paths_top $pymdsetup_path/$p2g_paths_gold_top)
-test3=$(diff $wd/$p2g_paths_ipt $pymdsetup_path/$p2g_paths_gold_itp)
+test2=$(diff -I '^;.*' $wd/$p2g_paths_top $pymdsetup_path/$p2g_paths_gold_top)
+test3=$(diff $wd/$p2g_paths_itp $pymdsetup_path/$p2g_paths_gold_itp)
 
+echo -e "Test1:"
 echo $test1
-echo $test2
-echo $test3
+echo ""
 
+echo -e "Test2:"
+echo $test2
+echo ""
+
+echo -e "Test3:"
+echo $test3
+echo ""
 
 #teardown
+rm *.itp
 rm -rf $wd

@@ -45,13 +45,13 @@ p2g:
     in_pdb: test/data/pdb2gmx/input_structure.pdb
     gold_gro: test/data/pdb2gmx/p2g_gold.gro
     gold_top: test/data/pdb2gmx/p2g_gold.top
-    gold_itp: test/data/pdb2gmx/posre_gold.itp
+    gold_itp: test/data/pdb2gmx/p2g_gold.itp
     out: p2g.out
     err: p2g.err
     gro: p2g.gro
     top: p2g.top
     tar: p2g_top.tar
-    itp: posre.itp
+    itp: p2g.itp
   properties:
     # Available water molecule types: tip3p, spce, etc.
     water_type: spce

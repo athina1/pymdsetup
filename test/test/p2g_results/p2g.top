@@ -1,8 +1,8 @@
 ;
-;	File '/home/pau/projects/pymdsetup/testworkflow/A.Lys58Glu/step4_p2g/p2g.top' was generated
+;	File '/home/pau/projects/pymdsetup/test/test/p2g_results/p2g.top' was generated
 ;	By user: pau (1000)
 ;	On host: mmb01
-;	At date: Thu Feb 23 17:08:46 2017
+;	At date: Tue Mar  7 16:50:35 2017
 
 ;
 ;	This is a standalone topology file
@@ -13,7 +13,7 @@
 ;	Executable:   /usr/local/gromacs/bin/gmx
 ;	Data prefix:  /usr/local/gromacs
 ;	Command line:
-;	  gmx pdb2gmx -f /home/pau/projects/pymdsetup/testworkflow/A.Lys58Glu/step3_scw/mutated.pdb -o /home/pau/projects/pymdsetup/testworkflow/A.Lys58Glu/step4_p2g/p2g.gro -p /home/pau/projects/pymdsetup/testworkflow/A.Lys58Glu/step4_p2g/p2g.top -water spce -ff oplsaa -ignh
+;	  gmx pdb2gmx -f /home/pau/projects/pymdsetup/test/data/pdb2gmx/input_structure.pdb -o /home/pau/projects/pymdsetup/test/test/p2g_results/p2g.gro -p /home/pau/projects/pymdsetup/test/test/p2g_results/p2g.top -i p2g.itp -water spce -ff oplsaa -ignh
 ;	Force field was read from the standard GROMACS share directory.
 ;
 

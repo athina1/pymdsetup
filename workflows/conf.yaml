@@ -72,6 +72,7 @@ step4_p2g:
     err: p2g.err
     gro: p2g.gro
     top: p2g.top
+    itp: p2g.itp
     tar: p2g_top.tar
   properties:
     # Available water molecule types: tip3p, spce, etc.
