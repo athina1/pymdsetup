@@ -1,0 +1,67 @@
+<tool id="preprocess-nvt" name="Preprocess nvt" version="0.1.0">
+    <description>Preprocessing to prepare for gromacs nvt</description>
+    <requirements>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python $__tool_directory__/preprocess_nvt.py 
+        $input1
+        $input2
+        $output_tpr
+        $__tool_directory__/gmx
+        "$title" "$define" "$integrator" "$nsteps" "$dt"
+        "$nstxout" "$nstvout" "$nstenergy" "$nstlog"
+        "$continuation" "$constraint_algorithm" "$constraints" "$lincs_iter" "$lincs_order"
+        "$cutoff_scheme" "$nstype" "$nstlist" "$rcoulomb" "$rvdw"
+        "$coulombtype" "$pme_order" "$fourierspacing"
+        "$tcoupl" "$tcgrps" "$tau_t" "$ref_t"
+        "$pcoupl" "$pbc" "$DispCorr"
+        "$gen_vel" "$gen_temp" "$gen_seed"
+        ]]></command>
+    <inputs>
+        <param format="txt" name="input1" type="data" label="gro input"/>
+        <param format="tar" name="input2" type="data" label="top tarball input"/>
+        <param format="txt" name="title" value="OPLS Lysozyme NPT equilibration" type="text" />
+        <param format="txt" name="define" value="-DPOSRES" type="text" label="position restrain the protein" />
+        <param format="txt" name="integrator" value="md" type="text" label="Algorithm" />
+        <param format="txt" name="nsteps" value="5000" type="text" label="Maximum number of (minimization) steps"/>
+        <param format="txt" name="dt" value="0.002" type="text" label="time for step. 0.002 = 2 fs"/>
+        <param format="txt" name="nstxout" value="500" type="text" label="save coordinates every n steps"/>
+        <param format="txt" name="nstvout" value="500" type="text" label="save velocities every n steps"/>
+        <param format="txt" name="nstenergy" value="500" type="text" label="save energies every n steps"/>
+        <param format="txt" name="nstlog" value="500" type="text" label="update log every n steps"/>
+        <param format="txt" name="continuation" value="no" type="text" label="is first dynamic run? yes/no"/>
+        <param format="txt" name="constraint_algorithm" value="lincs" type="text" label="holonomic constraints"/>
+        <param format="txt" name="constraints" value="all-bonds" type="text" label="type of bond constraints"/>
+        <param format="txt" name="lincs_iter" value="500" type="text" label="LINCS accuracy"/>
+        <param format="txt" name="lincs_order" value="1" type="text" label="LINCS accuracy-related"/>
+        <param format="txt" name="cutoff_scheme" value="Verlet" type="text" label="cutoff scheme" />
+        <param format="txt" name="nstype" value="grid" type="text" label="Method to determine neighbor list" />
+        <param format="txt" name="nstlist" value="10" type="text" label="Frequency to update the neighbor list and long range forces"/>
+        <param format="txt" name="rcoulomb" value="1.0" type="text" label="Short-range electrostatic cut-off" />
+        <param format="txt" name="rvdw" value="1.0" type="text" label="Short-range Van der Waals cut-off" />
+        <param format="txt" name="coulombtype" value="PME" type="text" label="Particle Mesh Ewald for long-range electrostatics" />
+        <param format="txt" name="pme_order" value="4" type="text" label="cubic interpolation" />
+        <param format="txt" name="fourierspacing" value="0.16" type="text" label="grid spacing for FFT" />
+        <param format="txt" name="tcoupl" value="V-rescale" type="text" label="modified Berendsen thermostat" />
+        <param format="txt" name="tcgrps" value="Protein Non-Protein" type="text" label="coupling groups" />
+        <param format="txt" name="tau_t" value="0.1     0.1" type="text" label="time constant in ps" />
+        <param format="txt" name="ref_t" value="300     300" type="text" label="reference temperature in K" />
+        <param format="txt" name="pcoupl" value="no" type="text" label="pressure coupling" />
+        <param format="txt" name="pbc" value="xyz" type="text" label="Periodic boundary conditions" />
+        <param format="txt" name="DispCorr" value="EnerPres" type="text" label="account for cut-off vdw sheme" />
+        <param format="txt" name="gen_vel" value="yes" type="text" label="velocities from Maxwell distributions" />
+        <param format="txt" name="gen_temp" value="300" type="text" label="temperature for Maxwell distribution" />
+        <param format="txt" name="gen_seed" value="-1" type="text" label="random seed" />
+    </inputs>
+    <outputs>
+        <data format="txt" name="output_tpr" label="gromacs tpr file" />
+    </outputs>
+    <help><![CDATA[
+        TODO
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

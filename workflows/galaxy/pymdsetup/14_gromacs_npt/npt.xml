@@ -1,0 +1,32 @@
+<tool id="md_npt" name="npt: constant mol, pressure, temp" version="0.1.0">
+    <description>Constant number of mol-pressure-temp</description>
+    <requirements>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python $__tool_directory__/npt.py 
+        $input1
+        $output_gro
+        $output_trr
+        $output_edr
+        $output_cpt
+        $__tool_directory__/gmx
+        ]]></command>
+    <inputs>
+        <param format="txt" name="input1" type="data" label="tpr input"/>
+    </inputs>
+    <outputs>
+        <data format="txt" name="output_gro" label="gromacs gro file"/>
+        <data format="txt" name="output_trr" label="gromacs trr file"/>
+        <data format="txt" name="output_edr" label="gromacs edr file"/>
+        <data format="txt" name="output_cpt" label="gromacs cpt file"/>
+    </outputs>
+    <help><![CDATA[
+        TODO
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
+

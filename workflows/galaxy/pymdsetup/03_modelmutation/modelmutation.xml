@@ -1,0 +1,41 @@
+<tool id="modelmutations" name="model a collection of mutations" version="0.1.0">
+    <description>Model a given mutation into a pdb using scwrl</description>
+    <requirements>
+        <requirement type="package" version="1.65">biopython</requirement>
+        <!--
+        <requirement type="package" version="0.1">pymdsetup</requirement>
+        <requirement type="binary" version="4.*">Scwrl</requirement>
+        -->
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python $__tool_directory__/modelmutation.py 
+        $input1
+        $inputs2
+        $__tool_directory__/Scwrl4
+        $pdbout
+        ]]></command>
+    <inputs>
+        <param format="pdb" name="input1" type="data" label="pdb input"/>
+        <!--        <param format="txt" name="inputs2" type="data_collection" collection_type="list" label="input mutation"/> -->
+        <param format="txt" name="inputs2" type="data" label="input mutation"/>
+    </inputs>
+    <outputs>
+        <data format="pdb" name="pdbout" label="pdb with modelled mutation"/>
+    </outputs>
+<!--    <tests>
+        <test>
+            <param name="input1" value="2jq3.pdb"/>
+            <param name="inputs2" value="A.Lys58Glu"/>
+            <output name="pdbout" value="scwrled.pdb" compare="diff" lines_diff="0" ftype="pdb"/>
+        </test>
+    </tests> -->
+    <help><![CDATA[
+        Model a pdb with the given mutation
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
+

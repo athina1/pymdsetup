@@ -1,0 +1,34 @@
+<tool id="water" name="Fill box with water" version="0.1.0">
+    <description>Fill empty space with water with gromacs</description>
+    <requirements>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python $__tool_directory__/fillwater.py 
+        $input1
+        $input2
+        $input3
+        $output_gro
+        $output_top
+        $output_tar
+        $__tool_directory__/gmx
+        ]]></command>
+    <inputs>
+        <param format="txt" name="input1" type="data" label="gro input"/>
+        <param format="tar" name="input2" type="data" label="top tarball input"/>
+        <param format="txt" name="input3" value="spc216.gro" type="text" label="Solvent gro path"/>
+    </inputs>
+    <outputs>
+        <data format="txt" name="output_gro" label="gromacs gro file"/>
+        <data format="txt" name="output_top" label="gromacs topology file"/>
+        <data format="tar" name="output_tar" label="tarball of topology files"/>
+    </outputs>
+    <help><![CDATA[
+        TODO
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
+

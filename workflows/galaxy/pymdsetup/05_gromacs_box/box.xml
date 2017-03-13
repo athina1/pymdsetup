@@ -1,0 +1,32 @@
+<tool id="box" name="Create a box for the molecule" version="0.1.0">
+    <description>Define box dimensions using gromacs</description>
+    <requirements>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python $__tool_directory__/box.py 
+        $input
+        $output
+        $boxtype
+        $distance
+        $centermol
+        $__tool_directory__/gmx
+        ]]></command>
+    <inputs>
+        <param format="txt" name="input" type="data" label="gro input"/>
+        <param format="txt" name="boxtype" value="cubic" type="text" label="box centermol. i.e: cubic, octahedron..."/>
+        <param format="txt" name="distance" value="1.0" type="text" label="distance from molecule"/>
+        <param format="txt" name="centermol" value="True" type="text" label="center molecule? True/False"/>
+    </inputs>
+    <outputs>
+        <data format="txt" name="output" label="gromacs gro file with box"/>
+    </outputs>
+    <help><![CDATA[
+        TODO
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
+
