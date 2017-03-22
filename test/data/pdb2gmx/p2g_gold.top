@@ -11261,7 +11261,7 @@ Protein_chain_A     3
 
 ; Include Position restraint file
 #ifdef POSRES
-#include "posre.itp"
+#include "p2g.itp"
 #endif
 
 ; Include water topology

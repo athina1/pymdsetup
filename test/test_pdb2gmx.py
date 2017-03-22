@@ -30,6 +30,7 @@ class TestPdb2gmx512(unittest.TestCase):
         Pdb2gmx512(input_structure_pdb_path=opj(self.root_dir, self.prop['p2g']['paths']['in_pdb']),
                    output_gro_path=self.p_p2g.gro,
                    output_top_path=self.p_p2g.top,
+                   output_itp_path=self.prop['p2g']['paths']['itp'],
                    output_top_tar_path=self.p_p2g.tar,
                    water_type=self.p_p2g.water_type,
                    force_field=self.p_p2g.force_field,

@@ -109,6 +109,7 @@ def main():
                         input_structure_pdb_path=p_scw.mut_pdb,
                         output_gro_path=p_p2g.gro,
                         output_top_path=p_p2g.top,
+                        output_itp_path=prop['step4_p2g']['paths']['itp'],
                         output_top_tar_path=p_p2g.tar,
                         water_type=p_p2g.water_type,
                         force_field=p_p2g.force_field,

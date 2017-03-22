@@ -1,0 +1,28 @@
+<tool id="rmsd" name="gromacs rmsd calculation" version="0.1.0">
+    <description>calculate rmsd between steps in the trajectory</description>
+    <requirements>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        python $__tool_directory__/rmsd.py 
+        $input1
+        $input2
+        $output_xvg
+        $__tool_directory__/gmx
+        ]]></command>
+    <inputs>
+        <param format="txt" name="input1" type="data" label="gro input"/>
+        <param format="txt" name="input2" type="data" label="trr input"/>
+    </inputs>
+    <outputs>
+        <data format="txt" name="output_xvg" label="gromacs xvg file"/>
+    </outputs>
+    <help><![CDATA[
+        TODO
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
+

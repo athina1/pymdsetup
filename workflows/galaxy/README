@@ -1,0 +1,14 @@
+###############
+Galaxy adaptation of pymdsetup by omarin
+v 0.1 - Proof of concept
+20170313
+###############
+
+1 - Install galaxy
+2 - Copy the folder pymdsetup to galaxy/tools folder
+3 - Copy the pymdsetup section of tool_conf.xml to your galaxy/config/tool_conf.xml
+4 - Make sure the soft links in each tool folder (to pymdsetup, gromacs gmx and Scwrl4) are properly set up
+5 - Import Galaxy-Workflow-pymd_prova.ga to your galaxy instance to use the whole workflow.
+6 - Enjoy your trajectories!
+
+###############
