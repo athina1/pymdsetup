@@ -247,7 +247,15 @@ def main():
     print 'step:  trjconv -- Extract last snapshot'
     fu.create_change_dir(opj(workflow_path,'step17_trjconv'))
     refined_structure = sys.argv[2]
-    cmd = ['echo', 'Protein', '|',
+    # echo  -e " \"Protein\" | \"DNA\" \n  q \n" | /usr/local/gromacs/bin/gmx make_ndx -f ../step16_mdeq/mdeq.gro
+    cmd = ['echo', '-e', '"Protein" | "DNA" \n q \n', '|',
+           gmx_path, "make_ndx",
+           "-f", p_mdeq.gro]
+
+    command = cmd_wrapper.CmdWrapper(cmd, 'tjconv.log', 'trjconv.err')
+    command.launch()
+
+    cmd = ['echo', 'Protein_DNA', '|',
            gmx_path, "trjconv",
            "-s", p_gppeq.tpr,
            "-f", p_mdeq.xtc,
