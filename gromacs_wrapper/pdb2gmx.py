@@ -52,9 +52,11 @@ class Pdb2gmx512(object):
         gmx = "gmx" if self.gmx_path is None else self.gmx_path
         cmd = [gmx, "pdb2gmx", "-f", self.input_structure_pdb_path,
                "-o", self.output_gro_path, "-p", self.output_top_path,
-               "-i", self.output_itp_path,
                "-water", self.water_type, "-ff", self.force_field]
 
+        if self.output_itp_path is not None:
+            cmd.append("-i")
+            cmd.append(self.output_itp_path)
         if self.ignh:
             cmd.append("-ignh")
 
