@@ -68,6 +68,15 @@ def main():
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     shutil.copy(structure_pdb_path, p_mmbpdb.pdb)
 
+    cmd = ['sed', '-i', 's/  O1P  /  OP1  /g', p_mmbpdb]
+    command = cmd_wrapper.CmdWrapper(cmd, 'sed1.log', 'sed1.err')
+    command.launch()
+
+    cmd = ['sed', '-i', 's/  O2P  /  OP2  /g', p_mmbpdb]
+    command = cmd_wrapper.CmdWrapper(cmd, 'sed1.log', 'sed1.err')
+    command.launch()
+
+
     print 'step:  scw ------ Model mutation'
     p_scw = conf.step_prop('step3_scw', workflow_path)
     fu.create_change_dir(p_scw.path)
@@ -242,8 +251,6 @@ def main():
 
     command = cmd_wrapper.CmdWrapper(cmd, 'tjconv.log', 'trjconv.err')
     command.launch()
-
-
 
     elapsed_time = time.time() - start_time
     print "Elapsed time: ", elapsed_time
