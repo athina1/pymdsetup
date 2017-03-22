@@ -240,7 +240,7 @@ def main():
            "-o", refined_structure,
            "-dump", '1']
 
-    command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
+    command = cmd_wrapper.CmdWrapper(cmd, 'tjconv.log', 'trjconv.err')
     command.launch()
 
 
