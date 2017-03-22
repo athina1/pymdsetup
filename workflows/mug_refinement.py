@@ -68,11 +68,12 @@ def main():
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     shutil.copy(structure_pdb_path, p_mmbpdb.pdb)
 
-    cmd = ['sed', '-i', 's/  O1P  /  OP1  /g', p_mmbpdb.pdb]
+    fu.create_dir(opj(workflow_path, 'sed'))
+    cmd = ['sed', '-i', "'s/  O1P  /  OP1  /g'", p_mmbpdb.pdb]
     command = cmd_wrapper.CmdWrapper(cmd, 'sed1.log', 'sed1.err')
     command.launch()
 
-    cmd = ['sed', '-i', 's/  O2P  /  OP2  /g', p_mmbpdb.pdb]
+    cmd = ['sed', '-i', "'s/  O2P  /  OP2  /g'", p_mmbpdb.pdb]
     command = cmd_wrapper.CmdWrapper(cmd, 'sed2.log', 'sed2.err')
     command.launch()
 
@@ -241,6 +242,7 @@ def main():
     mdeq.launch()
 
     print ('step: trjconv ----- Extract last snapshot')
+    fu.create_change_dir(opj(workflow_path,'step17_trjconv'))
     refined_structure = sys.argv[2]
     cmd = ['echo', 'Protein', '|',
            gmx_path, "trjconv",
