@@ -8,8 +8,6 @@ inputs:
   editconf_script: File
   pdb_structure: File
 
-
-
 outputs:
   topology_box:
     type: File
