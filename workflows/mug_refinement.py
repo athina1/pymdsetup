@@ -62,19 +62,21 @@ def main():
     print ''
     print ''
 
-    print 'step:  Get PDB structure'
+    print 'step:  in ------- Get PDB structure'
     p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
     fu.create_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     shutil.copy(structure_pdb_path, p_mmbpdb.pdb)
 
-    fu.create_dir(opj(workflow_path, 'sed'))
+    print 'step:  sed ------ Replacing atom names'
+    sed_path = opj(workflow_path, 'step2_sed')
+    fu.create_dir(sed_path)
     cmd = ['sed', '-i', "'s/  O1P  /  OP1  /g'", p_mmbpdb.pdb]
-    command = cmd_wrapper.CmdWrapper(cmd, 'sed1.log', 'sed1.err')
+    command = cmd_wrapper.CmdWrapper(cmd, opj(sed_path,'sed1.log'), opj(sed_path,'sed1.err'))
     command.launch()
 
     cmd = ['sed', '-i', "'s/  O2P  /  OP2  /g'", p_mmbpdb.pdb]
-    command = cmd_wrapper.CmdWrapper(cmd, 'sed2.log', 'sed2.err')
+    command = cmd_wrapper.CmdWrapper(cmd, opj(sed_path,'sed2.log'), opj(sed_path,'sed2.err'))
     command.launch()
 
 
@@ -159,7 +161,7 @@ def main():
                               log_path=p_gppmin.out, error_path=p_gppmin.err, gmx_path=gmx_path)
     gppmin.launch()
 
-    print 'step: mdmin ---- Running: Energy minimization'
+    print 'step:  mdmin ---- Running: Energy minimization'
     p_mdmin = conf.step_prop('step10_mdmin', workflow_path)
     fu.create_change_dir(p_mdmin.path)
     mdmin = mdrun.Mdrun512(input_tpr_path=p_gppmin.tpr,
@@ -169,7 +171,7 @@ def main():
                            log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path)
     mdmin.launch()
 
-    print ('step: gppnvt --- Preprocessing: nvt '
+    print ('step:  gppnvt --- Preprocessing: nvt '
            'constant number of molecules, volume and temp')
     p_gppnvt = conf.step_prop('step11_gppnvt', workflow_path)
     fu.create_change_dir(p_gppnvt.path)
@@ -180,7 +182,7 @@ def main():
                               log_path=p_gppnvt.out, error_path=p_gppnvt.err, gmx_path=gmx_path)
     gppnvt.launch()
 
-    print ('step: mdnvt ---- Running: nvt '
+    print ('step:  mdnvt ---- Running: nvt '
            'constant number of molecules, volume and temp')
     p_mdnvt = conf.step_prop('step12_mdnvt', workflow_path)
     fu.create_change_dir(p_mdnvt.path)
@@ -192,7 +194,7 @@ def main():
                            log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path)
     mdnvt.launch()
 
-    print ('step: gppnpt --- Preprocessing: npt '
+    print ('step:  gppnpt --- Preprocessing: npt '
            'constant number of molecules, pressure and temp')
     p_gppnpt = conf.step_prop('step13_gppnpt', workflow_path)
     fu.create_change_dir(p_gppnpt.path)
@@ -204,7 +206,7 @@ def main():
                               log_path=p_gppnpt.out, error_path=p_gppnpt.err, gmx_path=gmx_path)
     gppnpt.launch()
 
-    print ('step: mdnpt ---- Running: npt '
+    print ('step:  mdnpt ---- Running: npt '
            'constant number of molecules, pressure and temp')
     p_mdnpt = conf.step_prop('step14_mdnpt', workflow_path)
     fu.create_change_dir(p_mdnpt.path)
@@ -216,8 +218,8 @@ def main():
                            log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path)
     mdnpt.launch()
 
-    print ('step: gppeq ---- '
-           'Preprocessing: 1ns Molecular dynamics Equilibration')
+    print ('step:  gppeq ---- Preprocessing:'
+           ' 1ns Molecular dynamics Equilibration')
     p_gppeq = conf.step_prop('step15_gppeq', workflow_path)
     fu.create_change_dir(p_gppeq.path)
     gppeq = grompp.Grompp512(input_mdp_path=opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']),
@@ -228,8 +230,8 @@ def main():
                              log_path=p_gppeq.out, error_path=p_gppeq.err, gmx_path=gmx_path)
     gppeq.launch()
 
-    print ('step: mdeq ----- '
-           'Running: 1ns Molecular dynamics Equilibration')
+    print ('step:  mdeq ----- Running:'
+           ' 1ns Molecular dynamics Equilibration')
     p_mdeq = conf.step_prop('step16_mdeq', workflow_path)
     fu.create_change_dir(p_mdeq.path)
     mdeq = mdrun.Mdrun512(input_tpr_path=p_gppeq.tpr,
@@ -241,7 +243,7 @@ def main():
                           log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path)
     mdeq.launch()
 
-    print ('step: trjconv ----- Extract last snapshot')
+    print 'step:  trjconv -- Extract last snapshot'
     fu.create_change_dir(opj(workflow_path,'step17_trjconv'))
     refined_structure = sys.argv[2]
     cmd = ['echo', 'Protein', '|',
