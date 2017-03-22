@@ -68,12 +68,12 @@ def main():
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     shutil.copy(structure_pdb_path, p_mmbpdb.pdb)
 
-    cmd = ['sed', '-i', 's/  O1P  /  OP1  /g', p_mmbpdb]
+    cmd = ['sed', '-i', 's/  O1P  /  OP1  /g', p_mmbpdb.pdb]
     command = cmd_wrapper.CmdWrapper(cmd, 'sed1.log', 'sed1.err')
     command.launch()
 
-    cmd = ['sed', '-i', 's/  O2P  /  OP2  /g', p_mmbpdb]
-    command = cmd_wrapper.CmdWrapper(cmd, 'sed1.log', 'sed1.err')
+    cmd = ['sed', '-i', 's/  O2P  /  OP2  /g', p_mmbpdb.pdb]
+    command = cmd_wrapper.CmdWrapper(cmd, 'sed2.log', 'sed2.err')
     command.launch()
 
 
