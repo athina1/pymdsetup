@@ -248,11 +248,11 @@ def main():
     fu.create_change_dir(opj(workflow_path,'step17_trjconv'))
     refined_structure = sys.argv[2]
     # echo  -e " \"Protein\" | \"DNA\" \n  q \n" | /usr/local/gromacs/bin/gmx make_ndx -f ../step16_mdeq/mdeq.gro
-    cmd = ['echo', '-e', '"Protein" | "DNA" \n q \n', '|',
+    cmd = ['echo', '-e', '"Protein" | "DNA" \\n q \\n', '|',
            gmx_path, "make_ndx",
            "-f", p_mdeq.gro]
 
-    command = cmd_wrapper.CmdWrapper(cmd, 'tjconv.log', 'trjconv.err')
+    command = cmd_wrapper.CmdWrapper(cmd, 'make_ndx.log', 'make_ndx.err')
     command.launch()
 
     cmd = ['echo', 'Protein_DNA', '|',
@@ -262,7 +262,7 @@ def main():
            "-o", refined_structure,
            "-dump", '1']
 
-    command = cmd_wrapper.CmdWrapper(cmd, 'tjconv.log', 'trjconv.err')
+    command = cmd_wrapper.CmdWrapper(cmd, 'trjconv.log', 'trjconv.err')
     command.launch()
 
     elapsed_time = time.time() - start_time
