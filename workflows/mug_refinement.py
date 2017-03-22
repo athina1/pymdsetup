@@ -80,19 +80,20 @@ def main():
     command.launch()
 
 
-    print 'step:  scw ------ Model mutation'
-    p_scw = conf.step_prop('step3_scw', workflow_path)
-    fu.create_change_dir(p_scw.path)
-    scw = scwrl.Scwrl4(input_pdb_path=p_mmbpdb.pdb,
-                       output_pdb_path=p_scw.mut_pdb,
-                       mutation=None,
-                       error_path=p_scw.err, log_path=p_scw.out, scwrl_path=scwrl_path)
-    scw.launch()
+    # print 'step:  scw ------ Model mutation'
+    # p_scw = conf.step_prop('step3_scw', workflow_path)
+    # fu.create_change_dir(p_scw.path)
+    # scw = scwrl.Scwrl4(input_pdb_path=p_mmbpdb.pdb,
+    #                    output_pdb_path=p_scw.mut_pdb,
+    #                    mutation=None,
+    #                    error_path=p_scw.err, log_path=p_scw.out, scwrl_path=scwrl_path)
+    # scw.launch()
 
     print 'step:  p2g ------ Create gromacs topology'
     p_p2g = conf.step_prop('step4_p2g', workflow_path)
     fu.create_change_dir(p_p2g.path)
-    p2g = pdb2gmx.Pdb2gmx512(input_structure_pdb_path=p_scw.mut_pdb,
+    # p2g = pdb2gmx.Pdb2gmx512(input_structure_pdb_path=p_scw.mut_pdb,
+    p2g = pdb2gmx.Pdb2gmx512(input_structure_pdb_path=p_mmbpdb.pdb,
                              output_gro_path=p_p2g.gro,
                              output_top_path=p_p2g.top,
                              output_itp_path=prop['step4_p2g']['paths']['itp'],
