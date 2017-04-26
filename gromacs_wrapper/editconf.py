@@ -3,9 +3,10 @@
 import sys
 try:
     from command_wrapper import cmd_wrapper
+    import configuration.settings as settings
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
-
+    from pymdsetup.configuration import settings
 
 class Editconf512(object):
     """Wrapper for the 5.1.2 version of the editconf module
@@ -53,10 +54,10 @@ def main():
                 output_gro_path=sys.argv[2],
                 box_type=sys.argv[3],
                 distance_to_molecule=float(sys.argv[4]),
-                center_molecule=True,
-                gmx_path=sys.argv[5],
-                log_path='/Users/pau/projects/pymdsetup/cwltest/ec.log',
-                error_path='/Users/pau/projects/pymdsetup/cwltest/ec.err').launch()
+                center_molecule=settings.str2bool(sys.argv[5]),
+                gmx_path=sys.argv[6],
+                log_path=sys.argv[7],
+                error_path=sys.argv[8]).launch()
 
 if __name__ == '__main__':
     main()

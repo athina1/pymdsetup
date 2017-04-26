@@ -60,3 +60,18 @@ class Solvate512(object):
 
         # Remove temp files
         fu.rm_hash_bakup()
+
+#Creating a main function to be compatible with CWL
+def main():
+    Solvate512(input_solute_gro_path=sys.argv[1],
+                output_gro_path=sys.argv[2],
+                input_top_tar_path=sys.argv[3],
+                output_top_path=sys.argv[4],
+                output_top_tar_path=sys.argv[5],
+                input_solvent_gro_path=sys.argv[6]
+                gmx_path=sys.argv[7],
+                log_path=sys.argv[8],
+                error_path=sys.argv[9]).launch()
+
+if __name__ == '__main__':
+    main()

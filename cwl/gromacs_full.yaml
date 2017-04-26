@@ -6,6 +6,7 @@ class: Workflow
 inputs:
   pdb2gmx_script: File
   editconf_script: File
+  solvate_scritp: File
   pdb_structure: File
 
 outputs:
@@ -25,4 +26,11 @@ steps:
     in:
       script: editconf_script
       gromacs_structure: pdb2gmx/gromacs_structure
+    out: [gromacs_structure]
+
+  solvate:
+    run: solvate.yaml
+    in:
+      script: solvate_script
+      gromacs_structure: editconf/gromacs_structure
     out: [gromacs_structure]

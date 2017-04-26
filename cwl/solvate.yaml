@@ -7,7 +7,7 @@ requirements:
   - class: InitialWorkDirRequirement
     listing:
       - entry: $(inputs.gromacs_structure)
-        entryname: structure.gro
+        entryname: editconf.gro
 
 baseCommand:
   - python
@@ -19,22 +19,24 @@ inputs:
 
   gromacs_structure: File
 arguments:
-  - valueFrom: structure.gro
-    position: 2
   - valueFrom: editconf.gro
+    position: 2
+  - valueFrom: solvate.gro
     position: 3
-  - valueFrom: octahedron
+  - valueFrom: pdb2gmx.tar
     position: 4
-  - valueFrom: '1.0'
+  - valueFrom: solvate.top
     position: 5
-  - valueFrom: True
+  - valueFrom: solvate.tar
     position: 6
-  - valueFrom: /usr/local/bin/gmx
+  - valueFrom: spc216.gro
     position: 7
-  - valueFrom: editconf.out
+  - valueFrom: /usr/local/bin/gmx
     position: 8
-  - valueFrom: editconf.err
+  - valueFrom: solvate.out
     position: 9
+  - valueFrom: solvate.err
+    position: 10
 outputs:
   gromacs_structure:
     type: File
