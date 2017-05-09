@@ -41,7 +41,7 @@ except ImportError:
 
 def main():
     start_time = time.time()
-    sys_paths = 'pycompss_open_nebula'
+    sys_paths = 'linux'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
@@ -51,6 +51,8 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
+    input_structure_pdb_path = prop['input_structure_pdb_path']
+    input_mapped_mutations_list = prop['input_mapped_mutations_list']
     workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
     fu.create_dir(os.path.abspath(workflow_path))
 
@@ -60,28 +62,39 @@ def main():
     print ''
     print ''
 
-    print 'step1:  mmbpdb -- Get PDB'
-    print '     Selected PDB code: ' + input_pdb_code
-    p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
-    fu.create_dir(p_mmbpdb.path)
-    mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
-    mmbpdb.get_pdb()
+    # If no PDB structure is provided the structure will be downloaded
+    if ( input_structure_pdb_path is None or
+         not os.path.isfile(input_structure_pdb_path) ):
+        print 'step1:  mmbpdb -- Get PDB'
+        print '     Selected PDB code: ' + input_pdb_code
+        p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
+        fu.create_dir(p_mmbpdb.path)
+        mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
+        mmbpdb.get_pdb()
+        input_structure_pdb_path = p_mmbpdb.pdb
 
-    print 'step2:  mmbuniprot -- Get mutations'
-    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.get_pdb_variants()
+    # If no mapped to pdb structure mutation list is provided the mutation list
+    # will be downloaded from the MMB rest API
+    if ( input_mapped_mutations_list is None or
+         len(input_mapped_mutations_list) < 7 ):
+        print 'step2:  mmbuniprot -- Get mutations'
+        mmbuniprot = uniprot.MmbVariants(input_pdb_code)
+        mutations = mmbuniprot.get_pdb_variants()
 
-    # This is part of the code prints some feedback to the user
-    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
-    if mutations is None or len(mutations) == 0:
-        print (prop['pdb_code'] +
-               " " + mmbuniprot.get_uniprot() + ": No variants")
-        return
+        # This is part of the code prints some feedback to the user
+        print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+        if mutations is None or len(mutations) == 0:
+            print (prop['pdb_code'] +
+                   " " + mmbuniprot.get_uniprot() + ": No variants")
+            return
+        else:
+            print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+                   ' uniprot variants')
+            print ('     Mapped to ' + str(len(mutations)) + ' ' +
+                   input_pdb_code + ' PDB variants')
+
     else:
-        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-               ' uniprot variants')
-        print ('     Mapped to ' + str(len(mutations)) + ' ' +
-               input_pdb_code + ' PDB variants')
+        mutations = [m.strip() for m in input_mapped_mutations_list.split(',')]
 
     # Number of mutations to be modelled
     if prop['mutations_limit'] is None:
@@ -104,7 +117,7 @@ def main():
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', workflow_path, mut)
         fu.create_change_dir(p_scw.path)
-        scw = scwrl.Scwrl4(input_pdb_path=p_mmbpdb.pdb,
+        scw = scwrl.Scwrl4(input_pdb_path=input_structure_pdb_path,
                            output_pdb_path=p_scw.mut_pdb,
                            mutation=mut,
                            error_path=p_scw.err, log_path=p_scw.out, scwrl_path=scwrl_path)

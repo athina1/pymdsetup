@@ -68,7 +68,7 @@ def main():
                 input_top_tar_path=sys.argv[3],
                 output_top_path=sys.argv[4],
                 output_top_tar_path=sys.argv[5],
-                input_solvent_gro_path=sys.argv[6]
+                input_solvent_gro_path=sys.argv[6],
                 gmx_path=sys.argv[7],
                 log_path=sys.argv[8],
                 error_path=sys.argv[9]).launch()
