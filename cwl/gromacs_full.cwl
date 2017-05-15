@@ -26,11 +26,26 @@ inputs:
   ec_gmx_path: string
   ec_log_path: string
   ec_error_path: string
+  #SOLVATE
+  sol_script: File
+  sol_output_gro_path: string
+  sol_output_top_path: string
+  sol_output_top_tar_path: string
+  sol_input_solvent_gro_path: string
+  sol_gmx_path: string
+  sol_log_path: string
+  sol_error_path: string
 
 outputs:
-  ec_output_gro_file:
+  sol_output_gro_file:
     type: File
-    outputSource: editconf/ec_output_gro_file
+    outputSource: solvate/sol_output_gro_file
+  sol_output_top_file:
+    type: File
+    outputSource: solvate/sol_output_top_file
+  sol_output_top_tar_file:
+    type: File
+    outputSource: solvate/sol_output_top_tar_file
 
 steps:
   pdb2gmx:
@@ -63,3 +78,18 @@ steps:
       ec_log_path: ec_log_path
       ec_error_path: ec_error_path
     out: [ec_output_gro_file]
+
+  solvate:
+    run: solvate.cwl
+    in:
+      sol_script: sol_script
+      sol_input_solute_gro_path: editconf/ec_output_gro_file
+      sol_output_gro_path: sol_output_gro_path
+      sol_input_top_tar_path: pdb2gmx/p2g_output_top_tar_file
+      sol_output_top_path: sol_output_top_path
+      sol_output_top_tar_path: sol_output_top_tar_path
+      sol_input_solvent_gro_path: sol_input_solvent_gro_path
+      sol_gmx_path: sol_gmx_path
+      sol_log_path: sol_log_path
+      sol_error_path: sol_error_path
+    out: [sol_output_gro_file, sol_output_top_file, sol_output_top_tar_file]

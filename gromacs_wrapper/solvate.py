@@ -1,6 +1,7 @@
 """Python wrapper module for the GROMACS solvate module
 """
 
+import sys
 try:
     from command_wrapper import cmd_wrapper
     from tools import file_utils as fu
