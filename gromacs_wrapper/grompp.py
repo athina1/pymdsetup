@@ -1,5 +1,6 @@
 """Python wrapper for the GROMACS grompp module
 """
+import sys
 try:
     from command_wrapper import cmd_wrapper
     from tools import file_utils as fu
@@ -56,3 +57,19 @@ class Grompp512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+#Creating a main function to be compatible with CWL
+def main():
+    if len(sys.argv) < 9:
+        sys.argv.append(None)
+    Grompp512(input_mdp_path = sys.argv[1],
+              input_gro_path = sys.argv[2],
+              input_top_tar_path = sys.argv[3],
+              output_tpr_path = sys.argv[4],
+              gmx_path = sys.argv[5],
+              log_path = sys.argv[6],
+              error_path = sys.argv[7],
+              input_cpt_path = sys.argv[8]).launch()
+
+if __name__ == '__main__':
+    main()

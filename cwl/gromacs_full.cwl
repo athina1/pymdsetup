@@ -35,17 +35,18 @@ inputs:
   sol_gmx_path: string
   sol_log_path: string
   sol_error_path: string
+  #GPPIONS
+  gppions_script: File
+  gppions_input_mdp_path: File
+  gppions_output_tpr_path: string
+  gppions_gmx_path: string
+  gppions_log_path: string
+  gppions_error_path: string
 
 outputs:
-  sol_output_gro_file:
+  gpp_output_tpr_file:
     type: File
-    outputSource: solvate/sol_output_gro_file
-  sol_output_top_file:
-    type: File
-    outputSource: solvate/sol_output_top_file
-  sol_output_top_tar_file:
-    type: File
-    outputSource: solvate/sol_output_top_tar_file
+    outputSource: gppions/gpp_output_tpr_file
 
 steps:
   pdb2gmx:
@@ -93,3 +94,16 @@ steps:
       sol_log_path: sol_log_path
       sol_error_path: sol_error_path
     out: [sol_output_gro_file, sol_output_top_file, sol_output_top_tar_file]
+
+  gppions:
+    run: grompp.cwl
+    in:
+      gpp_script: gppions_script
+      gpp_input_mdp_path: gppions_input_mdp_path
+      gpp_input_gro_path: solvate/sol_output_gro_file
+      gpp_input_top_tar_path: solvate/sol_output_top_tar_file
+      gpp_output_tpr_path: gppions_output_tpr_path
+      gpp_gmx_path: gppions_gmx_path
+      gpp_log_path: gppions_log_path
+      gpp_error_path: gppions_error_path
+    out: [gpp_output_tpr_file]
