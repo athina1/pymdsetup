@@ -1,6 +1,6 @@
 """Python wrapper for the GROMACS genion module
 """
-
+import sys
 try:
     from command_wrapper import cmd_wrapper
     from tools import file_utils as fu
@@ -72,3 +72,23 @@ class Genion512(object):
 
         # Tar new_topology
         fu.tar_top(self.output_top_path, self.output_top_tar_path)
+
+#Creating a main function to be compatible with CWL
+def main():
+    if len(sys.argv) < 13:
+        sys.argv.append(None)
+    Genion512(input_tpr_path = sys.argv[1],
+              output_gro_path = sys.argv[2],
+              input_top_tar_path = sys.argv[3],
+              output_top_path = sys.argv[4],
+              output_top_tar_path = sys.argv[5],
+              replaced_group = sys.argv[6],
+              neutral = sys.argv[7],
+              concentration = sys.argv[8],
+              gmx_path = sys.argv[9],
+              log_path = sys.argv[10],
+              error_path = sys.argv[11],
+              seed = sys.argv[12]).launch()
+
+if __name__ == '__main__':
+    main()

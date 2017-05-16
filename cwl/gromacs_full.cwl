@@ -42,11 +42,29 @@ inputs:
   gppions_gmx_path: string
   gppions_log_path: string
   gppions_error_path: string
+  #GENION
+  gio_script: File
+  gio_output_gro_path: string
+  gio_output_top_path: string
+  gio_output_top_tar_path: string
+  gio_replaced_group: string
+  gio_neutral: string
+  gio_concentration: string
+  gio_gmx_path: string
+  gio_log_path: string
+  gio_error_path: string
+
 
 outputs:
-  gpp_output_tpr_file:
+  gio_output_gro_file:
     type: File
-    outputSource: gppions/gpp_output_tpr_file
+    outputSource: genion/gio_output_gro_file
+  gio_output_top_file:
+    type: File
+    outputSource: genion/gio_output_top_file
+  gio_output_top_tar_file:
+    type: File
+    outputSource: genion/gio_output_top_tar_file
 
 steps:
   pdb2gmx:
@@ -107,3 +125,21 @@ steps:
       gpp_log_path: gppions_log_path
       gpp_error_path: gppions_error_path
     out: [gpp_output_tpr_file]
+
+  genion:
+    run: genion.cwl
+    in:
+      gio_script: gio_script
+      gio_input_tpr_path: gppions/gpp_output_tpr_file
+      gio_output_gro_path: gio_output_gro_path
+      gio_input_gro_path: solvate/sol_output_gro_file
+      gio_input_top_tar_path: solvate/sol_output_top_tar_file
+      gio_output_top_path: gio_output_top_path
+      gio_output_top_tar_path: gio_output_top_tar_path
+      gio_replaced_group: gio_replaced_group
+      gio_neutral: gio_neutral
+      gio_concentration: gio_concentration
+      gio_gmx_path: gio_gmx_path
+      gio_log_path: gio_log_path
+      gio_error_path: gio_error_path
+    out: [gio_output_gro_file, gio_output_top_file, gio_output_top_tar_file]
