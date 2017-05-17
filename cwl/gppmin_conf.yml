@@ -1,0 +1,17 @@
+#GPPMIN
+gpp_script:
+    class: File
+    path: /Users/pau/projects/pymdsetup/gromacs_wrapper/grompp.py
+gpp_input_mdp_path:
+    class: File
+    path: /Users/pau/projects/pymdsetup/workflows/mdp/gmx_full_min_test.mdp
+gpp_input_gro_path:
+    class: File
+    path: /Users/pau/projects/pymdsetup/cwl/gio.gro
+gpp_input_top_tar_path:
+    class: File
+    path: /Users/pau/projects/pymdsetup/cwl/gio_top.tar
+gpp_output_tpr_path: gppmin.tpr
+gpp_gmx_path: /usr/local/bin/gmx
+gpp_log_path: gppmin.out
+gpp_error_path: gppmin.err

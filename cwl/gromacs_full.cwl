@@ -53,18 +53,36 @@ inputs:
   gio_gmx_path: string
   gio_log_path: string
   gio_error_path: string
+  #GPPMIN
+  gppmin_script: File
+  gppmin_input_mdp_path: File
+  gppmin_output_tpr_path: string
+  gppmin_gmx_path: string
+  gppmin_log_path: string
+  gppmin_error_path: string
+  #MDMIN
+  mdmin_script: File
+  mdmin_output_gro_path: string
+  mdmin_output_trr_path: string
+  mdmin_output_edr_path: string
+  mdmin_output_xtc_path: string
+  mdmin_output_cpt_path: string
+  mdmin_gmx_path: string
+  mdmin_log_path: string
+  mdmin_error_path: string
+  #GPPNVT
+  gppnvt_script: File
+  gppnvt_input_mdp_path: File
+  gppnvt_output_tpr_path: string
+  gppnvt_gmx_path: string
+  gppnvt_log_path: string
+  gppnvt_error_path: string
 
 
 outputs:
-  gio_output_gro_file:
+  gpp_output_tpr_file:
     type: File
-    outputSource: genion/gio_output_gro_file
-  gio_output_top_file:
-    type: File
-    outputSource: genion/gio_output_top_file
-  gio_output_top_tar_file:
-    type: File
-    outputSource: genion/gio_output_top_tar_file
+    outputSource: gppnvt/gpp_output_tpr_file
 
 steps:
   pdb2gmx:
@@ -143,3 +161,44 @@ steps:
       gio_log_path: gio_log_path
       gio_error_path: gio_error_path
     out: [gio_output_gro_file, gio_output_top_file, gio_output_top_tar_file]
+
+  gppmin:
+    run: grompp.cwl
+    in:
+      gpp_script: gppmin_script
+      gpp_input_mdp_path: gppmin_input_mdp_path
+      gpp_input_gro_path: genion/gio_output_gro_file
+      gpp_input_top_tar_path: genion/gio_output_top_tar_file
+      gpp_output_tpr_path: gppmin_output_tpr_path
+      gpp_gmx_path: gppmin_gmx_path
+      gpp_log_path: gppmin_log_path
+      gpp_error_path: gppmin_error_path
+    out: [gpp_output_tpr_file]
+
+  mdmin:
+    run: mdrun.cwl
+    in:
+      md_script: mdmin_script
+      md_input_tpr_path: gppmin/gpp_output_tpr_file
+      md_output_gro_path: mdmin_output_gro_path
+      md_output_trr_path: mdmin_output_trr_path
+      md_output_edr_path: mdmin_output_edr_path
+      md_output_xtc_path: mdmin_output_xtc_path
+      md_output_cpt_path: mdmin_output_cpt_path
+      md_gmx_path: mdmin_gmx_path
+      md_log_path: mdmin_log_path
+      md_error_path: mdmin_error_path
+    out: [md_output_gro_file, md_output_trr_file, md_output_edr_file]
+
+  gppnvt:
+    run: grompp.cwl
+    in:
+      gpp_script: gppnvt_script
+      gpp_input_mdp_path: gppnvt_input_mdp_path
+      gpp_input_gro_path: mdmin/md_output_gro_file
+      gpp_input_top_tar_path: genion/gio_output_top_tar_file
+      gpp_output_tpr_path: gppnvt_output_tpr_path
+      gpp_gmx_path: gppnvt_gmx_path
+      gpp_log_path: gppnvt_log_path
+      gpp_error_path: gppnvt_error_path
+    out: [gpp_output_tpr_file]

@@ -1,5 +1,6 @@
 """Python wrapper for the GROMACS mdrun module
 """
+import sys
 try:
     from command_wrapper import cmd_wrapper
 except ImportError:
@@ -52,3 +53,18 @@ class Mdrun512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+#Creating a main function to be compatible with CWL
+def main():
+    Mdrun512(input_tpr_path = sys.argv[1],
+              output_gro_path = sys.argv[2],
+              output_trr_path = sys.argv[3],
+              output_edr_path = sys.argv[4],
+              output_xtc_path = sys.argv[5],
+              output_cpt_path = sys.argv[6],
+              gmx_path = sys.argv[7],
+              log_path = sys.argv[8],
+              error_path = sys.argv[9]).launch()
+
+if __name__ == '__main__':
+    main()

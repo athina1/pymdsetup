@@ -1,10 +1,10 @@
 #PDB2GMX
 p2g_script:
     class: File
-    path: /home/pau/projects/pymdsetup/gromacs_wrapper/pdb2gmx.py
+    path: /Users/pau/projects/pymdsetup/gromacs_wrapper/pdb2gmx.py
 p2g_input_structure_pdb_path:
     class: File
-    path: /home/pau/projects/pymdsetup/cwl/mutated.pdb
+    path: /Users/pau/projects/pymdsetup/cwl/mutated.pdb
 p2g_output_gro_path: p2g.gro
 p2g_output_top_path: p2g.top
 p2g_output_itp_path: p2g.itp
@@ -12,21 +12,21 @@ p2g_output_top_tar_path: p2g_top.tar
 p2g_water_type: spce
 p2g_force_field: amber99sb-ildn
 p2g_ignh: "True"
-p2g_gmx_path: /usr/local/gromacs/bin/gmx
+p2g_gmx_path: /usr/local/bin/gmx
 p2g_log_path: p2g.out
 p2g_error_path: p2g.err
 
 #EDITCONF
 ec_script:
     class: File
-    path: /home/pau/projects/pymdsetup/gromacs_wrapper/editconf.py
+    path: /Users/pau/projects/pymdsetup/gromacs_wrapper/editconf.py
 ec_input_gro_path:
     class: File
-    path: /home/pau/projects/pymdsetup/cwl/p2g.gro
+    path: /Users/pau/projects/pymdsetup/cwl/p2g.gro
 ec_output_gro_path: ec.gro
 ec_box_type: cubic
 ec_distance_to_molecule: "1.0"
 ec_center_molecule: "True"
-ec_gmx_path: /usr/local/gromacs/bin/gmx
+ec_gmx_path: /usr/local/bin/gmx
 ec_log_path: ec.out
 ec_error_path: ec.err
