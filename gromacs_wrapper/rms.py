@@ -1,6 +1,6 @@
 """Python wrapper for the GROMACS rms module
 """
-
+import sys
 try:
     from command_wrapper import cmd_wrapper
 except ImportError:
@@ -40,3 +40,15 @@ class Rms512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+#Creating a main function to be compatible with CWL
+def main():
+    Rms512(input_gro_path=sys.argv[1],
+               input_trr_path=sys.argv[2],
+               output_xvg_path=sys.argv[3],
+               gmx_path=sys.argv[4],
+               log_path=sys.argv[5],
+               error_path=sys.argv[6]).launch()
+
+if __name__ == '__main__':
+    main()

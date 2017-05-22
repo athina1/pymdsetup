@@ -4,6 +4,8 @@ cwlVersion: v1.0
 class: Workflow
 
 inputs:
+  #SCWRL
+  scw_mutation: string
   #PDB2GMX
   p2g_script: File
   p2g_input_structure_pdb_path: File
@@ -77,12 +79,84 @@ inputs:
   gppnvt_gmx_path: string
   gppnvt_log_path: string
   gppnvt_error_path: string
+  #MDNVT
+  mdnvt_script: File
+  mdnvt_output_gro_path: string
+  mdnvt_output_trr_path: string
+  mdnvt_output_edr_path: string
+  mdnvt_output_xtc_path: string
+  mdnvt_output_cpt_path: string
+  mdnvt_gmx_path: string
+  mdnvt_log_path: string
+  mdnvt_error_path: string
+  #GPPNPT
+  gppnpt_script: File
+  gppnpt_input_mdp_path: File
+  gppnpt_output_tpr_path: string
+  gppnpt_gmx_path: string
+  gppnpt_log_path: string
+  gppnpt_error_path: string
+  #MDNPT
+  mdnpt_script: File
+  mdnpt_output_gro_path: string
+  mdnpt_output_trr_path: string
+  mdnpt_output_edr_path: string
+  mdnpt_output_xtc_path: string
+  mdnpt_output_cpt_path: string
+  mdnpt_gmx_path: string
+  mdnpt_log_path: string
+  mdnpt_error_path: string
+  #GPPEQ
+  gppeq_script: File
+  gppeq_input_mdp_path: File
+  gppeq_output_tpr_path: string
+  gppeq_gmx_path: string
+  gppeq_log_path: string
+  gppeq_error_path: string
+  #MDEQ
+  mdeq_script: File
+  mdeq_output_gro_path: string
+  mdeq_output_trr_path: string
+  mdeq_output_edr_path: string
+  mdeq_output_xtc_path: string
+  mdeq_output_cpt_path: string
+  mdeq_gmx_path: string
+  mdeq_log_path: string
+  mdeq_error_path: string
+  #RMS
+  rms_script: File
+  rms_output_xvg_path: string
+  rms_gmx_path: string
+  rms_log_path: string
+  rms_error_path: string
+  #GNUPLOT
+  gnuplot_script: File
+  gnuplot_output_png_path: string
+  gnuplot_output_plotscript_path: string
+  gnuplot_gnuplot_path: string
+  gnuplot_log_path: string
+  gnuplot_error_path: string
 
 
 outputs:
-  gpp_output_tpr_file:
+  gnuplot_output_png_file:
+     type: File
+     outputSource: gnuplot/gnuplot_output_png_file
+  gnuplot_output_plotscript_file:
+     type: File
+     outputSource: gnuplot/gnuplot_output_plotscript_file
+  rms_output_xvg_file:
+     type: File
+     outputSource: rms/rms_output_xvg_file
+  md_output_gro_file:
     type: File
-    outputSource: gppnvt/gpp_output_tpr_file
+    outputSource: mdeq/md_output_gro_file
+  md_output_trr_file:
+    type: File
+    outputSource: mdeq/md_output_trr_file
+  md_output_xtc_file:
+    type: File
+    outputSource: mdeq/md_output_xtc_file
 
 steps:
   pdb2gmx:
@@ -202,3 +276,101 @@ steps:
       gpp_log_path: gppnvt_log_path
       gpp_error_path: gppnvt_error_path
     out: [gpp_output_tpr_file]
+
+  mdnvt:
+    run: mdrun.cwl
+    in:
+      md_script: mdnvt_script
+      md_input_tpr_path: gppnvt/gpp_output_tpr_file
+      md_output_gro_path: mdnvt_output_gro_path
+      md_output_trr_path: mdnvt_output_trr_path
+      md_output_edr_path: mdnvt_output_edr_path
+      md_output_xtc_path: mdnvt_output_xtc_path
+      md_output_cpt_path: mdnvt_output_cpt_path
+      md_gmx_path: mdnvt_gmx_path
+      md_log_path: mdnvt_log_path
+      md_error_path: mdnvt_error_path
+    out: [md_output_gro_file, md_output_trr_file, md_output_edr_file, md_output_cpt_file]
+
+  gppnpt:
+    run: grompp.cwl
+    in:
+      gpp_script: gppnpt_script
+      gpp_input_mdp_path: gppnpt_input_mdp_path
+      gpp_input_gro_path: mdnvt/md_output_gro_file
+      gpp_input_top_tar_path: genion/gio_output_top_tar_file
+      gpp_output_tpr_path: gppnpt_output_tpr_path
+      gpp_gmx_path: gppnpt_gmx_path
+      gpp_log_path: gppnpt_log_path
+      gpp_error_path: gppnpt_error_path
+      gpp_input_cpt_path: mdnvt/md_output_cpt_file
+    out: [gpp_output_tpr_file]
+
+  mdnpt:
+    run: mdrun.cwl
+    in:
+      md_script: mdnpt_script
+      md_input_tpr_path: gppnpt/gpp_output_tpr_file
+      md_output_gro_path: mdnpt_output_gro_path
+      md_output_trr_path: mdnpt_output_trr_path
+      md_output_edr_path: mdnpt_output_edr_path
+      md_output_xtc_path: mdnpt_output_xtc_path
+      md_output_cpt_path: mdnpt_output_cpt_path
+      md_gmx_path: mdnpt_gmx_path
+      md_log_path: mdnpt_log_path
+      md_error_path: mdnpt_error_path
+    out: [md_output_gro_file, md_output_trr_file, md_output_edr_file, md_output_cpt_file]
+
+  gppeq:
+    run: grompp.cwl
+    in:
+      gpp_script: gppeq_script
+      gpp_input_mdp_path: gppeq_input_mdp_path
+      gpp_input_gro_path: mdnpt/md_output_gro_file
+      gpp_input_top_tar_path: genion/gio_output_top_tar_file
+      gpp_output_tpr_path: gppeq_output_tpr_path
+      gpp_gmx_path: gppeq_gmx_path
+      gpp_log_path: gppeq_log_path
+      gpp_error_path: gppeq_error_path
+      gpp_input_cpt_path: mdnpt/md_output_cpt_file
+    out: [gpp_output_tpr_file]
+
+  mdeq:
+    run: mdrun.cwl
+    in:
+      md_script: mdeq_script
+      md_input_tpr_path: gppeq/gpp_output_tpr_file
+      md_output_gro_path: mdeq_output_gro_path
+      md_output_trr_path: mdeq_output_trr_path
+      md_output_edr_path: mdeq_output_edr_path
+      md_output_xtc_path: mdeq_output_xtc_path
+      md_output_cpt_path: mdeq_output_cpt_path
+      md_gmx_path: mdeq_gmx_path
+      md_log_path: mdeq_log_path
+      md_error_path: mdeq_error_path
+    out: [md_output_gro_file, md_output_trr_file, md_output_edr_file, md_output_xtc_file, md_output_cpt_file]
+
+  rms:
+    run: rms.cwl
+    in:
+      rms_script: rms_script
+      rms_input_gro_path: mdeq/md_output_gro_file
+      rms_input_trr_path: mdeq/md_output_trr_file
+      rms_output_xvg_path: rms_output_xvg_path
+      rms_gmx_path: rms_gmx_path
+      rms_log_path: rms_log_path
+      rms_error_path: rms_error_path
+    out: [rms_output_xvg_file]
+
+  gnuplot:
+    run: gnuplot.cwl
+    in:
+      gnuplot_script: gnuplot_script
+      gnuplot_mutation: scw_mutation
+      gnuplot_xvg_file_path: rms/rms_output_xvg_file
+      gnuplot_output_png_path: gnuplot_output_png_path
+      gnuplot_output_plotscript_path: gnuplot_output_plotscript_path
+      gnuplot_gnuplot_path: gnuplot_gnuplot_path
+      gnuplot_log_path: gnuplot_log_path
+      gnuplot_error_path: gnuplot_error_path
+    out: [gnuplot_output_png_file, gnuplot_output_plotscript_file]

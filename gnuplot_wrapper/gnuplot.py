@@ -1,7 +1,7 @@
 """Python wrapper module for SCWRL
 """
 import os
-
+import sys
 try:
     from command_wrapper import cmd_wrapper
     from tools import file_utils as fu
@@ -51,3 +51,17 @@ class Gnuplot46(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+#Creating a main function to be compatible with CWL
+def main():
+    mutation = sys.argv[1]
+    xvg_file_path = sys.argv[2]
+    Gnuplot46(input_xvg_path_dict={mutation:xvg_file_path},
+               output_png_path=sys.argv[3],
+               output_plotscript_path=sys.argv[4],
+               gnuplot_path=sys.argv[5],
+               log_path=sys.argv[6],
+               error_path=sys.argv[7]).launch()
+
+if __name__ == '__main__':
+    main()
