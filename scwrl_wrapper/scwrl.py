@@ -1,5 +1,6 @@
 """Python wrapper module for SCWRL
 """
+import sys
 import re
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
@@ -80,3 +81,15 @@ class Scwrl4(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+#Creating a main function to be compatible with CWL
+def main():
+    Scwrl4(input_pdb_path=sys.argv[1],
+               output_pdb_path=sys.argv[2],
+               mutation=sys.argv[3],
+               scwrl_path=sys.argv[4],
+               log_path=sys.argv[5],
+               error_path=sys.argv[6]).launch()
+
+if __name__ == '__main__':
+    main()

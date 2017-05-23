@@ -5,10 +5,15 @@ class: Workflow
 
 inputs:
   #SCWRL
+  scw_script: File
+  scw_input_pdb_path: File
+  scw_output_pdb_path: string
   scw_mutation: string
+  scw_scwrl_path: string
+  scw_log_path: string
+  scw_error_path: string
   #PDB2GMX
   p2g_script: File
-  p2g_input_structure_pdb_path: File
   p2g_output_gro_path: string
   p2g_output_top_path: string
   p2g_output_itp_path: string
@@ -159,11 +164,22 @@ outputs:
     outputSource: mdeq/md_output_xtc_file
 
 steps:
+  scwrl:
+    run: scwrl.cwl
+    in:
+      scw_script: scw_script
+      scw_input_pdb_path: scw_input_pdb_path
+      scw_output_pdb_path: scw_output_pdb_path
+      scw_mutation: scw_mutation
+      scw_path: scw_scwrl_path
+      scw_log_path: scw_log_path
+      scw_error_path: scw_error_path
+    out: [scw_output_pdb_file]
   pdb2gmx:
     run: pdb2gmx.cwl
     in:
       p2g_script: p2g_script
-      p2g_input_structure_pdb_path: p2g_input_structure_pdb_path
+      p2g_input_structure_pdb_path: scwrl/scw_output_pdb_file
       p2g_output_gro_path: p2g_output_gro_path
       p2g_output_top_path: p2g_output_top_path
       p2g_output_itp_path: p2g_output_itp_path
