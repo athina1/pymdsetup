@@ -187,7 +187,7 @@ def main():
                                output_trr_path=p_mdmin.trr,
                                output_gro_path=p_mdmin.gro,
                                output_edr_path=p_mdmin.edr,
-                               log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path
+                               log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path,
                                num_threads=p_mdmin.num_threads)
         mdmin.launch()
 
@@ -211,7 +211,7 @@ def main():
                                output_gro_path=p_mdnvt.gro,
                                output_edr_path=p_mdnvt.edr,
                                output_cpt_path=p_mdnvt.cpt,
-                               log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path
+                               log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path,
                                num_threads=p_mdnvt.num_threads)
         mdnvt.launch()
 
@@ -236,7 +236,7 @@ def main():
                                output_gro_path=p_mdnpt.gro,
                                output_edr_path=p_mdnpt.edr,
                                output_cpt_path=p_mdnpt.cpt,
-                               log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path
+                               log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path,
                                num_threads=p_mdnpt.num_threads)
         mdnpt.launch()
 
@@ -261,7 +261,7 @@ def main():
                               output_gro_path=p_mdeq.gro,
                               output_edr_path=p_mdeq.edr,
                               output_cpt_path=p_mdeq.cpt,
-                              log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path
+                              log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path,
                               num_threads=p_mdeq.num_threads)
         mdeq.launch()
 
