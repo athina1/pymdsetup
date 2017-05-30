@@ -1,8 +1,9 @@
 title		= OPLS MD simulation
 ; Run parameters
-integrator	= md		; leap-frog integrator
-;nsteps		= 500000	; 2 * 500000 = 1000 ps (1 ns)
-nsteps		= 500	        ; 2 * 500 = 1000 fs (1 ps)
+integrator	= md		      ; leap-frog integrator
+;nsteps		= 500000	      ; 2 * 500000 = 1000 ps (1 ns)
+;nsteps		= 500	          ; 2 * 500 = 1000 fs (1 ps)
+nsteps		= 5000	        ; 2 * 5000 = 10000 fs (10 ps)
 dt		= 0.002		; 2 fs
 ; Output control
 nstxout		        = 500	; save coordinates every 0.1 ps

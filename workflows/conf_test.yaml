@@ -41,7 +41,7 @@ pycompss_open_nebula:
   # pdb_code field will be used to download the structure)
   input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
-pycompss_MN:
+mare_nostrum:
   gmx_path: /gpfs/home/bsc51/bsc51210/gromacs/bin/gmx
   scwrl4_path: /gpfs/home/bsc51/bsc51210/scwrl4/Scwrl4
   workflow_path: /gpfs/home/bsc51/bsc51210/pymdsetup/testworkflow
