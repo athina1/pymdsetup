@@ -87,7 +87,7 @@ step4_p2g:
     # Available water molecule types: tip3p, spce, etc.
     water_type: spce
     # Available force fields: amber99sb-ildn, oplsaa, etc.
-    force_field: oplsaa
+    force_field: amber99sb-ildn
     # Should be set to False in next release
     ignh: True
 

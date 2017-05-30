@@ -51,6 +51,10 @@ class Mdrun512(object):
             cmd.append(self.output_cpt_path)
         cmd += ['-c', self.output_gro_path, '-e', self.output_edr_path]
 
+        #JUST FOR TESTING PURPOSES number of threads to run (0 is guess)
+        cmd.append('-nt')
+        cmd.append('0')
+
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
