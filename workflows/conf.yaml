@@ -7,6 +7,9 @@ linux:
   workflow_path: /home/pau/projects/pymdsetup/testworkflow
   mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
   gnuplot_path: /usr/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 macos:
   gmx_path: /usr/local/bin/gmx
@@ -14,6 +17,9 @@ macos:
   workflow_path: /Users/pau/projects/pymdsetup/testworkflow
   mdp_path: /Users/pau/projects/pymdsetup/workflows/mdp
   gnuplot_path: /usr/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 pycompss_vm:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -21,6 +27,9 @@ pycompss_vm:
   workflow_path: /home/compss/pymdsetup/testworkflow
   mdp_path: /home/compss/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 pycompss_open_nebula:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -28,7 +37,9 @@ pycompss_open_nebula:
   workflow_path: /home/user/pymdsetup/testworkflow
   mdp_path: /home/user/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
-
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 pycompss_MN:
   gmx_path: /gpfs/home/bsc51/bsc51210/gromacs/bin/gmx
@@ -36,14 +47,16 @@ pycompss_MN:
   workflow_path: /gpfs/home/bsc51/bsc51210/pymdsetup/testworkflow
   mdp_path: /gpfs/home/bsc51/bsc51210/pymdsetup/workflows/mdp/
   gnuplot_path: /gpfs/apps/MN3/GNUPLOT/5.0.1/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  input_structure_pdb_path: /gpfs/home/bsc51/bsc51210/structure.pdb
+
 ##############################################################################
 
 # PDB code
 pdb_code: 2JQ3
 
-# Path to the initial pdb structure (if this field is empty
-# pdb_code field will be used to download the structure)
-input_structure_pdb_path: /home/pau/Desktop/structure.pdb
+
 
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
@@ -161,6 +174,8 @@ step10_mdmin:
     edr: mdmin.edr
     cpt: mdmin.cpt
     xtc: mdmin.xtc
+  properties:
+    num_threads: 0
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules,
 # volume and temp
@@ -183,6 +198,9 @@ step12_mdnvt:
     edr: mdnvt.edr
     cpt: mdnvt.cpt
     xtc: mdnvt.xtc
+  properties:
+    num_threads: 0
+
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure
 # and temp
@@ -205,6 +223,9 @@ step14_mdnpt:
     edr: mdnpt.edr
     cpt: mdnpt.cpt
     xtc: mdnpt.xtc
+  properties:
+    num_threads: 0
+
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
@@ -226,6 +247,9 @@ step16_mdeq:
     edr: mdeq.edr
     cpt: mdeq.cpt
     xtc: mdeq.xtc
+  properties:
+    num_threads: 0
+
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:

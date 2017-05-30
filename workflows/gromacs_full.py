@@ -26,9 +26,9 @@ import gnuplot_wrapper.gnuplot as gnuplot
 
 def main():
     start_time = time.time()
-    sys_paths = 'linux'
+    sys_paths = 'macos'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
-    conf_file_path = os.path.join(root_dir, 'conf.yaml')
+    conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
     mdp_dir = prop[sys_paths]['mdp_path']
@@ -36,7 +36,7 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
-    input_structure_pdb_path = prop['input_structure_pdb_path']
+    input_structure_pdb_path = prop[sys_paths]['input_structure_pdb_path']
     input_mapped_mutations_list = prop['input_mapped_mutations_list']
     workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
     fu.create_dir(os.path.abspath(workflow_path))
@@ -187,7 +187,8 @@ def main():
                                output_trr_path=p_mdmin.trr,
                                output_gro_path=p_mdmin.gro,
                                output_edr_path=p_mdmin.edr,
-                               log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path)
+                               log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path
+                               num_threads=p_mdmin.num_threads)
         mdmin.launch()
 
         print ('step11: gppnvt --- Preprocessing: nvt '
@@ -210,7 +211,8 @@ def main():
                                output_gro_path=p_mdnvt.gro,
                                output_edr_path=p_mdnvt.edr,
                                output_cpt_path=p_mdnvt.cpt,
-                               log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path)
+                               log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path
+                               num_threads=p_mdnvt.num_threads)
         mdnvt.launch()
 
         print ('step13: gppnpt --- Preprocessing: npt '
@@ -234,7 +236,8 @@ def main():
                                output_gro_path=p_mdnpt.gro,
                                output_edr_path=p_mdnpt.edr,
                                output_cpt_path=p_mdnpt.cpt,
-                               log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path)
+                               log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path
+                               num_threads=p_mdnpt.num_threads)
         mdnpt.launch()
 
         print ('step15: gppeq ---- '
@@ -258,7 +261,8 @@ def main():
                               output_gro_path=p_mdeq.gro,
                               output_edr_path=p_mdeq.edr,
                               output_cpt_path=p_mdeq.cpt,
-                              log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path)
+                              log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path
+                              num_threads=p_mdeq.num_threads)
         mdeq.launch()
 
         print ('step17: rmsd ----- Computing RMSD')

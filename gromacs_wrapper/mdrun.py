@@ -25,7 +25,7 @@ class Mdrun512(object):
     def __init__(self, input_tpr_path, output_trr_path, output_gro_path,
                  output_edr_path, output_xtc_path=None,
                  output_cpt_path=None, log_path=None,
-                 error_path=None, gmx_path=None):
+                 error_path=None, gmx_path=None, num_threads=None):
         self.input_tpr_path = input_tpr_path
         self.output_gro_path = output_gro_path
         self.output_trr_path = output_trr_path
@@ -35,6 +35,7 @@ class Mdrun512(object):
         self.log_path = log_path
         self.error_path = error_path
         self.gmx_path = gmx_path
+        self.num_threads = num_threads
 
     def launch(self):
         """Launches the execution of the GROMACS mdrun module.
@@ -52,8 +53,9 @@ class Mdrun512(object):
         cmd += ['-c', self.output_gro_path, '-e', self.output_edr_path]
 
         #JUST FOR TESTING PURPOSES number of threads to run (0 is guess)
-        cmd.append('-nt')
-        cmd.append('0')
+        if not self.num_threads is None:
+            cmd.append('-nt')
+            cmd.append(self.num_threads)
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
