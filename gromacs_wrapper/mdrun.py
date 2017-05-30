@@ -55,7 +55,7 @@ class Mdrun512(object):
         #JUST FOR TESTING PURPOSES number of threads to run (0 is guess)
         if not self.num_threads is None:
             cmd.append('-nt')
-            cmd.append(self.num_threads)
+            cmd.append(str(self.num_threads))
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
