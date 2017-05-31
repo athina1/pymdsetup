@@ -26,7 +26,7 @@ import gnuplot_wrapper.gnuplot as gnuplot
 
 def main():
     start_time = time.time()
-    sys_paths = 'macos'
+    sys_paths = 'mare_nostrum'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf_test_nt1.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
