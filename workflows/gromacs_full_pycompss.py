@@ -29,9 +29,9 @@ def main():
     from pycompss.api.api import waitForAllTasks
     from pycompss.api.api import compss_wait_on
     start_time = time.time()
-    sys_paths = 'mare_nostrum'
-    root_dir = "/gpfs/home/bsc51/bsc51210/pymdsetup/workflow"
-    conf_file_path = os.path.join(root_dir, 'conf_test_10_nt0.yaml')
+    sys_paths = 'pycompss_open_nebula'
+    root_dir = "/home/user/pymdsetup/workflows"
+    conf_file_path = os.path.join(root_dir, 'conf_test_10_nt1.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
     mdp_dir = prop[sys_paths]['mdp_path']
