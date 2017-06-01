@@ -65,7 +65,7 @@ input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
 
 # Max number of mutations
 # Available values None, Integer
-mutations_limit: 3
+mutations_limit: 0
 
 
 ########################## Step paths & properties ##########################
