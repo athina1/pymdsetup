@@ -21,7 +21,7 @@ macos:
   # pdb_code field will be used to download the structure)
   input_structure_pdb_path: /Users/pau/structure.pdb
 
-pycompss_vm:
+virtualbox:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/compss/scwrl/scwrl4/Scwrl4
   workflow_path: /home/compss/pymdsetup/testworkflow
@@ -31,7 +31,7 @@ pycompss_vm:
   # pdb_code field will be used to download the structure)
   input_structure_pdb_path: /home/compss/structure.pdb
 
-pycompss_open_nebula:
+open_nebula:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/user/scwrl4/Scwrl4
   workflow_path: /home/user/pymdsetup/testworkflow

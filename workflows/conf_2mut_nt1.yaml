@@ -19,9 +19,9 @@ macos:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  input_structure_pdb_path: /Users/pau/structure.pdb
+  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
-pycompss_vm:
+virtualbox:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/compss/scwrl/scwrl4/Scwrl4
   workflow_path: /home/compss/pymdsetup/testworkflow
@@ -29,9 +29,9 @@ pycompss_vm:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  input_structure_pdb_path: /home/compss/structure.pdb
+  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
-pycompss_open_nebula:
+open_nebula:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/user/scwrl4/Scwrl4
   workflow_path: /home/user/pymdsetup/testworkflow
@@ -63,10 +63,10 @@ input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
-input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
+input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
 
 # Max number of mutations
-# Available values 0 for all, Integer
+# Available values None, Integer
 mutations_limit: 0
 
 
@@ -177,7 +177,7 @@ step10_mdmin:
     cpt: mdmin.cpt
     xtc: mdmin.xtc
   properties:
-    num_threads: 0
+    num_threads: 1
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules,
 # volume and temp
@@ -201,7 +201,7 @@ step12_mdnvt:
     cpt: mdnvt.cpt
     xtc: mdnvt.xtc
   properties:
-    num_threads: 0
+    num_threads: 1
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure
 # and temp
@@ -225,7 +225,7 @@ step14_mdnpt:
     cpt: mdnpt.cpt
     xtc: mdnpt.xtc
   properties:
-    num_threads: 0
+    num_threads: 1
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
@@ -248,7 +248,7 @@ step16_mdeq:
     cpt: mdeq.cpt
     xtc: mdeq.xtc
   properties:
-    num_threads: 0
+    num_threads: 1
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:

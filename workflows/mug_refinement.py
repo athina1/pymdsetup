@@ -42,7 +42,7 @@ except ImportError:
 
 def main():
     start_time = time.time()
-    sys_paths = 'pycompss_open_nebula'
+    sys_paths = 'open_nebula'
     structure_pdb_path = sys.argv[1]
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
     conf_file_path = os.path.join(root_dir, 'conf_test.yaml')
