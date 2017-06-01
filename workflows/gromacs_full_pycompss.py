@@ -108,7 +108,7 @@ def main():
         scwrlPyCOMPSs(dependency_file_in=opj(workflow_path, 'step2_mmbuniprot.task'),
                       dependency_file_out=opj(p_scw.path, 'step3_scw.task'),
                       task_path=p_scw.path,
-                      pdb_path=p_mmbpdb.pdb,
+                      pdb_path=input_structure_pdb_path,
                       output_pdb_path=p_scw.mut_pdb,
                       mutation=mut,
                       log_path=p_scw.out, error_path=p_scw.err, scwrl_path=scwrl_path)
