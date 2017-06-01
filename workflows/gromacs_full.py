@@ -28,7 +28,7 @@ def main():
     start_time = time.time()
     sys_paths = 'mare_nostrum'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
-    conf_file_path = os.path.join(root_dir, 'conf_test_nt1.yaml')
+    conf_file_path = os.path.join(root_dir, 'conf_test_10_nt0.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
     mdp_dir = prop[sys_paths]['mdp_path']
