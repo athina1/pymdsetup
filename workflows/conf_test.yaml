@@ -39,7 +39,7 @@ pycompss_open_nebula:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  input_structure_pdb_path: /home/user/structure.pdb
 
 mare_nostrum:
   gmx_path: /gpfs/home/bsc51/bsc51210/gromacs/bin/gmx
