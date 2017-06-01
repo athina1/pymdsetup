@@ -83,9 +83,10 @@ def main():
 
     else:
         mutations = [m.strip() for m in input_mapped_mutations_list.split(',')]
+    open(opj(workflow_path, 'step2_mmbuniprot.task'), 'a').close()
 
     # Number of mutations to be modelled
-    if prop['mutations_limit'] is None:
+    if prop['mutations_limit'] is None or int(prop['mutations_limit']) == 0:
         mutations_limit = len(mutations)
     else:
         mutations_limit = min(len(mutations), int(prop['mutations_limit']))
@@ -342,18 +343,20 @@ def scwrlPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
 
 
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      structure_pdb_path=IN,
+      input_structure_pdb_path=IN,
       output_gro_path=IN,
       output_top_path=IN,
+      output_itp_path=IN,
       output_top_tar_path=IN,
       water_type=IN,
       force_field=IN,
       ignh=IN,
       log_path=IN, error_path=IN, gmx_path=IN)
 def pdb2gmxPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                    structure_pdb_path,
+                    input_structure_pdb_path,
                     output_gro_path,
                     output_top_path,
+                    output_itp_path,
                     output_top_tar_path,
                     water_type,
                     force_field,
@@ -361,9 +364,10 @@ def pdb2gmxPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                     log_path, error_path, gmx_path):
     """Launches the GROMACS pdb2gmx module using the PyCOMPSs library."""
     fu.create_change_dir(task_path)
-    pdb2gmx.Pdb2gmx512(structure_pdb_path,
+    pdb2gmx.Pdb2gmx512(input_structure_pdb_path,
                        output_gro_path,
                        output_top_path,
+                       output_itp_path,
                        output_top_tar_path,
                        water_type,
                        force_field,
@@ -509,7 +513,8 @@ def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                   output_edr_path,
                   output_xtc_path,
                   output_cpt_path,
-                  log_path, error_path, num_threads):
+                  log_path, error_path, gmx_path,
+                  num_threads):
     """Launches the GROMACS mdrun module using the PyCOMPSs library."""
     output_xtc_path = None if output_xtc_path.lower() == 'none' else output_xtc_path
     output_cpt_path = None if output_cpt_path.lower() == 'none' else output_cpt_path

@@ -19,7 +19,7 @@ macos:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  input_structure_pdb_path: /Users/pau/structure.pdb
 
 pycompss_vm:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -29,7 +29,7 @@ pycompss_vm:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  input_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  input_structure_pdb_path: /home/compss/structure.pdb
 
 pycompss_open_nebula:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -66,8 +66,8 @@ input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
 
 # Max number of mutations
-# Available values None, Integer
-mutations_limit: 3
+# Available values 0 for all, Integer
+mutations_limit: 0
 
 
 ########################## Step paths & properties ##########################

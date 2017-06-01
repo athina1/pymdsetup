@@ -84,7 +84,7 @@ def main():
         mutations = [m.strip() for m in input_mapped_mutations_list.split(',')]
 
     # Number of mutations to be modelled
-    if prop['mutations_limit'] is None:
+    if prop['mutations_limit'] is None or int(prop['mutations_limit']) == 0:
         mutations_limit = len(mutations)
     else:
         mutations_limit = min(len(mutations), int(prop['mutations_limit']))
@@ -133,7 +133,7 @@ def main():
                                   box_type=p_ec.box_type,
                                   distance_to_molecule=float(p_ec.distance_to_molecule),
                                   center_molecule=settings.str2bool(p_ec.center_molecule),
-                                  log_path=p_ec.out, error_path=p_ec.err, gmx_path=gmx_path,)
+                                  log_path=p_ec.out, error_path=p_ec.err, gmx_path=gmx_path)
         ec.launch()
 
         print 'step6:  sol ------ Fill the box with water molecules'
