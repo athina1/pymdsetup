@@ -3,8 +3,8 @@ Gromacs full setup from a pdb
 """
 import os
 import sys
-import shutil
 import time
+import shutil
 from os.path import join as opj
 
 import tools.file_utils as fu
@@ -28,10 +28,10 @@ from pycompss.api.constraint import constraint
 def main():
     from pycompss.api.api import waitForAllTasks
     from pycompss.api.api import compss_wait_on
-    start_time= time.time()
+    start_time = time.time()
     sys_paths = 'pycompss_open_nebula'
     root_dir = "/home/user/pymdsetup/workflows"
-    conf_file_path = os.path.join(root_dir, 'conf.yaml')
+    conf_file_path = os.path.join(root_dir, 'conf_test_10_nt0.yaml')
     conf = settings.YamlReader(yaml_path=(conf_file_path))
     prop = conf.properties
     mdp_dir = prop[sys_paths]['mdp_path']
@@ -39,6 +39,8 @@ def main():
     scwrl_path = prop[sys_paths]['scwrl4_path']
     gnuplot_path = prop[sys_paths]['gnuplot_path']
     input_pdb_code = prop['pdb_code']
+    input_structure_pdb_path = prop[sys_paths]['input_structure_pdb_path']
+    input_mapped_mutations_list = prop['input_mapped_mutations_list']
     workflow_path = fu.get_workflow_path(prop[sys_paths]['workflow_path'])
     fu.create_dir(os.path.abspath(workflow_path))
 
@@ -48,29 +50,39 @@ def main():
     print ''
     print ''
 
-    print 'step1:  mmbpdb -- Get PDB'
-    print '     Selected PDB code: ' + input_pdb_code
-    p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
-    fu.create_dir(p_mmbpdb.path)
-    mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
-    mmbpdb.get_pdb()
+    # If no PDB structure is provided the structure will be downloaded
+    if ( input_structure_pdb_path is None or
+         not os.path.isfile(input_structure_pdb_path) ):
+        print 'step1:  mmbpdb -- Get PDB'
+        print '     Selected PDB code: ' + input_pdb_code
+        p_mmbpdb = conf.step_prop('step1_mmbpdb', workflow_path)
+        fu.create_dir(p_mmbpdb.path)
+        mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
+        mmbpdb.get_pdb()
+        input_structure_pdb_path = p_mmbpdb.pdb
 
-    print 'step2:  mmbuniprot -- Get mutations'
-    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.get_pdb_variants()
-    open(opj(workflow_path, 'step2_mmbuniprot.task'), 'a').close()
+    # If no mapped to pdb structure mutation list is provided the mutation list
+    # will be downloaded from the MMB rest API
+    if ( input_mapped_mutations_list is None or
+         len(input_mapped_mutations_list) < 7 ):
+        print 'step2:  mmbuniprot -- Get mutations'
+        mmbuniprot = uniprot.MmbVariants(input_pdb_code)
+        mutations = mmbuniprot.get_pdb_variants()
 
-#    This is part of the code prints some feedback to the user
-    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
-    if mutations is None or len(mutations) == 0:
-        print (prop['pdb_code'] +
-               " " + mmbuniprot.get_uniprot() + ": No variants")
-        return
+        # This is part of the code prints some feedback to the user
+        print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+        if mutations is None or len(mutations) == 0:
+            print (prop['pdb_code'] +
+                   " " + mmbuniprot.get_uniprot() + ": No variants")
+            return
+        else:
+            print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+                   ' uniprot variants')
+            print ('     Mapped to ' + str(len(mutations)) + ' ' +
+                   input_pdb_code + ' PDB variants')
+
     else:
-        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-               ' uniprot variants')
-        print ('     Mapped to ' + str(len(mutations)) + ' ' +
-               input_pdb_code + ' PDB variants')
+        mutations = [m.strip() for m in input_mapped_mutations_list.split(',')]
 
     # Number of mutations to be modelled
     if prop['mutations_limit'] is None:
@@ -193,7 +205,8 @@ def main():
                       output_edr_path=p_mdmin.edr,
                       output_xtc_path='None',
                       output_cpt_path='None',
-                      log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path)
+                      log_path=p_mdmin.out, error_path=p_mdmin.err, gmx_path=gmx_path,
+                      num_threads=p_mdmin.num_threads)
 
         print ('step11: gppnvt --- Preprocessing: nvt '
                'constant number of molecules, volume and temp')
@@ -220,7 +233,8 @@ def main():
                       output_edr_path=p_mdnvt.edr,
                       output_xtc_path=p_mdnvt.xtc,
                       output_cpt_path=p_mdnvt.cpt,
-                      log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path)
+                      log_path=p_mdnvt.out, error_path=p_mdnvt.err, gmx_path=gmx_path,
+                      num_threads=p_mdnvt.num_threads)
 
         print ('step13: gppnpt --- Preprocessing: npt '
                'constant number of molecules, pressure and temp')
@@ -247,7 +261,8 @@ def main():
                       output_edr_path=p_mdnpt.edr,
                       output_xtc_path=p_mdnpt.xtc,
                       output_cpt_path=p_mdnpt.cpt,
-                      log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path)
+                      log_path=p_mdnpt.out, error_path=p_mdnpt.err, gmx_path=gmx_path,
+                      num_threads=p_mdnvt.num_threads)
 
         print ('step15: gppeq ---- '
                'Preprocessing: 1ns Molecular dynamics Equilibration')
@@ -274,7 +289,8 @@ def main():
                       output_edr_path=p_mdeq.edr,
                       output_xtc_path=p_mdeq.xtc,
                       output_cpt_path=p_mdeq.cpt,
-                      log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path)
+                      log_path=p_mdeq.out, error_path=p_mdeq.err, gmx_path=gmx_path,
+                      num_threads=p_mdnvt.num_threads)
 
         print ('step17: rmsd ----- Computing RMSD')
         p_rmsd = conf.step_prop('step17_rmsd', workflow_path, mut)
@@ -484,7 +500,8 @@ def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
       output_edr_path=IN,
       output_xtc_path=IN,
       output_cpt_path=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
+      log_path=IN, error_path=IN, gmx_path=IN,
+      num_threads=IN)
 def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                   input_tpr_path,
                   output_gro_path,
@@ -492,7 +509,7 @@ def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                   output_edr_path,
                   output_xtc_path,
                   output_cpt_path,
-                  log_path, error_path, gmx_path):
+                  log_path, error_path, num_threads):
     """Launches the GROMACS mdrun module using the PyCOMPSs library."""
     output_xtc_path = None if output_xtc_path.lower() == 'none' else output_xtc_path
     output_cpt_path = None if output_cpt_path.lower() == 'none' else output_cpt_path
@@ -503,7 +520,9 @@ def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
                    output_edr_path=output_edr_path,
                    output_xtc_path=output_xtc_path,
                    output_cpt_path=output_cpt_path,
-                   log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
+                   log_path=log_path, error_path=error_path, gmx_path=gmx_path,
+                   num_threads=num_threads).launch()
+
     open(dependency_file_out, 'a').close()
 
 

@@ -25,6 +25,8 @@ import gnuplot_wrapper.gnuplot as gnuplot
 
 
 def main():
+
+
     start_time = time.time()
     sys_paths = 'mare_nostrum'
     root_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
