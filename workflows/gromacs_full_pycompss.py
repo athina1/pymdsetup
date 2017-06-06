@@ -317,7 +317,19 @@ def main():
     elapsed_time = time.time() - start_time
     print "Elapsed time: ", elapsed_time
     with open(opj(workflow_path, 'time.txt'), 'a') as time_file:
+        time_file.write('Elapsed time: '
         time_file.write(str(elapsed_time))
+        time_file.write('\n')
+        time_file.write('Config File: '
+        time_file.write(conf_file_path)
+        time_file.write('\n')
+        time_file.write('Sytem: '
+        time_file.write(sys_paths)
+        time_file.write('\n')
+        if len(sys.argv) >= 4
+            time_file.write('Nodes: '
+            time_file.write(sys.argv[3])
+            time_file.write('\n')
 
 ############################## PyCOMPSs functions #############################
 @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
