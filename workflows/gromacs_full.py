@@ -298,7 +298,7 @@ def main():
         time_file.write('Sytem: ')
         time_file.write(sys_paths)
         time_file.write('\n')
-        if len(sys.argv) >= 4
+        if len(sys.argv) >= 4:
             time_file.write('Nodes: ')
             time_file.write(sys.argv[3])
             time_file.write('\n')
