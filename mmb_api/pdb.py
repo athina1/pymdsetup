@@ -16,7 +16,7 @@ class MmbPdb(object):
             ie: '/home/user1/2ki5.pdb'
     """
 
-    def __init__(self, pdb_code, output_pdb_path):
+    def __init__(self, pdb_code, output_pdb_path, **kwargs):
         self._pdb_code = pdb_code
         self._output_pdb_path = output_pdb_path
         self._filter = "filter=/1&group=ATOM"

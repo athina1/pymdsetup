@@ -53,17 +53,11 @@ mare_nostrum:
 
 ##############################################################################
 
-# PDB code
-pdb_code: 2JQ3
-
-# Path to the initial pdb structure (if this field is empty
-# pdb_code field will be used to download the structure)
-input_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
-input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
+#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
 
 # Max number of mutations
 # Available values None, Integer
@@ -75,10 +69,15 @@ mutations_limit: 0
 step1_mmbpdb:
   paths:
     path: step1_mmbpdb
-    pdb: structure.pdb
+    output_pdb_path: structure.pdb
+  properties:
+    pdb_code: 2JQ3
+
 
 # Step2: mmbuniprot -- Get mutations
-# No configuration yet required
+step2_mmbuniprot:
+  properties:
+    pdb_code: dependency/step1_mmbpdb/pdb_code
 
 # Step3: scw -- Model mutation
 step3_scw:

@@ -37,13 +37,7 @@ class YamlReader(object):
         with open(self.yaml_path, 'r') as stream:
             return yaml.load(stream)
 
-    def step_prop(self, step, workflow_path, mut=None):
-
-        class Dict2Obj(object):
-            def __init__(self, dictionary):
-                for key in dictionary:
-                    setattr(self, key, dictionary[key])
-
+    def step_prop_dic(self, step, workflow_path, mut=None):
         self.properties = self._read_yaml()
         dp = self.properties[step]
         if 'paths' in dp:
@@ -62,8 +56,18 @@ class YamlReader(object):
         dp.pop('paths', None)
         dp.pop('properties', None)
 
-        return Dict2Obj(dp)
+        #solving dependencies
+        for key, value in dp.iteritems():
+            if value.startswith('dependency'):
+                dp[key] = self.step_prop_dic(value.split('/')[1], workflow_path, mut)[value.split('/')[2]]
+        return dp
 
+    def step_prop_obj(self, step, workflow_path, mut=None):
+        class Dict2Obj(object):
+            def __init__(self, dictionary):
+                for key in dictionary:
+                    setattr(self, key, dictionary[key])
+        return Dict2Obj(self.step_prop_dic(step, workflow_path, mut))
 
 def str2bool(v):
     if isinstance(v, bool):
