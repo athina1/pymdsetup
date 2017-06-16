@@ -30,7 +30,7 @@ class Solvate512(object):
     def __init__(self, input_solute_gro_path, output_gro_path,
                  input_top_tar_path, output_top_path, output_top_tar_path,
                  input_solvent_gro_path='spc216.gro',
-                 log_path=None, error_path=None, gmx_path=None):
+                 log_path=None, error_path=None, gmx_path=None, **kwargs):
         self.input_solute_gro_path = input_solute_gro_path
         self.output_gro_path = output_gro_path
         self.input_top_tar_path = input_top_tar_path

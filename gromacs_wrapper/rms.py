@@ -20,7 +20,7 @@ class Rms512(object):
     """
 
     def __init__(self, input_gro_path, input_trr_path, output_xvg_path,
-                 log_path=None, error_path=None, gmx_path=None):
+                 log_path=None, error_path=None, gmx_path=None, **kwargs):
         self.input_gro_path = input_gro_path
         self.input_trr_path = input_trr_path
         self.output_xvg_path = output_xvg_path

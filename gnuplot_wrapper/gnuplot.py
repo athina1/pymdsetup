@@ -25,7 +25,7 @@ class Gnuplot46(object):
 
     def __init__(self, input_xvg_path_dict, output_png_path,
                  output_plotscript_path,
-                 log_path=None, error_path=None, gnuplot_path=None):
+                 log_path=None, error_path=None, gnuplot_path=None, **kwargs):
         self.input_xvg_path_dict = input_xvg_path_dict
         self.output_png_path = output_png_path
         self.output_plotscript_path = output_plotscript_path

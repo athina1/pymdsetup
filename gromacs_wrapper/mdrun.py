@@ -24,18 +24,18 @@ class Mdrun512(object):
 
     def __init__(self, input_tpr_path, output_trr_path, output_gro_path,
                  output_edr_path, output_xtc_path=None,
-                 output_cpt_path=None, log_path=None,
-                 error_path=None, gmx_path=None, num_threads=None):
+                 output_cpt_path=None, num_threads=None,
+                 log_path=None, error_path=None, gmx_path=None, **kwargs):
         self.input_tpr_path = input_tpr_path
         self.output_gro_path = output_gro_path
         self.output_trr_path = output_trr_path
         self.output_edr_path = output_edr_path
         self.output_xtc_path = output_xtc_path
         self.output_cpt_path = output_cpt_path
+        self.num_threads = num_threads
         self.log_path = log_path
         self.error_path = error_path
         self.gmx_path = gmx_path
-        self.num_threads = num_threads
 
     def launch(self):
         """Launches the execution of the GROMACS mdrun module.

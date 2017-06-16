@@ -29,7 +29,7 @@ class Grompp512(object):
 
     def __init__(self, input_mdp_path, input_gro_path, input_top_tar_path,
                  output_tpr_path, input_cpt_path=None,
-                 log_path=None, error_path=None, gmx_path=None):
+                 log_path=None, error_path=None, gmx_path=None, **kwargs):
         self.input_mdp_path = input_mdp_path
         self.input_gro_path = input_gro_path
         self.input_top_tar_path = input_top_tar_path

@@ -32,7 +32,7 @@ class Pdb2gmx512(object):
     def __init__(self, input_structure_pdb_path, output_gro_path, output_top_path,
                  output_itp_path, output_top_tar_path,  water_type='spce',
                  force_field='oplsaa', ignh=True,
-                 log_path=None, error_path=None, gmx_path=None):
+                 log_path=None, error_path=None, gmx_path=None, **kwargs):
         self.input_structure_pdb_path = input_structure_pdb_path
         self.output_gro_path = output_gro_path
         self.output_top_path = output_top_path
