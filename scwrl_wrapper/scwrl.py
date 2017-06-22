@@ -27,7 +27,7 @@ class Scwrl4(object):
     """
 
     def __init__(self, input_pdb_path, output_pdb_path, mutation,
-                 log_path=None, error_path=None, scwrl_path=None, **kwargs):
+                 log_path=None, error_path=None, scwrl4_path=None, **kwargs):
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
         self.mutation = mutation
