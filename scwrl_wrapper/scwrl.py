@@ -23,7 +23,7 @@ class Scwrl4(object):
         log_path (str): Path to the file where the SCWRL log will be stored.
         error_path (str): Path to the file where the SCWRL error log will be
             stored.
-        scwrl_path (str): Path to the SCWRL executable binary.
+        scwrl4_path (str): Path to the SCWRL executable binary.
     """
 
     def __init__(self, input_pdb_path, output_pdb_path, mutation,
@@ -37,7 +37,7 @@ class Scwrl4(object):
             self.mutation = pattern.match(mutation).groupdict()
         self.log_path = log_path
         self.error_path = error_path
-        self.scwrl_path = scwrl_path
+        self.scwrl4_path = scwrl4_path
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
@@ -76,7 +76,7 @@ class Scwrl4(object):
         else:
             prepared_file_path = self.input_pdb_path
 
-        scrwl = 'Scwrl4' if self.scwrl_path is None else self.scwrl_path
+        scrwl = 'Scwrl4' if self.scwrl4_path is None else self.scwrl4_path
         cmd = [scrwl, '-i', prepared_file_path, '-o', self.output_pdb_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
@@ -87,7 +87,7 @@ def main():
     Scwrl4(input_pdb_path=sys.argv[1],
                output_pdb_path=sys.argv[2],
                mutation=sys.argv[3],
-               scwrl_path=sys.argv[4],
+               scwrl4_path=sys.argv[4],
                log_path=sys.argv[5],
                error_path=sys.argv[6]).launch()
 
