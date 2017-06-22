@@ -41,6 +41,8 @@ def main():
         fu.create_dir(p_mmbpdb["path"])
         pdb.MmbPdb(**p_mmbpdb).get_pdb()
         initial_structure_pdb_path = p_mmbpdb["output_pdb_path"]
+    else:
+        initial_structure_pdb_path = p_mmbpdb.get('initial_structure_pdb_path')
 
     # If no mapped to pdb structure mutation list is provided the mutation list
     # will be downloaded from the MMB rest API
