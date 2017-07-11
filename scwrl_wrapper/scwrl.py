@@ -4,6 +4,7 @@ import sys
 import re
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
+import configuration.settings as settings
 
 try:
     from command_wrapper import cmd_wrapper
@@ -27,17 +28,31 @@ class Scwrl4(object):
     """
 
     def __init__(self, input_pdb_path, output_pdb_path, mutation,
-                 log_path=None, error_path=None, scwrl4_path=None, **kwargs):
+                 log_path=None, error_path=None, scwrl4_path=None,
+                 config_string=None, **kwargs):
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
-        self.mutation = mutation
-        if self.mutation is not None:
+
+        if step_conf_path is not None:
+            config_path, system, step = step_conf_path.split(":")
+            general_conf = settings.YamlReader(yaml_path=config_path, system=system)
+            self.mutation = general_conf.properties['input_mapped_mutations_list'].split(',')[0]
+            config = general_conf.step_prop_dic(step, fu.get_workflow_path(general_conf.properties[system]['workflow_path']), self.mutation)
             pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
                                   "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
             self.mutation = pattern.match(mutation).groupdict()
-        self.log_path = log_path
-        self.error_path = error_path
-        self.scwrl4_path = scwrl4_path
+            self.log_path = config['log_path']
+            self.error_path = config['error_path']
+            self.scwrl4_path = config['scwrl4_path']
+        else:
+            self.mutation = mutation
+            if self.mutation is not None:
+                pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
+                                      "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
+                self.mutation = pattern.match(mutation).groupdict()
+            self.log_path = log_path
+            self.error_path = error_path
+            self.scwrl4_path = scwrl4_path
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
