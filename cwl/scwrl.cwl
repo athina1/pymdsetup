@@ -18,23 +18,11 @@ inputs:
     type: string
     inputBinding:
       position: 3
-  scw_mutation:
+  scw_config_string:
     type: string
     inputBinding:
       position: 4
-  scw_path:
-    type: string
-    inputBinding:
-      position: 5
-  scw_log_path:
-    type: string
-    inputBinding:
-      position: 6
-  scw_error_path:
-    type: string
-    inputBinding:
-      position: 7
-
+      
 outputs:
   scw_output_pdb_file:
     type: File

@@ -2,6 +2,7 @@
 """
 import sys
 import re
+import os
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
 import configuration.settings as settings
@@ -27,23 +28,24 @@ class Scwrl4(object):
         scwrl4_path (str): Path to the SCWRL executable binary.
     """
 
-    def __init__(self, input_pdb_path, output_pdb_path, mutation,
-                 log_path=None, error_path=None, scwrl4_path=None,
+    def __init__(self, input_pdb_path, output_pdb_path, mutation=None,
+                 log_path=None, error_path=None, scwrl4_path=None, path='./',
                  config_string=None, **kwargs):
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
 
-        if step_conf_path is not None:
-            config_path, system, step = step_conf_path.split(":")
+        if config_string is not None:
+            config_path, system, step = config_string.split(":")
             general_conf = settings.YamlReader(yaml_path=config_path, system=system)
             self.mutation = general_conf.properties['input_mapped_mutations_list'].split(',')[0]
             config = general_conf.step_prop_dic(step, fu.get_workflow_path(general_conf.properties[system]['workflow_path']), self.mutation)
             pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
                                   "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
-            self.mutation = pattern.match(mutation).groupdict()
+            self.mutation = pattern.match(self.mutation).groupdict()
             self.log_path = config['log_path']
             self.error_path = config['error_path']
             self.scwrl4_path = config['scwrl4_path']
+            self.path = config['path']
         else:
             self.mutation = mutation
             if self.mutation is not None:
@@ -53,10 +55,13 @@ class Scwrl4(object):
             self.log_path = log_path
             self.error_path = error_path
             self.scwrl4_path = scwrl4_path
+            self.path = path
+        print vars(self)
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
         """
+        fu.create_dir(self.path)
         if self.mutation is not None:
             # Read structure with Biopython
             parser = PDBParser(PERMISSIVE=1)
@@ -86,7 +91,7 @@ class Scwrl4(object):
             # Write resultant structure
             w = PDBIO()
             w.set_structure(st)
-            prepared_file_path = self.output_pdb_path + '.scwrl4.prepared.pdb'
+            prepared_file_path = os.path.join(self.path , 'prepared.pdb')
             w.save(prepared_file_path)
         else:
             prepared_file_path = self.input_pdb_path
@@ -99,12 +104,17 @@ class Scwrl4(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    Scwrl4(input_pdb_path=sys.argv[1],
+    if len(sys.argv) > 4:
+        Scwrl4(input_pdb_path=sys.argv[1],
                output_pdb_path=sys.argv[2],
                mutation=sys.argv[3],
                scwrl4_path=sys.argv[4],
                log_path=sys.argv[5],
                error_path=sys.argv[6]).launch()
+    else:
+        Scwrl4(input_pdb_path=sys.argv[1],
+               output_pdb_path=sys.argv[2],
+               config_string=sys.argv[3]).launch()
 
 if __name__ == '__main__':
     main()

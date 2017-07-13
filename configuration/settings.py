@@ -39,7 +39,7 @@ class YamlReader(object):
         with open(self.yaml_path, 'r') as stream:
             return yaml.load(stream)
 
-    def step_prop_dic(self, step, workflow_path, mutation=None):
+    def step_prop_dic(self, step, workflow_path, mutation=None, add_workflow_path=True):
         self.properties = self._read_yaml()
         dp = self.properties[step]
 
@@ -53,19 +53,30 @@ class YamlReader(object):
             dp['mutation']=mutation
 
         if 'paths' in dp:
-            if mutation is None:
-                dp['path'] = opj(workflow_path, dp['paths']['path'])
-            else:
-                dp['path'] = opj(workflow_path, mutation, dp['paths']['path'])
+            if add_workflow_path:
+                if mutation is None:
+                    dp['path'] = opj(workflow_path, dp['paths']['path'])
+                else:
+                    dp['path'] = opj(workflow_path, mutation, dp['paths']['path'])
 
-            for key, value in dp['paths'].iteritems():
-                #solving dependencies
-                if isinstance(value, basestring) and value.startswith('dependency'):
-                    dp[key] = self.step_prop_dic(value.split('/')[1], workflow_path, mutation)[value.split('/')[2]]
-                elif key == 'input_mdp_path':
-                    dp[key] = opj(dp['mdp_path'],dp['paths'][key])
-                elif key != 'path':
-                    dp[key] = opj(dp['path'], dp['paths'][key])
+                for key, value in dp['paths'].iteritems():
+                    #solving dependencies
+                    if isinstance(value, basestring) and value.startswith('dependency'):
+                        dp[key] = self.step_prop_dic(value.split('/')[1], workflow_path, mutation)[value.split('/')[2]]
+                    elif key == 'input_mdp_path':
+                        dp[key] = opj(dp['mdp_path'],dp['paths'][key])
+                    elif key != 'path':
+                        dp[key] = opj(dp['path'], dp['paths'][key])
+            else:
+                for key, value in dp['paths'].iteritems():
+                    #solving dependencies
+                    if isinstance(value, basestring) and value.startswith('dependency'):
+                        dp[key] = self.step_prop_dic(value.split('/')[1], workflow_path, mutation, False)[value.split('/')[2]]
+                    elif key == 'input_mdp_path':
+                        dp[key] = dp['paths'][key]
+                    elif key != 'path':
+                        dp[key] = dp['paths'][key]
+
 
         if 'properties' in dp:
             for key, value in dp['properties'].iteritems():

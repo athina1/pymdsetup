@@ -1,0 +1,9 @@
+#Scwrl4
+scw_script:
+    class: File
+    path: /home/pau/projects/pymdsetup/scwrl_wrapper/scwrl.py
+scw_input_pdb_path:
+    class: File
+    path: /home/pau/projects/pymdsetup/cwl/test/structure.pdb
+scw_output_pdb_path: /home/pau/projects/pymdsetup/cwl/test/mutated.pdb
+scw_config_string: /home/pau/projects/pymdsetup/cwl/test/conf_2mut_nt0.yaml:linux:step3_scw
