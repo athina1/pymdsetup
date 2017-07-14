@@ -85,7 +85,6 @@ def main():
 
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop_dic('step3_scw', workflow_path, mut)
-        #fu.create_change_dir(p_scw['path'])
         p_scw['input_pdb_path']=initial_structure_pdb_path
         scwrl.Scwrl4(**p_scw).launch()
 
