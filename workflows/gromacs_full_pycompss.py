@@ -311,7 +311,7 @@ def main():
 
 ############################## PyCOMPSs functions #############################
 @task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT)
-def scwrlPyCOMPSs(input_pdb_path, output_pdb_path, mutation=None,
+def scwrl_pc(input_pdb_path, output_pdb_path, mutation=None,
                   log_path=None, error_path=None, scwrl4_path=None,
                   path='./', config_string=None, **kwargs):
     """ Launches SCWRL 4 using the PyCOMPSs library."""
