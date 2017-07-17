@@ -282,7 +282,7 @@ def main():
     #
     #     rmsd_xvg_path_dict[mut] = p_rmsd.xvg
     #
-    # barrier()
+    barrier()
     # print ('step18: gnuplot ----- Creating RMSD plot')
     # p_gnuplot = conf.step_prop('step18_gnuplot', workflow_path)
     # gnuplotPyCOMPSs(dependency_file_out=opj(p_gnuplot.path, 'step18_gnuplot.task'),
