@@ -299,10 +299,10 @@ def main():
         time_file.write(str(elapsed_time))
         time_file.write('\n')
         time_file.write('Config File: ')
-        time_file.write(conf_file_path)
+        time_file.write(sys.argv[1])
         time_file.write('\n')
         time_file.write('Sytem: ')
-        time_file.write(sys_paths)
+        time_file.write(sys.argv[2])
         time_file.write('\n')
         if len(sys.argv) >= 4:
             time_file.write('Nodes: ')
