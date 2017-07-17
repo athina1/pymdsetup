@@ -310,7 +310,7 @@ def main():
             time_file.write('\n')
 
 ############################## PyCOMPSs functions #############################
-@task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT):
+@task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT)
 def scwrlPyCOMPSs(input_pdb_path, output_pdb_path, mutation=None,
                   log_path=None, error_path=None, scwrl4_path=None,
                   path='./', config_string=None, **kwargs):
