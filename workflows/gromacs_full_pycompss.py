@@ -26,7 +26,7 @@ from pycompss.api.task import task
 from pycompss.api.constraint import constraint
 
 def main():
-    from pycompss.api.api import waitForAllTasks
+    from pycompss.api.api import barrier
     from pycompss.api.api import compss_wait_on
     start_time = time.time()
     conf = settings.YamlReader(yaml_path=(sys.argv[1]), system=sys.argv[2])
@@ -282,7 +282,7 @@ def main():
     #
     #     rmsd_xvg_path_dict[mut] = p_rmsd.xvg
     #
-    # waitForAllTasks()
+    # barrier()
     # print ('step18: gnuplot ----- Creating RMSD plot')
     # p_gnuplot = conf.step_prop('step18_gnuplot', workflow_path)
     # gnuplotPyCOMPSs(dependency_file_out=opj(p_gnuplot.path, 'step18_gnuplot.task'),
