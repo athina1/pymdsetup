@@ -1,5 +1,6 @@
 """
 Gromacs full setup from a pdb
+
 """
 import os
 import sys
@@ -89,22 +90,29 @@ def main():
         print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop_dic('step3_scw', workflow_path, mut)
         p_scw['input_pdb_path']=initial_structure_pdb_path
-        scwrl_pc(**p_scw)
+        print p_scw
+        scwrl_pc(input_pdb_path=p_scw['input_pdb_path'],
+                 output_pdb_path=p_scw['output_pdb_path'],
+                 mutation=p_scw['mutation'],
+                 log_path=p_scw['log_path'],
+                 error_path=p_scw['error_path'],
+                 scwrl4_path=p_scw['scwrl4_path'],
+                 path=p_scw['path'],
+                 config_string=None)
 
-    #     print 'step4:  p2g ------ Create gromacs topology'
-    #     p_p2g = conf.step_prop('step4_p2g', workflow_path, mut)
-    #     pdb2gmxPyCOMPSs(dependency_file_in=opj(p_scw.path, 'step3_scw.task'),
-    #                     dependency_file_out=opj(p_p2g.path, 'step4_p2g.task'),
-    #                     task_path=p_p2g.path,
-    #                     input_structure_pdb_path=p_scw.mut_pdb,
-    #                     output_gro_path=p_p2g.gro,
-    #                     output_top_path=p_p2g.top,
-    #                     output_itp_path=prop['step4_p2g']['paths']['itp'],
-    #                     output_top_tar_path=p_p2g.tar,
-    #                     water_type=p_p2g.water_type,
-    #                     force_field=p_p2g.force_field,
-    #                     ignh=settings.str2bool(p_p2g.ignh),
-    #                     log_path=p_p2g.out, error_path=p_p2g.err, gmx_path=gmx_path)
+        print 'step4:  p2g ------ Create gromacs topology'
+        p_p2g = conf.step_prop_dic('step4_p2g', workflow_path, mut)
+        pdb2gmxPyCOMPSs(input_structure_pdb_path=p_scw['input_structure_pdb_path'],
+                        output_gro_path=p_scw['output_gro_path'],
+                        output_top_path=p_scw['output_top_path'],
+                        output_itp_path=p_scw['output_itp_path'],
+                        output_top_tar_path=p_scw['output_top_tar_path'],
+                        water_type=p_scw['water_type'],
+                        force_field=p_scw['force_field'],
+                        ignh=p_scw['ignh'],
+                        log_path=p_scw['log_path'],
+                        error_path=p_scw['error_path'],
+                        gmx_path=p_scw['gmx_path'])
     #
     #     print 'step5:  ec ------- Define box dimensions'
     #     p_ec = conf.step_prop('step5_ec', workflow_path, mut)
@@ -310,240 +318,217 @@ def main():
             time_file.write('\n')
 
 ############################## PyCOMPSs functions #############################
-@task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT)
+@task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT, )
 def scwrl_pc(input_pdb_path, output_pdb_path, mutation=None,
                   log_path=None, error_path=None, scwrl4_path=None,
-                  path='./', config_string=None, **kwargs):
+                  path='./', config_string=None):
     """ Launches SCWRL 4 using the PyCOMPSs library."""
     scwrl.Scwrl4(input_pdb_path, output_pdb_path, mutation,
                  log_path, error_path, scwrl4_path,
-                 path, config_string, **kwargs).launch()
+                 path, config_string).launch()
 
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_structure_pdb_path=IN,
-      output_gro_path=IN,
-      output_top_path=IN,
-      output_itp_path=IN,
-      output_top_tar_path=IN,
-      water_type=IN,
-      force_field=IN,
-      ignh=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
-def pdb2gmxPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                    input_structure_pdb_path,
-                    output_gro_path,
-                    output_top_path,
-                    output_itp_path,
-                    output_top_tar_path,
-                    water_type,
-                    force_field,
-                    ignh,
-                    log_path, error_path, gmx_path):
+@task(input_structure_pdb_path=FILE_IN, output_gro_path=FILE_OUT,
+      output_top_path=FILE_OUT, output_itp_path=FILE_OUT,
+      output_top_tar_path=FILE_OUT)
+def pdb2gmxPyCOMPSs(input_structure_pdb_path, output_gro_path, output_top_path,
+                    output_itp_path, output_top_tar_path, water_type,
+                    force_field, ignh, log_path, error_path, gmx_path):
     """Launches the GROMACS pdb2gmx module using the PyCOMPSs library."""
-    fu.create_change_dir(task_path)
-    pdb2gmx.Pdb2gmx512(input_structure_pdb_path,
-                       output_gro_path,
-                       output_top_path,
-                       output_itp_path,
-                       output_top_tar_path,
-                       water_type,
-                       force_field,
-                       ignh,
-                       log_path, error_path, gmx_path).launch()
+    pdb2gmx.Pdb2gmx512(input_structure_pdb_path, output_gro_path,
+                       output_top_path, output_itp_path, output_top_tar_path,
+                       water_type, force_field, ignh, log_path, error_path,
+                       gmx_path).launch()
 
-    open(dependency_file_out, 'a').close()
-
-
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_gro_path=IN,
-      output_gro_path=IN,
-      distance_to_molecule=IN,
-      box_type=IN,
-      center_molecule=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
-def editconfPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                     input_gro_path,
-                     output_gro_path,
-                     distance_to_molecule,
-                     box_type,
-                     center_molecule,
-                     log_path, error_path, gmx_path):
-    """Launches the GROMACS editconf module using the PyCOMPSs library."""
-    fu.create_change_dir(task_path)
-    editconf.Editconf512(input_gro_path,
-                         output_gro_path,
-                         distance_to_molecule,
-                         box_type,
-                         center_molecule,
-                         log_path, error_path, gmx_path).launch()
-
-    open(dependency_file_out, 'a').close()
-
-
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_solute_gro_path=IN,
-      output_gro_path=IN,
-      input_top_tar_path=IN,
-      output_top_path=IN,
-      output_top_tar_path=IN,
-      input_solvent_gro_path=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
-def solvatePyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                    input_solute_gro_path,
-                    output_gro_path,
-                    input_top_tar_path,
-                    output_top_path,
-                    output_top_tar_path,
-                    input_solvent_gro_path,
-                    log_path, error_path, gmx_path):
-    """Launches the GROMACS solvate module using the PyCOMPSs library."""
-    fu.create_change_dir(task_path)
-    solvate.Solvate512(input_solute_gro_path,
-                       output_gro_path,
-                       input_top_tar_path,
-                       output_top_path,
-                       output_top_tar_path,
-                       input_solvent_gro_path,
-                       log_path, error_path, gmx_path).launch()
-
-    open(dependency_file_out, 'a').close()
-
-
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_mdp_path=IN,
-      input_gro_path=IN,
-      input_top_tar_path=IN,
-      output_tpr_path=IN,
-      input_cpt_path=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
-def gromppPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                   input_mdp_path,
-                   input_gro_path,
-                   input_top_tar_path,
-                   output_tpr_path,
-                   input_cpt_path,
-                   log_path, error_path, gmx_path):
-    """Launches the GROMACS grompp module using the PyCOMPSs library."""
-    input_cpt_path = None if input_cpt_path.lower() == 'none' else input_cpt_path
-    fu.create_change_dir(task_path)
-    grompp.Grompp512(input_mdp_path,
-                     input_gro_path,
-                     input_top_tar_path,
-                     output_tpr_path,
-                     input_cpt_path,
-                     log_path, error_path, gmx_path).launch()
-    open(dependency_file_out, 'a').close()
-
-
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_tpr_path=IN,
-      output_gro_path=IN,
-      input_top_tar_path=IN,
-      output_top_path=IN,
-      output_top_tar_path=IN,
-      replaced_group=IN,
-      neutral=IN,
-      concentration=IN,
-      seed=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
-def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                   input_tpr_path,
-                   output_gro_path,
-                   input_top_tar_path,
-                   output_top_path,
-                   output_top_tar_path,
-                   replaced_group,
-                   neutral,
-                   concentration,
-                   seed,
-                   log_path, error_path, gmx_path):
-    """Launches the GROMACS genion module using the PyCOMPSs library."""
-    seed = None if seed.lower() == 'none' else seed
-    fu.create_change_dir(task_path)
-    genion.Genion512(input_tpr_path,
-                     output_gro_path,
-                     input_top_tar_path,
-                     output_top_path,
-                     output_top_tar_path,
-                     replaced_group,
-                     neutral,
-                     concentration,
-                     seed,
-                     log_path, error_path, gmx_path).launch()
-    open(dependency_file_out, 'a').close()
-
-
-#@constraint(ComputingUnits="16")
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_tpr_path=IN,
-      output_gro_path=IN,
-      output_trr_path=IN,
-      output_edr_path=IN,
-      output_xtc_path=IN,
-      output_cpt_path=IN,
-      log_path=IN, error_path=IN, gmx_path=IN,
-      num_threads=IN)
-def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                  input_tpr_path,
-                  output_gro_path,
-                  output_trr_path,
-                  output_edr_path,
-                  output_xtc_path,
-                  output_cpt_path,
-                  log_path, error_path, gmx_path,
-                  num_threads):
-    """Launches the GROMACS mdrun module using the PyCOMPSs library."""
-    output_xtc_path = None if output_xtc_path.lower() == 'none' else output_xtc_path
-    output_cpt_path = None if output_cpt_path.lower() == 'none' else output_cpt_path
-    fu.create_change_dir(task_path)
-    mdrun.Mdrun512(input_tpr_path=input_tpr_path,
-                   output_gro_path=output_gro_path,
-                   output_trr_path=output_trr_path,
-                   output_edr_path=output_edr_path,
-                   output_xtc_path=output_xtc_path,
-                   output_cpt_path=output_cpt_path,
-                   log_path=log_path, error_path=error_path, gmx_path=gmx_path,
-                   num_threads=num_threads).launch()
-
-    open(dependency_file_out, 'a').close()
-
-
-@task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-      input_gro_path=IN,
-      input_trr_path=IN,
-      output_xvg_path=IN,
-      log_path=IN, error_path=IN, gmx_path=IN)
-def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-                 input_gro_path,
-                 input_trr_path,
-                 output_xvg_path,
-                 log_path, error_path, gmx_path):
-    fu.create_change_dir(task_path)
-    rms.Rms512(input_gro_path=input_gro_path,
-               input_trr_path=input_trr_path,
-               output_xvg_path=output_xvg_path,
-               log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
-    open(dependency_file_out, 'a').close()
-
-
-@task(dependency_file_out=FILE_OUT,
-      task_path=IN,
-      input_xvg_path_dict=IN,
-      output_png_path=IN,
-      output_plotscript_path=IN,
-      log_path=IN, error_path=IN, gnuplot_path=IN)
-def gnuplotPyCOMPSs(dependency_file_out,
-                    task_path,
-                    input_xvg_path_dict,
-                    output_png_path,
-                    output_plotscript_path,
-                    log_path, error_path, gnuplot_path):
-    fu.create_change_dir(task_path)
-    gnuplot.Gnuplot46(input_xvg_path_dict=input_xvg_path_dict,
-                      output_png_path=output_png_path,
-                      output_plotscript_path=output_plotscript_path,
-                      log_path=log_path, error_path=error_path, gnuplot_path=gnuplot_path).launch()
-    open(dependency_file_out, 'a').close()
+# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+#       input_gro_path=IN,
+#       output_gro_path=IN,
+#       distance_to_molecule=IN,
+#       box_type=IN,
+#       center_molecule=IN,
+#       log_path=IN, error_path=IN, gmx_path=IN)
+# def editconfPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+#                      input_gro_path,
+#                      output_gro_path,
+#                      distance_to_molecule,
+#                      box_type,
+#                      center_molecule,
+#                      log_path, error_path, gmx_path):
+#     """Launches the GROMACS editconf module using the PyCOMPSs library."""
+#     fu.create_change_dir(task_path)
+#     editconf.Editconf512(input_gro_path,
+#                          output_gro_path,
+#                          distance_to_molecule,
+#                          box_type,
+#                          center_molecule,
+#                          log_path, error_path, gmx_path).launch()
+#
+#     open(dependency_file_out, 'a').close()
+#
+#
+# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+#       input_solute_gro_path=IN,
+#       output_gro_path=IN,
+#       input_top_tar_path=IN,
+#       output_top_path=IN,
+#       output_top_tar_path=IN,
+#       input_solvent_gro_path=IN,
+#       log_path=IN, error_path=IN, gmx_path=IN)
+# def solvatePyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+#                     input_solute_gro_path,
+#                     output_gro_path,
+#                     input_top_tar_path,
+#                     output_top_path,
+#                     output_top_tar_path,
+#                     input_solvent_gro_path,
+#                     log_path, error_path, gmx_path):
+#     """Launches the GROMACS solvate module using the PyCOMPSs library."""
+#     fu.create_change_dir(task_path)
+#     solvate.Solvate512(input_solute_gro_path,
+#                        output_gro_path,
+#                        input_top_tar_path,
+#                        output_top_path,
+#                        output_top_tar_path,
+#                        input_solvent_gro_path,
+#                        log_path, error_path, gmx_path).launch()
+#
+#     open(dependency_file_out, 'a').close()
+#
+#
+# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+#       input_mdp_path=IN,
+#       input_gro_path=IN,
+#       input_top_tar_path=IN,
+#       output_tpr_path=IN,
+#       input_cpt_path=IN,
+#       log_path=IN, error_path=IN, gmx_path=IN)
+# def gromppPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+#                    input_mdp_path,
+#                    input_gro_path,
+#                    input_top_tar_path,
+#                    output_tpr_path,
+#                    input_cpt_path,
+#                    log_path, error_path, gmx_path):
+#     """Launches the GROMACS grompp module using the PyCOMPSs library."""
+#     input_cpt_path = None if input_cpt_path.lower() == 'none' else input_cpt_path
+#     fu.create_change_dir(task_path)
+#     grompp.Grompp512(input_mdp_path,
+#                      input_gro_path,
+#                      input_top_tar_path,
+#                      output_tpr_path,
+#                      input_cpt_path,
+#                      log_path, error_path, gmx_path).launch()
+#     open(dependency_file_out, 'a').close()
+#
+#
+# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+#       input_tpr_path=IN,
+#       output_gro_path=IN,
+#       input_top_tar_path=IN,
+#       output_top_path=IN,
+#       output_top_tar_path=IN,
+#       replaced_group=IN,
+#       neutral=IN,
+#       concentration=IN,
+#       seed=IN,
+#       log_path=IN, error_path=IN, gmx_path=IN)
+# def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+#                    input_tpr_path,
+#                    output_gro_path,
+#                    input_top_tar_path,
+#                    output_top_path,
+#                    output_top_tar_path,
+#                    replaced_group,
+#                    neutral,
+#                    concentration,
+#                    seed,
+#                    log_path, error_path, gmx_path):
+#     """Launches the GROMACS genion module using the PyCOMPSs library."""
+#     seed = None if seed.lower() == 'none' else seed
+#     fu.create_change_dir(task_path)
+#     genion.Genion512(input_tpr_path,
+#                      output_gro_path,
+#                      input_top_tar_path,
+#                      output_top_path,
+#                      output_top_tar_path,
+#                      replaced_group,
+#                      neutral,
+#                      concentration,
+#                      seed,
+#                      log_path, error_path, gmx_path).launch()
+#     open(dependency_file_out, 'a').close()
+#
+#
+# #@constraint(ComputingUnits="16")
+# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+#       input_tpr_path=IN,
+#       output_gro_path=IN,
+#       output_trr_path=IN,
+#       output_edr_path=IN,
+#       output_xtc_path=IN,
+#       output_cpt_path=IN,
+#       log_path=IN, error_path=IN, gmx_path=IN,
+#       num_threads=IN)
+# def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+#                   input_tpr_path,
+#                   output_gro_path,
+#                   output_trr_path,
+#                   output_edr_path,
+#                   output_xtc_path,
+#                   output_cpt_path,
+#                   log_path, error_path, gmx_path,
+#                   num_threads):
+#     """Launches the GROMACS mdrun module using the PyCOMPSs library."""
+#     output_xtc_path = None if output_xtc_path.lower() == 'none' else output_xtc_path
+#     output_cpt_path = None if output_cpt_path.lower() == 'none' else output_cpt_path
+#     fu.create_change_dir(task_path)
+#     mdrun.Mdrun512(input_tpr_path=input_tpr_path,
+#                    output_gro_path=output_gro_path,
+#                    output_trr_path=output_trr_path,
+#                    output_edr_path=output_edr_path,
+#                    output_xtc_path=output_xtc_path,
+#                    output_cpt_path=output_cpt_path,
+#                    log_path=log_path, error_path=error_path, gmx_path=gmx_path,
+#                    num_threads=num_threads).launch()
+#
+#     open(dependency_file_out, 'a').close()
+#
+#
+# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
+#       input_gro_path=IN,
+#       input_trr_path=IN,
+#       output_xvg_path=IN,
+#       log_path=IN, error_path=IN, gmx_path=IN)
+# def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
+#                  input_gro_path,
+#                  input_trr_path,
+#                  output_xvg_path,
+#                  log_path, error_path, gmx_path):
+#     fu.create_change_dir(task_path)
+#     rms.Rms512(input_gro_path=input_gro_path,
+#                input_trr_path=input_trr_path,
+#                output_xvg_path=output_xvg_path,
+#                log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
+#     open(dependency_file_out, 'a').close()
+#
+#
+# @task(dependency_file_out=FILE_OUT,
+#       task_path=IN,
+#       input_xvg_path_dict=IN,
+#       output_png_path=IN,
+#       output_plotscript_path=IN,
+#       log_path=IN, error_path=IN, gnuplot_path=IN)
+# def gnuplotPyCOMPSs(dependency_file_out,
+#                     task_path,
+#                     input_xvg_path_dict,
+#                     output_png_path,
+#                     output_plotscript_path,
+#                     log_path, error_path, gnuplot_path):
+#     fu.create_change_dir(task_path)
+#     gnuplot.Gnuplot46(input_xvg_path_dict=input_xvg_path_dict,
+#                       output_png_path=output_png_path,
+#                       output_plotscript_path=output_plotscript_path,
+#                       log_path=log_path, error_path=error_path, gnuplot_path=gnuplot_path).launch()
+#     open(dependency_file_out, 'a').close()
 
 ##############################################################################
 

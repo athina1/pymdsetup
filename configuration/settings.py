@@ -92,6 +92,9 @@ class YamlReader(object):
         dp.pop('paths', None)
         dp.pop('properties', None)
 
+        for key, value in dp.iteritems():
+            dp[key] = str(value)
+
         return dp
 
     def step_prop_obj(self, step, workflow_path, mutation):
