@@ -58,6 +58,7 @@ mare_nostrum:
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
 input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
+#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
 
 # Max number of mutations
 # Available values None, Integer
@@ -68,7 +69,6 @@ mutations_limit: 0
 # Step 1: mmbpdb -- Get PDB
 step1_mmbpdb:
   paths:
-    path: step1_mmbpdb
     output_pdb_path: structure.pdb
   properties:
     pdb_code: 2JQ3
@@ -82,11 +82,8 @@ step2_mmbuniprot:
 # Step3: scw -- Model mutation
 step3_scw:
   paths:
-    path: step3_scw
     input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
     output_pdb_path: mutated.pdb
-    log_path: scw.out
-    error_path: scw.err
 
 # Step4: p2g -- Create gromacs topology
 step4_p2g:
@@ -174,6 +171,7 @@ step9_gppmin:
     output_tpr_path: gppmin.tpr
     log_path: gppmin.out
     error_path: gppmin.err
+  properties:
 
 # Step10: mdmin -- Running: Energy minimization
 step10_mdmin:
@@ -199,6 +197,7 @@ step11_gppnvt:
     output_tpr_path: gppnvt.tpr
     log_path: gppnvt.out
     error_path: gppnvt.err
+  properties:
 
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
 step12_mdnvt:
@@ -226,6 +225,7 @@ step13_gppnpt:
     output_tpr_path: npt.tpr
     log_path: gppnpt.out
     error_path: gppnpt.err
+  properties:
 
 # Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
 step14_mdnpt:
@@ -252,6 +252,7 @@ step15_gppeq:
     output_tpr_path: gppeq.tpr
     log_path: gppeq.out
     error_path: gppeq.err
+  properties:
 
 # Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration
 step16_mdeq:
@@ -276,6 +277,7 @@ step17_rmsd:
     output_xvg_path: rmsd.xvg
     log_path: rmsd.out
     error_path: rmsd.err
+  properties:
 
 # Step18: gnuplot ----- Creating RMSD plot
 step18_gnuplot:
@@ -285,3 +287,4 @@ step18_gnuplot:
     output_plotscript_path: gplot.plotscript
     log_path: gplot.out
     error_path: gplot.err
+  properties:

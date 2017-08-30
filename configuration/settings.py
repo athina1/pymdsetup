@@ -12,32 +12,66 @@ variable.
 
 import yaml
 import os
+import logging
 from os.path import join as opj
-
+import tools.file_utils as fu
 
 class YamlReader(object):
     """Configuration file loader for yaml format files.
-
-    The path for the configuration file path should be provided by an argument
-    in the constructor or the 'PYMDS_CONF' environment variable.
-    If none of the two is provided the default path will be './conf.yaml'
     """
 
-    def __init__(self, yaml_path=None, system=None):
-        if yaml_path is not None:
-            self.yaml_path = yaml_path
-        elif os.environ.get('PYMDS_CONF') is not None:
-            self.yaml_path = os.environ.get('PYMDS_CONF')
-        else:
-            self.yaml_path = 'conf.yaml'
-
+    def __init__(self, yaml_path, system):
+        self.yaml_path= os.path.abspath(yaml_path)
         self.system = system
-        self.yaml_path= os.path.abspath(self.yaml_path)
         self.properties = self._read_yaml()
+        self.properties[system]['workflow_path'] = fu.get_workflow_path(self.properties[system]['workflow_path'])
 
     def _read_yaml(self):
         with open(self.yaml_path, 'r') as stream:
             return yaml.load(stream)
+
+    def get_prop_dic(self, mutation=None):
+        if mutation is None:
+            mutation = ''
+        prop_dic = dict()
+
+        #Filtering just properties
+        for key in self.properties:
+            if isinstance(self.properties[key], dict):
+                if 'paths' in self.properties[key] or 'properties' in self.properties[key]:
+                    prop_dic[key]={'path': opj(self.properties[self.system]['workflow_path'], mutation, key)}
+                    prop_dic[key]['mutation']=mutation
+                    prop_dic[key].update(self.properties[self.system].copy())
+                if 'properties' in self.properties[key] and isinstance(self.properties[key]['properties'], dict):
+                    prop_dic[key].update(self.properties[key]['properties'].copy())
+
+        return prop_dic
+
+    def get_paths_dic(self, mutation=None):
+        if mutation is None:
+            mutation = ''
+        prop_dic = dict()
+
+        #Filtering just paths
+        for key in self.properties:
+            if isinstance(self.properties[key], dict):
+                if 'paths' in self.properties[key]:
+                    prop_dic[key]=self.properties[key]['paths'].copy()
+
+        #Solving dependencies
+        for key in prop_dic:
+            for key2, value in prop_dic[key].iteritems():
+                while isinstance(value, basestring) and value.startswith('dependency'):
+                    value = prop_dic[value.split('/')[1]][value.split('/')[2]]
+                prop_dic[key][key2] = value
+
+        #Adding paths
+        for key in prop_dic:
+            for key2, value in prop_dic[key].iteritems():
+                prop_dic[key][key2] = opj(self.properties[self.system]['workflow_path'], mutation, key, value)
+
+        return prop_dic
+
 
     def step_prop_dic(self, step, workflow_path, mutation=None, add_workflow_path=True):
         self.properties = self._read_yaml()
@@ -97,14 +131,27 @@ class YamlReader(object):
 
         return dp
 
-    def step_prop_obj(self, step, workflow_path, mutation):
-        class Dict2Obj(object):
-            def __init__(self, dictionary):
-                for key in dictionary:
-                    setattr(self, key, dictionary[key])
-        return Dict2Obj(self.step_prop_dic(step, workflow_path, mutation))
-
 def str2bool(v):
     if isinstance(v, bool):
             return v
     return v.lower() in ("true")
+
+def get_logs(path, console=False):
+    logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+    out_Logger = logging.getLogger(opj(path, "out.log"))
+    err_Logger = logging.getLogger(opj(path, "err.log"))
+    out_fileHandler = logging.FileHandler(opj(path, "out.log"), mode='a', encoding=None, delay=False)
+    err_fileHandler = logging.FileHandler(opj(path, "err.log"), mode='a', encoding=None, delay=False)
+    out_fileHandler.setFormatter(logFormatter)
+    err_fileHandler.setFormatter(logFormatter)
+    out_Logger.addHandler(out_fileHandler)
+    err_Logger.addHandler(err_fileHandler)
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(logFormatter)
+    # Adding console aditional output
+    if console:
+        out_Logger.addHandler(consoleHandler)
+        err_Logger.addHandler(consoleHandler)
+    out_Logger.setLevel(10)
+    err_Logger.setLevel(10)
+    return out_Logger, err_Logger
