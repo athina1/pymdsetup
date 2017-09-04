@@ -73,7 +73,9 @@ def main():
         mutations_limit = len(mutations)
     else:
         mutations_limit = min(len(mutations), int(prop['mutations_limit']))
-    out_log.info( 'Number of mutations to be modelled: ' + str(mutations_limit))
+
+    out_log.info('')
+    out_log.info('Number of mutations to be modelled: ' + str(mutations_limit))
 
     rmsd_xvg_path_dict = {}
     mutations_counter = 0
@@ -85,11 +87,14 @@ def main():
         paths['step3_scw']['input_pdb_path']=initial_structure_pdb_path
         prop = conf.get_prop_dic(mut)
 
-        out_log.info('___________')
+        out_log.info('')
+        out_log.info('-------------------------')
         out_log.info(str(mutations_counter) + '/' + str(mutations_limit) + ' ' + mut)
-        out_log.info('___________')
+        out_log.info('-------------------------')
+        out_log.info('')
 
         out_log.info( 'step3:  scw ------ Model mutation')
+        fu.create_dir(prop['step3_scw']['path'])
         scwrl.Scwrl4(properties=prop['step3_scw'], **paths['step3_scw']).launch()
 
     #     out_log.info( 'step4:  p2g ------ Create gromacs topology')
@@ -180,6 +185,7 @@ def main():
     # gnuplot.Gnuplot46(**p_gnuplot).launch()
     #
     elapsed_time = time.time() - start_time
+    out_log.info('')
     out_log.info('***********************************')
     out_log.info('Execution sucessful: ')
     out_log.info('Workflow_path: '+workflow_path)

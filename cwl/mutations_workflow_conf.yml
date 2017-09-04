@@ -4,12 +4,9 @@ scw_script:
     path: /home/pau/projects/pymdsetup/scwrl_wrapper/scwrl.py
 scw_input_pdb_path:
     class: File
-    path: /home/pau/projects/pymdsetup/cwl/structure.pdb
-scw_output_pdb_path: scw.pdb
-scw_mutation: A.Lys58Glu
-scw_scwrl_path: /home/pau/soft/scwrl4/Scwrl4
-scw_log_path: scw.out
-scw_error_path: scw.err
+    path: test/structure.pdb
+scw_output_pdb_path: mutated.pdb
+scw_properties: "{\"mutation\":\"A.Lys58Glu\", \"scwrl4_path\":\"/home/pau/soft/scwrl4/Scwrl4\"}"
 
 #PDB2GMX
 p2g_script:

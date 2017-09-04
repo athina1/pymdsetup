@@ -3,6 +3,7 @@
 import sys
 import re
 import os
+import json
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
 import configuration.settings as settings
@@ -20,17 +21,18 @@ class Scwrl4(object):
     """
 
     def __init__(self, input_pdb_path, output_pdb_path, properties, **kwargs):
+        if isinstance(properties, basestring):
+            properties=json.loads(properties)
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
         pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(properties['mutation']).groupdict()
         self.scwrl4_path = properties['scwrl4_path']
-        self.path = properties['path']
+        self.path = properties.get('path','')
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
         """
-        fu.create_dir(self.path)
         out_log, err_log = settings.get_logs(self.path)
         if self.mutation is not None:
             # Read structure with Biopython

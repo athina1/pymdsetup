@@ -18,11 +18,10 @@ inputs:
     type: string
     inputBinding:
       position: 3
-  scw_config_string:
+  scw_properties:
     type: string
     inputBinding:
       position: 4
-      
 outputs:
   scw_output_pdb_file:
     type: File

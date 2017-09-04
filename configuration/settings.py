@@ -137,6 +137,8 @@ def str2bool(v):
     return v.lower() in ("true")
 
 def get_logs(path, console=False):
+    if path is None or not os.path.isdir(path):
+        path = ''
     logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
     out_Logger = logging.getLogger(opj(path, "out.log"))
     err_Logger = logging.getLogger(opj(path, "err.log"))
