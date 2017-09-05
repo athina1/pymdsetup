@@ -4,136 +4,56 @@ scw_script:
     path: /home/pau/projects/pymdsetup/scwrl_wrapper/scwrl.py
 scw_input_pdb_path:
     class: File
-    path: test/structure.pdb
+    path: test/data/structure.pdb
 scw_output_pdb_path: mutated.pdb
 scw_properties: "{\"mutation\":\"A.Lys58Glu\", \"scwrl4_path\":\"/home/pau/soft/scwrl4/Scwrl4\"}"
-
 #PDB2GMX
 p2g_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/pdb2gmx.py
-# p2g_input_structure_pdb_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mutated.pdb
 p2g_output_gro_path: p2g.gro
-p2g_output_top_path: p2g.top
-p2g_output_itp_path: p2g.itp
 p2g_output_top_tar_path: p2g_top.tar
-p2g_water_type: spce
-p2g_force_field: amber99sb-ildn
-p2g_ignh: "True"
-p2g_gmx_path: /usr/local/gromacs/bin/gmx
-p2g_log_path: p2g.out
-p2g_error_path: p2g.err
-
+p2g_properties: "{\"output_top_path\":\"p2g.top\", \"output_itp_path\":\"p2g.itp\", \"water_type\":\"spce\", \"force_field\":\"amber99sb-ildn\", \"ignh\":\"True\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #EDITCONF
 ec_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/editconf.py
-#ec_input_gro_path:
-#    class: File
-#    path: /home/pau/projects/pymdsetup/cwl/p2g.gro
 ec_output_gro_path: ec.gro
-ec_box_type: cubic
-ec_distance_to_molecule: "1.0"
-ec_center_molecule: "True"
-ec_gmx_path: /usr/local/gromacs/bin/gmx
-ec_log_path: ec.out
-ec_error_path: ec.err
-
+ec_properties: "{\"box_type\":\"cubic\", \"distance_to_molecule\":\"1.0\", \"center_molecule\":\"True\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #SOLVATE
 sol_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/solvate.py
-#sol_input_solute_gro_path:
-#    class: File
-#    path: /home/pau/projects/pymdsetup/cwl/ec.gro
 sol_output_gro_path: sol.gro
-#sol_input_top_tar_path:
-#    class: File
-#    path: /home/pau/projects/pymdsetup/cwl/p2g_top.tar
-sol_output_top_path: sol.top
 sol_output_top_tar_path: sol_top.tar
-sol_input_solvent_gro_path: spc216.gro
-sol_gmx_path: /usr/local/gromacs/bin/gmx
-sol_log_path: sol.out
-sol_error_path: sol.err
-
+sol_properties: "{\"output_top_path\":\"sol.top\", \"input_solvent_gro_path\":\"spc216.gro\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #GPPIONS
 gppions_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/grompp.py
-gppions_input_mdp_path:
-    class: File
-    path: /home/pau/projects/pymdsetup/workflows/mdp/gmx_full_ions_test.mdp
-# gppions_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/sol.gro
-# gppions_input_top_tar_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/sol_top.tar
 gppions_output_tpr_path: gppions.tpr
-gppions_gmx_path: /usr/local/gromacs/bin/gmx
-gppions_log_path: gppions.out
-gppions_error_path: gppions.err
-
-#GPPIONS
+gppions_properties: "{\"input_mdp_path\":\"/home/pau/projects/pymdsetup/workflows/mdp/gmx_full_ions_test.mdp\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
+#GENION
 gio_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/genion.py
-# gio_input_tpr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gppions.tpr
 gio_output_gro_path: gio.gro
-# gio_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/sol.gro
-# gio_input_top_tar_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/sol_top.tar
-gio_output_top_path: gio.top
 gio_output_top_tar_path: gio_top.tar
-gio_replaced_group: SOL
-gio_neutral: "True"
-gio_concentration: "0.05"
-gio_gmx_path: /usr/local/gromacs/bin/gmx
-gio_log_path: gio.out
-gio_error_path: gio.err
-
+gio_properties: "{\"output_top_path\":\"gio.top\", \"replaced_group\":\"SOL\", \"neutral\":\"True\", \"concentration\":\"0.05\", \"seed\":\"1993\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #GPPMIN
 gppmin_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/grompp.py
-gppmin_input_mdp_path:
-    class: File
-    path: /home/pau/projects/pymdsetup/workflows/mdp/gmx_full_min_test.mdp
-# gpp_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gio.gro
-# gpp_input_top_tar_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gio_top.tar
 gppmin_output_tpr_path: gppmin.tpr
-gppmin_gmx_path: /usr/local/gromacs/bin/gmx
-gppmin_log_path: gppmin.out
-gppmin_error_path: gppmin.err
-
+gppmin_properties: "{\"input_mdp_path\":\"/home/pau/projects/pymdsetup/workflows/mdp/gmx_full_min_test.mdp\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #MDMIN
 mdmin_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/mdrun.py
-# mdmin_input_tpr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gppmin.tpr
-mdmin_output_gro_path: mdmin.gro
 mdmin_output_trr_path: mdmin.trr
-mdmin_output_edr_path: mdmin.edr
-mdmin_output_xtc_path: mdmin.xtc
+mdmin_output_gro_path: mdmin.gro
 mdmin_output_cpt_path: mdmin.cpt
-mdmin_gmx_path: /usr/local/gromacs/bin/gmx
-mdmin_log_path: mdmin.out
-mdmin_error_path: mdmin.err
-
+mdmin_properties: "{\"output_edr_path\":\"mdmin.edr\", \"output_xtc_path\":\"mdmin.xtc\", \"num_threads\":\"0\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #GPPNVT
 gppnvt_script:
     class: File

@@ -51,25 +51,22 @@ class YamlReader(object):
         if mutation is None:
             mutation = ''
         prop_dic = dict()
-
         #Filtering just paths
         for key in self.properties:
             if isinstance(self.properties[key], dict):
                 if 'paths' in self.properties[key]:
                     prop_dic[key]=self.properties[key]['paths'].copy()
 
-        #Solving dependencies
+        #Solving dependencies and adding workflow and step path
         for key in prop_dic:
             for key2, value in prop_dic[key].iteritems():
-                while isinstance(value, basestring) and value.startswith('dependency'):
-                    value = prop_dic[value.split('/')[1]][value.split('/')[2]]
-                prop_dic[key][key2] = value
-
-        #Adding paths
-        for key in prop_dic:
-            for key2, value in prop_dic[key].iteritems():
-                prop_dic[key][key2] = opj(self.properties[self.system]['workflow_path'], mutation, key, value)
-
+                if isinstance(value, basestring) and value.startswith('dependency'):
+                    while isinstance(value, basestring) and value.startswith('dependency'):
+                        dependency_step=value.split('/')[1]
+                        value = prop_dic[value.split('/')[1]][value.split('/')[2]]
+                    prop_dic[key][key2] = opj(self.properties[self.system]['workflow_path'], mutation, dependency_step, value)
+                else:
+                    prop_dic[key][key2] = opj(self.properties[self.system]['workflow_path'], mutation, key, value)
         return prop_dic
 
 

@@ -10,8 +10,6 @@ import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
 
-
-
 class Scwrl4(object):
     """Wrapper class for the 4.0 version of SCWRL.
     Args:

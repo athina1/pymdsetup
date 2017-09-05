@@ -97,41 +97,33 @@ def main():
         fu.create_dir(prop['step3_scw']['path'])
         scwrl.Scwrl4(properties=prop['step3_scw'], **paths['step3_scw']).launch()
 
-    #     out_log.info( 'step4:  p2g ------ Create gromacs topology')
-    #     p_p2g = conf.step_prop_dic('step4_p2g', workflow_path, mut)
-    #     fu.create_change_dir(p_p2g['path'])
-    #     pdb2gmx.Pdb2gmx512(**p_p2g).launch()
-    #
-    #     out_log.info( 'step5:  ec ------- Define box dimensions')
-    #     p_ec = conf.step_prop_dic('step5_ec', workflow_path, mut)
-    #     fu.create_change_dir(p_ec['path'])
-    #     editconf.Editconf512(**p_ec).launch()
-    #
-    #     out_log.info( 'step6:  sol ------ Fill the box with water molecules')
-    #     p_sol = conf.step_prop_dic('step6_sol', workflow_path, mut)
-    #     fu.create_change_dir(p_sol['path'])
-    #     solvate.Solvate512(**p_sol).launch()
-    #
-    #     out_log.info( ('step7:  gppions -- Preprocessing: '
-    #            'Add ions to neutralice the charge'))
-    #     p_gppions = conf.step_prop_dic('step7_gppions', workflow_path, mut)
-    #     fu.create_change_dir(p_gppions['path'])
-    #     grompp.Grompp512(**p_gppions).launch()
-    #
-    #     out_log.info( 'step8:  gio ------ Running: Add ions to neutralice the charge')
-    #     p_gio = conf.step_prop_dic('step8_gio', workflow_path, mut)
-    #     fu.create_change_dir(p_gio['path'])
-    #     genion.Genion512(**p_gio).launch()
-    #
-    #     out_log.info( 'step9:  gppmin --- Preprocessing: Energy minimization')
-    #     p_gppmin = conf.step_prop_dic('step9_gppmin', workflow_path, mut)
-    #     fu.create_change_dir(p_gppmin['path'])
-    #     grompp.Grompp512(**p_gppmin).launch()
-    #
-    #     out_log.info( 'step10: mdmin ---- Running: Energy minimization')
-    #     p_mdmin = conf.step_prop_dic('step10_mdmin', workflow_path, mut)
-    #     fu.create_change_dir(p_mdmin['path'])
-    #     mdrun.Mdrun512(**p_mdmin).launch()
+        out_log.info( 'step4:  p2g ------ Create gromacs topology')
+        fu.create_dir(prop['step4_p2g']['path'])
+        pdb2gmx.Pdb2gmx(properties=prop['step4_p2g'], **paths['step4_p2g']).launch()
+
+        out_log.info( 'step5:  ec ------- Define box dimensions')
+        fu.create_dir(prop['step5_ec']['path'])
+        editconf.Editconf(properties=prop['step5_ec'], **paths['step5_ec']).launch()
+
+        out_log.info( 'step6:  sol ------ Fill the box with water molecules')
+        fu.create_dir(prop['step6_sol']['path'])
+        solvate.Solvate(properties=prop['step6_sol'], **paths['step6_sol']).launch()
+
+        out_log.info( ('step7:  gppions -- Preprocessing: Add ions to neutralice the charge'))
+        fu.create_dir(prop['step7_gppions']['path'])
+        grompp.Grompp(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
+
+        out_log.info( 'step8:  gio ------ Running: Add ions to neutralice the charge')
+        fu.create_dir(prop['step8_gio']['path'])
+        genion.Genion(properties=prop['step8_gio'], **paths['step8_gio']).launch()
+
+        out_log.info( 'step9:  gppmin --- Preprocessing: Energy minimization')
+        fu.create_dir(prop['step9_gppmin']['path'])
+        grompp.Grompp(properties=prop['step9_gppmin'], **paths['step9_gppmin']).launch()
+
+        out_log.info( 'step10: mdmin ---- Running: Energy minimization')
+        fu.create_dir(prop['step10_mdmin']['path'])
+        mdrun.Mdrun(properties=prop['step10_mdmin'], **paths['step10_mdmin']).launch()
     #
     #     out_log.info( ('step11: gppnvt --- Preprocessing: nvt ')
     #            'constant number of molecules, volume and temp')
