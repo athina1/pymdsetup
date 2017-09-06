@@ -32,8 +32,8 @@ def main():
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
     out_log, err_log = settings.get_logs(workflow_path, console=True)
-    paths = conf.get_paths_dic()
-    prop = conf.get_prop_dic()
+    paths_glob = conf.get_paths_dic()
+    prop_glob = conf.get_prop_dic()
 
     out_log.info('_______GROMACS FULL WORKFLOW_______')
 
@@ -93,89 +93,74 @@ def main():
         out_log.info('-------------------------')
         out_log.info('')
 
-        out_log.info( 'step3:  scw ------ Model mutation')
+        out_log.info('step3:  scw ------ Model mutation')
         fu.create_dir(prop['step3_scw']['path'])
         scwrl.Scwrl4(properties=prop['step3_scw'], **paths['step3_scw']).launch()
 
-        out_log.info( 'step4:  p2g ------ Create gromacs topology')
+        out_log.info('step4:  p2g ------ Create gromacs topology')
         fu.create_dir(prop['step4_p2g']['path'])
         pdb2gmx.Pdb2gmx(properties=prop['step4_p2g'], **paths['step4_p2g']).launch()
 
-        out_log.info( 'step5:  ec ------- Define box dimensions')
+        out_log.info('step5:  ec ------- Define box dimensions')
         fu.create_dir(prop['step5_ec']['path'])
         editconf.Editconf(properties=prop['step5_ec'], **paths['step5_ec']).launch()
 
-        out_log.info( 'step6:  sol ------ Fill the box with water molecules')
+        out_log.info('step6:  sol ------ Fill the box with water molecules')
         fu.create_dir(prop['step6_sol']['path'])
         solvate.Solvate(properties=prop['step6_sol'], **paths['step6_sol']).launch()
 
-        out_log.info( ('step7:  gppions -- Preprocessing: Add ions to neutralice the charge'))
+        out_log.info('step7:  gppions -- Preprocessing: Add ions to neutralice the charge')
         fu.create_dir(prop['step7_gppions']['path'])
         grompp.Grompp(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
 
-        out_log.info( 'step8:  gio ------ Running: Add ions to neutralice the charge')
+        out_log.info('step8:  gio ------ Running: Add ions to neutralice the charge')
         fu.create_dir(prop['step8_gio']['path'])
         genion.Genion(properties=prop['step8_gio'], **paths['step8_gio']).launch()
 
-        out_log.info( 'step9:  gppmin --- Preprocessing: Energy minimization')
+        out_log.info('step9:  gppmin --- Preprocessing: Energy minimization')
         fu.create_dir(prop['step9_gppmin']['path'])
         grompp.Grompp(properties=prop['step9_gppmin'], **paths['step9_gppmin']).launch()
 
-        out_log.info( 'step10: mdmin ---- Running: Energy minimization')
+        out_log.info('step10: mdmin ---- Running: Energy minimization')
         fu.create_dir(prop['step10_mdmin']['path'])
         mdrun.Mdrun(properties=prop['step10_mdmin'], **paths['step10_mdmin']).launch()
-    #
-    #     out_log.info( ('step11: gppnvt --- Preprocessing: nvt ')
-    #            'constant number of molecules, volume and temp')
-    #     p_gppnvt = conf.step_prop_dic('step11_gppnvt', workflow_path, mut)
-    #     fu.create_change_dir(p_gppnvt['path'])
-    #     grompp.Grompp512(**p_gppnvt).launch()
-    #
-    #     out_log.info( ('step12: mdnvt ---- Running: nvt ')
-    #            'constant number of molecules, volume and temp')
-    #     p_mdnvt = conf.step_prop_dic('step12_mdnvt', workflow_path, mut)
-    #     fu.create_change_dir(p_mdnvt['path'])
-    #     mdrun.Mdrun512(**p_mdnvt).launch()
-    #
-    #     out_log.info( ('step13: gppnpt --- Preprocessing: npt ')
-    #            'constant number of molecules, pressure and temp')
-    #     p_gppnpt = conf.step_prop_dic('step13_gppnpt', workflow_path, mut)
-    #     fu.create_change_dir(p_gppnpt['path'])
-    #     grompp.Grompp512(**p_gppnpt).launch()
-    #
-    #     out_log.info( ('step14: mdnpt ---- Running: npt ')
-    #            'constant number of molecules, pressure and temp')
-    #     p_mdnpt = conf.step_prop_dic('step14_mdnpt', workflow_path, mut)
-    #     fu.create_change_dir(p_mdnpt['path'])
-    #     mdnpt = mdrun.Mdrun512(**p_mdnpt).launch()
-    #
-    #     out_log.info( ('step15: gppeq ---- '
-    #            'Preprocessing: 1ns Molecular dynamics Equilibration'))
-    #     p_gppeq = conf.step_prop_dic('step15_gppeq', workflow_path, mut)
-    #     fu.create_change_dir(p_gppeq['path'])
-    #     gppeq = grompp.Grompp512(**p_gppeq).launch()
-    #
-    #     out_log.info( ('step16: mdeq ----- '
-    #            'Running: 1ns Molecular dynamics Equilibration'))
-    #     p_mdeq = conf.step_prop_dic('step16_mdeq', workflow_path, mut)
-    #     fu.create_change_dir(p_mdeq['path'])
-    #     mdeq = mdrun.Mdrun512(**p_mdeq).launch()
-    #
-    #     out_log.info( ('step17: rmsd ----- Computing RMSD'))
-    #     p_rmsd = conf.step_prop_dic('step17_rmsd', workflow_path, mut)
-    #     fu.create_change_dir(p_rmsd['path'])
-    #     rms.Rms512(**p_rmsd).launch()
-    #     rmsd_xvg_path_dict[mut] = p_rmsd['output_xvg_path']
-    #
-    #     out_log.info( '***************************************************************')
-    #     out_log.info( '\n')
-    #
-    # out_log.info( ('step18: gnuplot ----- Creating RMSD plot'))
-    # p_gnuplot = conf.step_prop_dic('step18_gnuplot', workflow_path)
-    # p_gnuplot['input_xvg_path_dict']=rmsd_xvg_path_dict
-    # fu.create_change_dir(p_gnuplot['path'])
-    # gnuplot.Gnuplot46(**p_gnuplot).launch()
-    #
+
+        out_log.info('step11: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step11_gppnvt']['path'])
+        grompp.Grompp(properties=prop['step11_gppnvt'], **paths['step11_gppnvt']).launch()
+
+        out_log.info('step12: mdnvt ---- Running: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step12_mdnvt']['path'])
+        mdrun.Mdrun(properties=prop['step12_mdnvt'], **paths['step12_mdnvt']).launch()
+
+        out_log.info('step13: gppnpt --- Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step13_gppnpt']['path'])
+        grompp.Grompp(properties=prop['step13_gppnpt'], **paths['step13_gppnpt']).launch()
+
+        out_log.info('step14: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step14_mdnpt']['path'])
+        mdrun.Mdrun(properties=prop['step14_mdnpt'], **paths['step14_mdnpt']).launch()
+
+        out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
+        fu.create_change_dir(prop['step15_gppeq']['path'])
+        grompp.Grompp(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
+
+        out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
+        fu.create_dir(prop['step16_mdeq']['path'])
+        mdrun.Mdrun(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
+
+        out_log.info('step17: rmsd ----- Computing RMSD')
+        fu.create_dir(prop['step17_rmsd']['path'])
+        rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch()
+        rmsd_xvg_path_dict[mut] = paths['step17_rmsd']['output_xvg_path']
+
+        out_log.info( '***************************************************************')
+        out_log.info( '')
+
+    out_log.info('step18: gnuplot ----- Creating RMSD plot')
+    fu.create_dir(prop_glob['step18_gnuplot']['path'])
+    gnuplot.Gnuplot(input_xvg_path_dict=rmsd_xvg_path_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
+
     elapsed_time = time.time() - start_time
     out_log.info('')
     out_log.info('***********************************')

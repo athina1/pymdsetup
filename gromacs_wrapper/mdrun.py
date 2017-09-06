@@ -40,7 +40,8 @@ class Mdrun(object):
         out_log, err_log = settings.get_logs(self.path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'mdrun', '-s', self.input_tpr_path,
-               '-o', self.output_trr_path]
+               '-o', self.output_trr_path,
+               '-g', opj(self.path, 'md.log')]
 
         if not self.output_xtc_path is None:
             cmd.append('-x')

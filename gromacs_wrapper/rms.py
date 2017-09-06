@@ -1,36 +1,34 @@
 """Python wrapper for the GROMACS rms module
 """
 import sys
-try:
-    from command_wrapper import cmd_wrapper
-except ImportError:
-    from pymdsetup.command_wrapper import cmd_wrapper
+import json
+import configuration.settings as settings
+from command_wrapper import cmd_wrapper
 
-
-class Rms512(object):
+class Rms(object):
     """Wrapper for the 5.1.2 version of the rms module
-
     Args:
-        input_ref_struct (str): Path to the original (before launching the trajectory) GROMACS structure file GRO.
-        input_traj (str): Path to the GROMACS uncompressed raw trajectory file TRR.
-        output_xvg (str): Path to the simple xmgrace plot file XVG.
-        log_path (str): Path to the file where the rms log will be stored.
-        error_path (str): Path to the file where the rms error log will be stored.
-        gmx_path (str): Path to the GROMACS executable binary.
+        input_gro_path (str): Path to the original (before launching the trajectory) GROMACS structure file GRO.
+        input_trr_paht (str): Path to the GROMACS uncompressed raw trajectory file TRR.
+        output_xvg_path (str): Path to the simple xmgrace plot file XVG.
+        properties (dic):
+            gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, input_gro_path, input_trr_path, output_xvg_path,
-                 log_path=None, error_path=None, gmx_path=None, **kwargs):
+                 properties, **kwargs):
+        if isinstance(properties, basestring):
+            properties=json.loads(properties)
         self.input_gro_path = input_gro_path
         self.input_trr_path = input_trr_path
         self.output_xvg_path = output_xvg_path
-        self.log_path = log_path
-        self.error_path = error_path
-        self.gmx_path = gmx_path
+        self.gmx_path = properties['gmx_path']
+        self.path = properties.get('path','')
 
     def launch(self):
         """Launches the execution of the GROMACS rms module.
         """
+        out_log, err_log = settings.get_logs(self.path)
         gmx = 'gmx' if self.gmx_path is 'None' else self.gmx_path
         cmd = ['echo', '0 0', '|', gmx, 'rms',
                '-s', self.input_gro_path,
@@ -38,17 +36,15 @@ class Rms512(object):
                '-o', self.output_xvg_path,
                '-xvg', 'none']
 
-        command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
+        command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
 
 #Creating a main function to be compatible with CWL
 def main():
-    Rms512(input_gro_path=sys.argv[1],
-               input_trr_path=sys.argv[2],
-               output_xvg_path=sys.argv[3],
-               gmx_path=sys.argv[4],
-               log_path=sys.argv[5],
-               error_path=sys.argv[6]).launch()
+    Rms(input_gro_path=sys.argv[1],
+        input_trr_path=sys.argv[2],
+        output_xvg_path=sys.argv[3],
+        properties=sys.argv[4]).launch()
 
 if __name__ == '__main__':
     main()

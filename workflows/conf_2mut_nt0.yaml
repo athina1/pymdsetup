@@ -53,7 +53,6 @@ mare_nostrum:
 
 ##############################################################################
 
-
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
@@ -64,7 +63,6 @@ input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
 # Available values None, Integer
 mutations_limit: 0
 
-
 ########################## Step paths & properties ##########################
 # Step 1: mmbpdb -- Get PDB
 step1_mmbpdb:
@@ -72,7 +70,6 @@ step1_mmbpdb:
     output_pdb_path: structure.pdb
   properties:
     pdb_code: 2JQ3
-
 
 # Step2: mmbuniprot -- Get mutations
 step2_mmbuniprot:
@@ -168,105 +165,82 @@ step10_mdmin:
     output_edr_path: mdmin.edr
     num_threads: 0
 
-# Step11: gppnvt -- Preprocessing: nvt constant number of molecules,
-# volume and temp
+# Step11: gppnvt -- Preprocessing: nvt constant number of molecules, volume and temp
 step11_gppnvt:
   paths:
-    path: step11_gppnvt
     input_gro_path: dependency/step10_mdmin/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
-    input_mdp_path: gmx_full_nvt_test.mdp
     output_tpr_path: gppnvt.tpr
-    log_path: gppnvt.out
-    error_path: gppnvt.err
   properties:
+    input_mdp_path: gmx_full_nvt_test.mdp
 
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
 step12_mdnvt:
   paths:
-    path: step12_mdnvt
     input_tpr_path: dependency/step11_gppnvt/output_tpr_path
     output_trr_path: mdnvt.trr
     output_gro_path: mdnvt.gro
-    output_edr_path: mdnvt.edr
     output_cpt_path: mdnvt.cpt
-    log_path: mdnvt.out
-    error_path: mdnvt.err
   properties:
+    output_xtc_path: mdnvt.xtc
+    output_edr_path: mdnvt.edr
     num_threads: 0
 
-# Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure
-# and temp
+# Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure and temp
 step13_gppnpt:
   paths:
-    path: step13_gppnpt
     input_gro_path: dependency/step12_mdnvt/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     input_cpt_path: dependency/step12_mdnvt/output_cpt_path
-    input_mdp_path: gmx_full_npt_test.mdp
     output_tpr_path: npt.tpr
-    log_path: gppnpt.out
-    error_path: gppnpt.err
   properties:
+    input_mdp_path: gmx_full_npt_test.mdp
 
 # Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
 step14_mdnpt:
   paths:
-    path: step14_mdnpt
     input_tpr_path: dependency/step13_gppnpt/output_tpr_path
     output_trr_path: mdnpt.trr
     output_gro_path: mdnpt.gro
-    output_edr_path: mdnpt.edr
     output_cpt_path: mdnpt.cpt
-    log_path: mdnpt.out
-    error_path: mdnpt.err
   properties:
+    output_edr_path: mdnpt.edr
+    output_xtc_path: mdnpt.xtc
     num_threads: 0
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
   paths:
-    path: step15_gppeq
     input_gro_path: dependency/step14_mdnpt/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     input_cpt_path: dependency/step14_mdnpt/output_cpt_path
-    input_mdp_path: gmx_full_md_test.mdp
     output_tpr_path: gppeq.tpr
-    log_path: gppeq.out
-    error_path: gppeq.err
   properties:
+    input_mdp_path: gmx_full_md_test.mdp
 
 # Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration
 step16_mdeq:
   paths:
-    path: step16_mdeq
     input_tpr_path: dependency/step15_gppeq/output_tpr_path
     output_trr_path: mdeq.trr
     output_gro_path: mdeq.gro
-    output_edr_path: mdeq.edr
     output_cpt_path: mdeq.cpt
-    log_path: mdeq.out
-    error_path: mdeq.err
   properties:
+    output_edr_path: mdeq.edr
+    output_xtc_path: mdeq.xtc
     num_threads: 0
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:
   paths:
-    path: step17_rmsd
     input_gro_path: dependency/step8_gio/output_gro_path
     input_trr_path: dependency/step16_mdeq/output_trr_path
     output_xvg_path: rmsd.xvg
-    log_path: rmsd.out
-    error_path: rmsd.err
   properties:
 
 # Step18: gnuplot ----- Creating RMSD plot
 step18_gnuplot:
   paths:
-    path: step18_gnuplot
     output_png_path: gplot.png
-    output_plotscript_path: gplot.plotscript
-    log_path: gplot.out
-    error_path: gplot.err
   properties:
+    output_plotscript_path: gplot.plotscript

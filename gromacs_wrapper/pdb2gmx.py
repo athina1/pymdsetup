@@ -68,7 +68,6 @@ class Pdb2gmx(object):
         # Tar topology
         fu.tar_top(self.output_top_path, self.output_top_tar_path)
 
-
 #Creating a main function to be compatible with CWL
 def main():
     Pdb2gmx(input_structure_pdb_path=sys.argv[1],

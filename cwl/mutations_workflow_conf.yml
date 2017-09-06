@@ -162,20 +162,12 @@ mdeq_gmx_path: /usr/local/gromacs/bin/gmx
 mdeq_log_path: mdeq.out
 mdeq_error_path: mdeq.err
 
-#RMSD
+#RMS
 rms_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/rms.py
-# rms_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdeq.gro
-# rms_input_trr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdeq.trr
 rms_output_xvg_path: rms.xvg
-rms_gmx_path: /usr/local/gromacs/bin/gmx
-rms_log_path: rms.out
-rms_error_path: rms.err
+rms_properties: "{\"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 
 #GNUPLOT
 gnuplot_script:

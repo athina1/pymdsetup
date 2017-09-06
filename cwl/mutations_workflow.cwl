@@ -303,7 +303,7 @@ steps:
   #     md_error_path: mdeq_error_path
   #   out: [md_output_gro_file, md_output_trr_file, md_output_edr_file, md_output_xtc_file, md_output_cpt_file]
   #
-  # rms:
+  # rmsd:
   #   run: rms.cwl
   #   in:
   #     rms_script: rms_script

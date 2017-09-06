@@ -2,41 +2,36 @@
 """
 import os
 import sys
-try:
-    from command_wrapper import cmd_wrapper
-    from tools import file_utils as fu
-except ImportError:
-    from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.tools import file_utils as fu
+import json
+import configuration.settings as settings
+from command_wrapper import cmd_wrapper
+from tools import file_utils as fu
 
-
-class Gnuplot46(object):
+class Gnuplot(object):
     """Wrapper class for the 4.6 version of GNUPLOT.
-
     Args:
         input_xvg_path_dict (dict): Dict where keys are mutations (str) and
                                     values are paths (str) to xvg rmsd files.
         output_png_path (srt): Path to the output png chart file.
-        output_plotscript_path (str): Path to the output GNUPLOT script file.
-        log_path (str): Path to the file where the log will be stored.
-        error_path (str): Path to the file where the error log will be stored.
-        gnuplot_path (str): Path to the GNUPLOT executable binary.
+        properties (dic):
+            output_plotscript_path (str): Path to the output GNUPLOT script file.
+            gnuplot_path (str): Path to the GNUPLOT executable binary.
     """
 
     def __init__(self, input_xvg_path_dict, output_png_path,
-                 output_plotscript_path,
-                 log_path=None, error_path=None, gnuplot_path=None, **kwargs):
+                 properties, **kwargs):
+        if isinstance(properties, basestring):
+            properties=json.loads(properties)
         self.input_xvg_path_dict = input_xvg_path_dict
         self.output_png_path = output_png_path
-        self.output_plotscript_path = output_plotscript_path
-        self.log_path = log_path
-        self.error_path = error_path
-        self.gnuplot_path = gnuplot_path
+        self.output_plotscript_path = opj(properties.get('path',''), properties['output_plotscript_path'])
+        self.gnuplot_path = properties['gnuplot_path']
+        self.path = properties.get('path','')
 
     def launch(self):
         """Launches the execution of the GNUPLOT binary.
         """
-
+        out_log, err_log = settings.get_logs(self.path)
         # Create the input script for gnuplot
         lb = os.linesep
         with open(self.output_plotscript_path, 'w') as ps:
@@ -49,19 +44,14 @@ class Gnuplot46(object):
         gplot = 'gnuplot' if self.gnuplot_path is None else self.gnuplot_path
         cmd = [gplot, self.output_plotscript_path]
 
-        command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
+        command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
 
 #Creating a main function to be compatible with CWL
 def main():
-    mutation = sys.argv[1]
-    xvg_file_path = sys.argv[2]
-    Gnuplot46(input_xvg_path_dict={mutation:xvg_file_path},
-               output_png_path=sys.argv[3],
-               output_plotscript_path=sys.argv[4],
-               gnuplot_path=sys.argv[5],
-               log_path=sys.argv[6],
-               error_path=sys.argv[7]).launch()
+    Gnuplot(input_xvg_path_dict={'mutation':sys.argv[1]},
+            output_png_path=sys.argv[2],
+            properties=sys.argv[3]).launch()
 
 if __name__ == '__main__':
     main()
