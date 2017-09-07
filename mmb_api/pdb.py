@@ -5,17 +5,14 @@ import shutil
 
 class MmbPdb(object):
     """Wrapper class for the MMB group PDB REST API.
-
     This class is a wrapper for the PDB (http://www.rcsb.org/pdb/home/home.do)
     mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)
-
     Args:
         pdb_code (str): Protein Data Bank (PDB) four letter code.
             ie: '2ki5'
         output_pdb_path (str): File path where the PDB file will be stored.
             ie: '/home/user1/2ki5.pdb'
     """
-
     def __init__(self, pdb_code, output_pdb_path, **kwargs):
         self._pdb_code = pdb_code
         self._output_pdb_path = output_pdb_path

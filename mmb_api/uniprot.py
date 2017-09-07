@@ -6,19 +6,15 @@ import re
 
 class MmbVariants(object):
     """Wrapper class for the MMB group UNIPROT REST API.
-
     This class is a wrapper for the UNIPROT (http://www.uniprot.org/)
     mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)
-
     Args:
         pdb_code (str): Protein Data Bank (PDB) four letter code.
             ie: '2ki5'
     """
-
     def __init__(self, pdb_code):
         self._pdb_code = pdb_code.lower()
         self._uniprot = self.get_uniprot()
-
     def get_uniprot(self):
         """Returns the UNIPROT code corresponding to the `self._pdb_code`.
 

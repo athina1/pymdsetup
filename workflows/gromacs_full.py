@@ -41,10 +41,10 @@ def main():
     if ( conf.properties[system].get('initial_structure_pdb_path') is None or
          not os.path.isfile(conf.properties[system].get('initial_structure_pdb_path'))):
         out_log.info( 'step1:  mmbpdb -- Get PDB')
-        out_log.info( '     Selected PDB code: ' + p_mmbpdb["pdb_code"])
-        fu.create_dir(paths['path'])
-        pdb.MmbPdb(prop['step1_mmbpdb']['pdb_code'], paths['step1_mmbpdb']).get_pdb()
-        initial_structure_pdb_path = paths['step1_mmbpdb']["output_pdb_path"]
+        out_log.info( '     Selected PDB code: ' + prop_glob['step1_mmbpdb']['pdb_code'])
+        fu.create_dir(prop_glob['step1_mmbpdb']['path'])
+        pdb.MmbPdb(prop_glob['step1_mmbpdb']['pdb_code'], paths_glob['step1_mmbpdb']['output_pdb_path']).get_pdb()
+        initial_structure_pdb_path = paths_glob['step1_mmbpdb']['output_pdb_path']
     else:
         initial_structure_pdb_path = conf.properties[system].get('initial_structure_pdb_path')
 
@@ -53,16 +53,16 @@ def main():
     if ( conf.properties.get('input_mapped_mutations_list') is None or
          len(conf.properties.get('input_mapped_mutations_list')) < 7 ):
         out_log.info( 'step2:  mmbuniprot -- Get mutations')
-        mmbuniprot = uniprot.MmbVariants(prop['step1_mmbpdb']['pdb_code'])
+        mmbuniprot = uniprot.MmbVariants(prop_glob['step1_mmbpdb']['pdb_code'])
         mutations = mmbuniprot.get_pdb_variants()
         # This is part of the code prints some feedback to the user
         out_log.info( '     Uniprot code: ' + mmbuniprot.get_uniprot())
         if mutations is None or len(mutations) == 0:
-            out_log.info( (prop['step1_mmbpdb']['pdb_code'] + " " + mmbuniprot.get_uniprot() + ": No variants"))
+            out_log.info( (prop_glob['step1_mmbpdb']['pdb_code'] + " " + mmbuniprot.get_uniprot() + ": No variants"))
             return
         else:
             out_log.info( ('     Found ' + str(len(mmbuniprot.get_variants())) + ' uniprot variants'))
-            out_log.info( ('     Mapped to ' + str(len(mutations)) + ' ' + prop['step1_mmbpdb']['pdb_code'] + ' PDB variants'))
+            out_log.info( ('     Mapped to ' + str(len(mutations)) + ' ' + prop_glob['step1_mmbpdb']['pdb_code'] + ' PDB variants'))
 
     else:
         mutations = [m.strip() for m in conf.properties.get('input_mapped_mutations_list').split(',')]

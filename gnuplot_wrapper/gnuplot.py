@@ -17,7 +17,6 @@ class Gnuplot(object):
             output_plotscript_path (str): Path to the output GNUPLOT script file.
             gnuplot_path (str): Path to the GNUPLOT executable binary.
     """
-
     def __init__(self, input_xvg_path_dict, output_png_path,
                  properties, **kwargs):
         if isinstance(properties, basestring):
