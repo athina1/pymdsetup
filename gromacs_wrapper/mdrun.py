@@ -63,11 +63,17 @@ class Mdrun(object):
 def main():
     if len(sys.argv) < 7:
         sys.argv.append(None)
+    step=sys.argv[4]
+    prop=sys.argv[5]
+    step, system = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
+    prop['path']=''
     Mdrun(input_tpr_path = sys.argv[1],
           output_trr_path = sys.argv[2],
           output_gro_path = sys.argv[3],
-          properties = sys.argv[4],
-          output_cpt_path = sys.argv[5]).launch()
+          step=step,
+          properties=prop,
+          output_cpt_path = sys.argv[6]).launch()
 
 if __name__ == '__main__':
     main()

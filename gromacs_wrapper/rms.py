@@ -41,10 +41,16 @@ class Rms(object):
 
 #Creating a main function to be compatible with CWL
 def main():
+    step=sys.argv[4]
+    prop=sys.argv[5]
+    step, system = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
+    prop['path']=''
     Rms(input_gro_path=sys.argv[1],
         input_trr_path=sys.argv[2],
         output_xvg_path=sys.argv[3],
-        properties=sys.argv[4]).launch()
+        step=step,
+        properties=prop).launch()
 
 if __name__ == '__main__':
     main()

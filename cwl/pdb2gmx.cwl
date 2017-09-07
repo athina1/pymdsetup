@@ -17,14 +17,20 @@ inputs:
     type: string
     inputBinding:
       position: 3
+    default: "p2g.gro"
   p2g_output_top_tar_path:
     type: string
     inputBinding:
       position: 4
-  p2g_properties:
+    default: "p2g_top.tar"
+  p2g_step:
     type: string
     inputBinding:
       position: 5
+  p2g_properties:
+    type: File
+    inputBinding:
+      position: 6
 outputs:
   p2g_output_gro_file:
     type: File

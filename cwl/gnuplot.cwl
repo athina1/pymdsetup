@@ -16,10 +16,15 @@ inputs:
     type: string
     inputBinding:
       position: 3
-  gnuplot_properties:
+    default: "gnuplot.png"
+  gnuplot_step:
     type: string
     inputBinding:
       position: 4
+  gnuplot_properties:
+    type: File
+    inputBinding:
+      position: 5
 outputs:
   gnuplot_output_png_file:
     type: File

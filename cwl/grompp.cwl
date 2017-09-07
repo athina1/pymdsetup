@@ -20,14 +20,19 @@ inputs:
     type: string
     inputBinding:
       position: 4
-  gpp_properties:
+    default: "grompp.tpr"
+  gpp_step:
     type: string
     inputBinding:
       position: 5
+  gpp_properties:
+    type: File
+    inputBinding:
+      position: 6
   gpp_input_cpt_path:
     type: File?
     inputBinding:
-      position: 6
+      position: 7
 outputs:
   gpp_output_tpr_file:
     type: File

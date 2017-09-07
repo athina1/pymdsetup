@@ -1,8 +1,6 @@
 #!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
 class: CommandLineTool
-
 baseCommand:
   - python
 inputs:
@@ -18,10 +16,15 @@ inputs:
     type: string
     inputBinding:
       position: 3
-  scw_properties:
+    default: "mutated.pdb"
+  scw_step:
     type: string
     inputBinding:
       position: 4
+  scw_properties:
+    type: File
+    inputBinding:
+      position: 5
 outputs:
   scw_output_pdb_file:
     type: File

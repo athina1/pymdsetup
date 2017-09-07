@@ -16,6 +16,7 @@ inputs:
     type: string
     inputBinding:
       position: 3
+    default: "sol.gro"
   sol_input_top_tar_path:
     type: File
     inputBinding:
@@ -24,10 +25,15 @@ inputs:
     type: string
     inputBinding:
       position: 5
-  sol_properties:
+    default: "sol_top.tar"
+  sol_step:
     type: string
     inputBinding:
       position: 6
+  sol_properties:
+    type: File
+    inputBinding:
+      position: 7
 outputs:
   sol_output_gro_file:
     type: File

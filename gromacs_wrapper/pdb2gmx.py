@@ -70,10 +70,16 @@ class Pdb2gmx(object):
 
 #Creating a main function to be compatible with CWL
 def main():
+    step=sys.argv[4]
+    prop=sys.argv[5]
+    step, system = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
+    prop['path']=''
     Pdb2gmx(input_structure_pdb_path=sys.argv[1],
-               output_gro_path=sys.argv[2],
-               output_top_tar_path=sys.argv[3],
-               properties=sys.argv[4]).launch()
+            output_gro_path=sys.argv[2],
+            output_top_tar_path=sys.argv[3],
+            step=step,
+            properties=prop).launch()
 
 if __name__ == '__main__':
     main()

@@ -16,6 +16,7 @@ inputs:
     type: string
     inputBinding:
       position: 3
+    default: "gio.gro"
   gio_input_top_tar_path:
     type: File
     inputBinding:
@@ -24,10 +25,15 @@ inputs:
     type: string
     inputBinding:
       position: 5
-  gio_properties:
+    default: "gio_tar.top"
+  gio_step:
     type: string
     inputBinding:
       position: 6
+  gio_properties:
+    type: File
+    inputBinding:
+      position: 7
 
 outputs:
   gio_output_gro_file:

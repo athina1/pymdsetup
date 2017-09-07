@@ -1,12 +1,15 @@
 #RMS
 rms_script:
     class: File
-    path: /home/pau/projects/pymdsetup/gromacs_wrapper/rms.py
+    path: ../../gromacs_wrapper/rms.py
 rms_input_gro_path:
     class: File
-    path:  /home/pau/projects/pymdsetup/cwl/test/data/gio.gro
+    path:  ../../cwl/test/data/gio.gro
 rms_input_trr_path:
     class: File
-    path:  /home/pau/projects/pymdsetup/cwl/test/data/mdeq.trr
+    path:  ../../cwl/test/data/mdeq.trr
 rms_output_xvg_path: rms.xvg
-rms_properties: "{\"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
+rms_step: step17_rmsd:linux
+rms_properties:
+    class: File
+    path: ../../workflows/conf_2mut_nt0.yaml

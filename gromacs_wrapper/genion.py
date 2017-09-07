@@ -71,11 +71,17 @@ class Genion(object):
 
 #Creating a main function to be compatible with CWL
 def main():
+    step=sys.argv[5]
+    prop=sys.argv[6]
+    step, system = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
+    prop['path']=''
     Genion(input_tpr_path = sys.argv[1],
-              output_gro_path = sys.argv[2],
-              input_top_tar_path = sys.argv[3],
-              output_top_tar_path = sys.argv[4],
-              properties = sys.argv[5]).launch()
+           output_gro_path = sys.argv[2],
+           input_top_tar_path = sys.argv[3],
+           output_top_tar_path = sys.argv[4],
+           step=step,
+           properties=prop).launch()
 
 if __name__ == '__main__':
     main()

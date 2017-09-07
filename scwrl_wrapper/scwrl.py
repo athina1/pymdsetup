@@ -17,7 +17,6 @@ class Scwrl4(object):
         output_pdb_path (srt): Path to the output mutated PDB file.
         properties (dic): All properties and system path
     """
-
     def __init__(self, input_pdb_path, output_pdb_path, properties, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
@@ -74,9 +73,15 @@ class Scwrl4(object):
 
 #Creating a main function to be compatible with CWL
 def main():
+    step=sys.argv[3]
+    prop=sys.argv[4]
+    step, system, mut = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic(mut)[step]
+    prop['path']=''
     Scwrl4(input_pdb_path=sys.argv[1],
            output_pdb_path=sys.argv[2],
-           properties=sys.argv[3]).launch()
+           step=step,
+           properties=prop).launch()
 
 if __name__ == '__main__':
     main()

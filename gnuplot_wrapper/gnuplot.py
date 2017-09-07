@@ -49,9 +49,15 @@ class Gnuplot(object):
 
 #Creating a main function to be compatible with CWL
 def main():
+    step=sys.argv[3]
+    prop=sys.argv[4]
+    step, system = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
+    prop['path']=''
     Gnuplot(input_xvg_path_dict={'mutation':sys.argv[1]},
             output_png_path=sys.argv[2],
-            properties=sys.argv[3]).launch()
+            step=step,
+            properties=prop).launch()
 
 if __name__ == '__main__':
     main()

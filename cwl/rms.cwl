@@ -20,10 +20,15 @@ inputs:
     type: string
     inputBinding:
       position: 4
-  rms_properties:
+    default: "rms.xvg"
+  rms_step:
     type: string
     inputBinding:
       position: 5
+  rms_properties:
+    type: File
+    inputBinding:
+      position: 6
 outputs:
   rms_output_xvg_file:
     type: File

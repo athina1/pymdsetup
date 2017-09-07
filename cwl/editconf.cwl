@@ -1,8 +1,6 @@
 #!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
 class: CommandLineTool
-
 baseCommand:
   - python
 inputs:
@@ -18,10 +16,15 @@ inputs:
     type: string
     inputBinding:
       position: 3
-  ec_properties:
+    default: ec.gro
+  ec_step:
     type: string
     inputBinding:
       position: 4
+  ec_properties:
+    type: File
+    inputBinding:
+      position: 5
 outputs:
   ec_output_gro_file:
     type: File

@@ -61,13 +61,19 @@ class Grompp(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    if len(sys.argv) < 6:
+    if len(sys.argv) < 7:
         sys.argv.append(None)
+    step=sys.argv[4]
+    prop=sys.argv[5]
+    step, system = step.split(':')
+    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
+    prop['path']=''
     Grompp(input_gro_path = sys.argv[1],
               input_top_tar_path = sys.argv[2],
               output_tpr_path = sys.argv[3],
-              properties = sys.argv[4],
-              input_cpt_path = sys.argv[5]).launch()
+              step=step,
+              properties=prop,
+              input_cpt_path = sys.argv[6]).launch()
 
 if __name__ == '__main__':
     main()
