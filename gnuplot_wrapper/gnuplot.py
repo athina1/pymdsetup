@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+from os.path import join as opj
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu

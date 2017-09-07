@@ -8,12 +8,12 @@ inputs:
     type: File
     inputBinding:
       position: 1
-  gnuplot_input_xvg_path_dict:
-    type: string
+  gnuplot_input_xvg_path:
+    type: File
     inputBinding:
       position: 2
   gnuplot_output_png_path:
-    type: File
+    type: string
     inputBinding:
       position: 3
   gnuplot_properties:

@@ -1,9 +1,9 @@
 #GNUPLOT
 gnuplot_script:
     class: File
-    path: /home/pau/projects/pymdsetup/scwrl_wrapper/scwrl.py
-gnuplot_input_xvg_path_dict: mutated.pdb
-gnuplot_input_pdb_path:
+    path: /home/pau/projects/pymdsetup/gnuplot_wrapper/gnuplot.py
+gnuplot_input_xvg_path:
     class: File
-    path:  /home/pau/projects/pymdsetup/cwl/test/data/structure.pdb
-gnuplot_properties: "{\"mutation\":\"A.Lys58Glu\", \"scwrl4_path\":\"/home/pau/soft/scwrl4/Scwrl4\"}"
+    path: /home/pau/projects/pymdsetup/cwl/test/data/rmsd.xvg
+gnuplot_output_png_path: gplot.png
+gnuplot_properties: "{\"output_plotscript_path\":\"gplot.plotscript\", \"gnuplot_path\":\"/usr/bin/gnuplot\"}"

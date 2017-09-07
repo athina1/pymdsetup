@@ -58,130 +58,53 @@ mdmin_properties: "{\"output_edr_path\":\"mdmin.edr\", \"output_xtc_path\":\"mdm
 gppnvt_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/grompp.py
-gppnvt_input_mdp_path:
-    class: File
-    path: /home/pau/projects/pymdsetup/workflows/mdp/gmx_full_nvt_test.mdp
-# gpp_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdmin.gro
-# gpp_input_top_tar_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gio_top.tar
 gppnvt_output_tpr_path: gppnvt.tpr
-gppnvt_gmx_path: /usr/local/gromacs/bin/gmx
-gppnvt_log_path: gppnvt.out
-gppnvt_error_path: gppnvt.err
-
+gppnvt_properties: "{\"input_mdp_path\":\"/home/pau/projects/pymdsetup/workflows/mdp/gmx_full_nvt_test.mdp\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #MDNVT
 mdnvt_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/mdrun.py
-# mdnvt_input_tpr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gppnvt.tpr
-mdnvt_output_gro_path: mdnvt.gro
 mdnvt_output_trr_path: mdnvt.trr
-mdnvt_output_edr_path: mdnvt.edr
-mdnvt_output_xtc_path: mdnvt.xtc
+mdnvt_output_gro_path: mdnvt.gro
 mdnvt_output_cpt_path: mdnvt.cpt
-mdnvt_gmx_path: /usr/local/gromacs/bin/gmx
-mdnvt_log_path: mdnvt.out
-mdnvt_error_path: mdnvt.err
-
+mdnvt_properties: "{\"output_edr_path\":\"mdnvt.edr\", \"output_xtc_path\":\"mdnvt.xtc\", \"num_threads\":\"0\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #GPPNPT
 gppnpt_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/grompp.py
-gppnpt_input_mdp_path:
-    class: File
-    path: /home/pau/projects/pymdsetup/workflows/mdp/gmx_full_npt_test.mdp
-# gpp_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdmin.gro
-# gpp_input_top_tar_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gio_top.tar
 gppnpt_output_tpr_path: gppnpt.tpr
-gppnpt_gmx_path: /usr/local/gromacs/bin/gmx
-gppnpt_log_path: gppnpt.out
-gppnpt_error_path: gppnpt.err
-# gpp_input_cpt_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdnvt.cpt
-
+gppnpt_properties: "{\"input_mdp_path\":\"/home/pau/projects/pymdsetup/workflows/mdp/gmx_full_npt_test.mdp\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #MDNPT
 mdnpt_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/mdrun.py
-# mdnpt_input_tpr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gppnpt.tpr
 mdnpt_output_gro_path: mdnpt.gro
 mdnpt_output_trr_path: mdnpt.trr
-mdnpt_output_edr_path: mdnpt.edr
-mdnpt_output_xtc_path: mdnpt.xtc
 mdnpt_output_cpt_path: mdnpt.cpt
-mdnpt_gmx_path: /usr/local/gromacs/bin/gmx
-mdnpt_log_path: mdnpt.out
-mdnpt_error_path: mdnpt.err
-
+mdnpt_properties: "{\"output_edr_path\":\"mdnpt.edr\", \"output_xtc_path\":\"mdnpt.xtc\", \"num_threads\":\"0\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #GPPEQ
 gppeq_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/grompp.py
-gppeq_input_mdp_path:
-    class: File
-    path: /home/pau/projects/pymdsetup/workflows/mdp/gmx_full_md_test.mdp
-# gpp_input_gro_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdmin.gro
-# gpp_input_top_tar_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gio_top.tar
 gppeq_output_tpr_path: gppeq.tpr
-gppeq_gmx_path: /usr/local/gromacs/bin/gmx
-gppeq_log_path: gppeq.out
-gppeq_error_path: gppeq.err
-# gpp_input_cpt_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdnvt.cpt
-
+gppeq_properties: "{\"input_mdp_path\":\"/home/pau/projects/pymdsetup/workflows/mdp/gmx_full_md_test.mdp\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #MDEQ
 mdeq_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/mdrun.py
-# mdeq_input_tpr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/gppeq.tpr
 mdeq_output_gro_path: mdeq.gro
 mdeq_output_trr_path: mdeq.trr
-mdeq_output_edr_path: mdeq.edr
-mdeq_output_xtc_path: mdeq.xtc
 mdeq_output_cpt_path: mdeq.cpt
-mdeq_gmx_path: /usr/local/gromacs/bin/gmx
-mdeq_log_path: mdeq.out
-mdeq_error_path: mdeq.err
-
+mdeq_properties: "{\"output_edr_path\":\"mdeq.edr\", \"output_xtc_path\":\"mdeq.xtc\", \"num_threads\":\"0\", \"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
 #RMS
 rms_script:
     class: File
     path: /home/pau/projects/pymdsetup/gromacs_wrapper/rms.py
 rms_output_xvg_path: rms.xvg
 rms_properties: "{\"gmx_path\":\"/usr/local/gromacs/bin/gmx\"}"
-
 #GNUPLOT
 gnuplot_script:
     class: File
     path: /home/pau/projects/pymdsetup/gnuplot_wrapper/gnuplot.py
-# mutation: A.ALA2VAL
-# xvg_file_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/rms.xvg
-# rms_input_trr_path:
-#     class: File
-#     path: /home/pau/projects/pymdsetup/cwl/mdeq.trr
-gnuplot_output_png_path: gplot.png
-gnuplot_output_plotscript_path: gplot.plotscript
-gnuplot_gnuplot_path: /usr/bin/gnuplot
-gnuplot_log_path: gplot.out
-gnuplot_error_path: gplot.err
+gnuplot_output_png_path: gnuplot.png
+gnuplot_properties: "{\"output_plotscript_path\":\"gplot.plotscript\", \"gnuplot_path\":\"/usr/bin/gnuplot\"}"
