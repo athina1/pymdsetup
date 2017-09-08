@@ -8,6 +8,9 @@ inputs:
     type: File
     inputBinding:
       position: 1
+    default:
+      class: File
+      location: ../gromacs_wrapper/solvate.py
   sol_input_solute_gro_path:
     type: File
     inputBinding:
@@ -30,10 +33,14 @@ inputs:
     type: string
     inputBinding:
       position: 6
+    default: "step6_sol:linux"
   sol_properties:
     type: File
     inputBinding:
       position: 7
+    default:
+      class: File
+      location: "../workflows/conf_2mut_nt0.yaml"
 outputs:
   sol_output_gro_file:
     type: File

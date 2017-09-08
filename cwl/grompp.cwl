@@ -8,6 +8,9 @@ inputs:
     type: File
     inputBinding:
       position: 1
+    default:
+      class: File
+      location: ../gromacs_wrapper/grompp.py
   gpp_input_gro_path:
     type: File
     inputBinding:
@@ -25,10 +28,14 @@ inputs:
     type: string
     inputBinding:
       position: 5
+    default: "step7_gppions:linux"
   gpp_properties:
     type: File
     inputBinding:
       position: 6
+    default:
+      class: File
+      location: "../workflows/conf_2mut_nt0.yaml"
   gpp_input_cpt_path:
     type: File?
     inputBinding:

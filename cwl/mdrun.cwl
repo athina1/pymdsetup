@@ -8,6 +8,9 @@ inputs:
     type: File
     inputBinding:
       position: 1
+    default:
+      class: File
+      location: "../gromacs_wrapper/mdrun.py"
   md_input_tpr_path:
     type: File
     inputBinding:
@@ -26,10 +29,14 @@ inputs:
     type: string
     inputBinding:
       position: 5
+    default: "step10_mdmin:linux"
   md_properties:
     type: File
     inputBinding:
       position: 6
+    default:
+      class: File
+      location: "../workflows/conf_2mut_nt0.yaml"
   md_output_cpt_path:
     type: string?
     inputBinding:

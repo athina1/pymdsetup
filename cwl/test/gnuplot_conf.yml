@@ -1,12 +1,12 @@
 #GNUPLOT
 gnuplot_script:
     class: File
-    path: ../../gnuplot_wrapper/gnuplot.py
+    location: ../../gnuplot_wrapper/gnuplot.py
 gnuplot_input_xvg_path:
     class: File
-    path: ../../cwl/test/data/rmsd.xvg
+    location: ../../cwl/test/data/rmsd.xvg
 gnuplot_output_png_path: gplot.png
 gnuplot_step: step18_gnuplot:linux
 gnuplot_properties:
     class: File
-    path: ../../workflows/conf_2mut_nt0.yaml
+    location: ../../workflows/conf_2mut_nt0.yaml

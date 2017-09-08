@@ -1,16 +1,16 @@
 #SOLVATE
 sol_script:
     class: File
-    path: ../../gromacs_wrapper/solvate.py
+    location: ../../gromacs_wrapper/solvate.py
 sol_input_solute_gro_path:
     class: File
-    path: ../../cwl/test/data/ec.gro
+    location: ../../cwl/test/data/ec.gro
 sol_output_gro_path: sol.gro
 sol_input_top_tar_path:
     class: File
-    path: ../../cwl/test/data/p2g_top.tar
+    location: ../../cwl/test/data/p2g_top.tar
 sol_output_top_tar_path: sol_top.tar
 sol_step: step6_sol:linux
 sol_properties:
     class: File
-    path: ../../workflows/conf_2mut_nt0.yaml
+    location: ../../workflows/conf_2mut_nt0.yaml

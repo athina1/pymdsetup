@@ -4,19 +4,19 @@
 Pymdsetup is a python package to setup systems to run molecular
 dynamics simulations.
 
-### Version 0.1 Alpha
-This first version is just an example of a functional workflow.
+### Version 0.2 Alpha
+This version is just an example of a functional workflow.
 In v0.1 Pymdsetup uses the following applications:
 
-1. GROMACS: Open source and widely used molecular dynamics simulation package. 
+1. GROMACS: Open source and widely used molecular dynamics simulation package.
 (http://www.gromacs.org/)
-2. MMBAPI: REST API to access the PDB, UNIPROT and lots of precomputed 
+2. MMBAPI: REST API to access the PDB, UNIPROT and lots of precomputed
 information about variants, residue mapping, etc. (http://mmb.pcb.ub.es/api/)
-3. SCWRL4: Application to determine the protein side chain conformations. 
+3. SCWRL4: Application to determine the protein side chain conformations.
 (http://dunbrack.fccc.edu/scwrl4/)
-4. PyCOMPSs: Python library for parallel computing. 
+4. PyCOMPSs: Python library for parallel computing.
 (https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python)
-
+<!--
 ### Installation
 1. Clone this repository in your local machine
 
@@ -40,7 +40,7 @@ information about variants, residue mapping, etc. (http://mmb.pcb.ub.es/api/)
     ```
 
 4. Third party applications installation  
-   In order to install the rest of applications please follow their 
+   In order to install the rest of applications please follow their
    installation instructions:
   * GROMACS: http://manual.gromacs.org/documentation/5.1/install-guide/index.html
   * SCWRL4: http://dunbrack.fccc.edu/scwrl4/#installation
@@ -52,7 +52,7 @@ All of them are compatible with pytest and nosetests libraries.
    Launch tests with _nosetests_
 
 ```bash
-$ nosetests --nocapture test 
+$ nosetests --nocapture test
 ```
 
 launch tests with _pytest_:
@@ -62,10 +62,10 @@ $ python test/<name_of_the_test_file>.py
 ```
 
 ### Usage
-1. Modify the paths of _workflows/conf.yaml_ to point your GROMACS and SCWRL4 
+1. Modify the paths of _workflows/conf.yaml_ to point your GROMACS and SCWRL4
 binary files.
-2. Still in _conf.yaml_, select the input PDB code. In the current Alpha 0.1 
-this workflow has been tested with a small set of PDB codes and for demo 
+2. Still in _conf.yaml_, select the input PDB code. In the current Alpha 0.1
+this workflow has been tested with a small set of PDB codes and for demo
 purposes we recomend to use _1AKI_ the default one.
 3. Launch the serial workflow:
 
@@ -74,18 +74,18 @@ purposes we recomend to use _1AKI_ the default one.
     ```
 
     or the paralel one:
-    
+
     ```bash
     $ python workflows/gromacs_full_pycompss.py
     ```
 
 ### Copyright & Licensing
-This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the 
+This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the
 BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/)
 project.  
-   
-   
-   
+
+
+
 ![Bioexcel](docs/images/bioexcel_logo.png "Bioexcel")
 
 
@@ -211,7 +211,7 @@ project.
         nstlog      = 500       ; update log file every 1.0 ps
         ; Bond parameters
         continuation            = no        ; first dynamics run
-        constraint_algorithm    = lincs     ; holonomic constraints 
+        constraint_algorithm    = lincs     ; holonomic constraints
         constraints             = all-bonds ; all bonds (even heavy atom-H bonds)
         constrained
         lincs_iter              = 1         ; accuracy of LINCS
@@ -258,8 +258,8 @@ project.
         nstenergy   = 500       ; save energies every 1.0 ps
         nstlog      = 500       ; update log file every 1.0 ps
         ; Bond parameters
-        continuation            = yes       ; Restarting after NVT 
-        constraint_algorithm    = lincs     ; holonomic constraints 
+        continuation            = yes       ; Restarting after NVT
+        constraint_algorithm    = lincs     ; holonomic constraints
         constraints             = all-bonds ; all bonds (even heavy atom-H bonds)
         constrained
         lincs_iter              = 1         ; accuracy of LINCS
@@ -315,8 +315,8 @@ project.
                                         ; nstxout-compressed replaces nstxtcout
         compressed-x-grps   = System    ; replaces xtc-grps
         ; Bond parameters
-        continuation            = yes       ; Restarting after NPT 
-        constraint_algorithm    = lincs     ; holonomic constraints 
+        continuation            = yes       ; Restarting after NPT
+        constraint_algorithm    = lincs     ; holonomic constraints
         constraints             = all-bonds ; all bonds (even heavy atom-H bonds)
         constrained
         lincs_iter              = 1         ; accuracy of LINCS
@@ -354,3 +354,4 @@ project.
         gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md1ns.tpr
 
         gmx mdrun -s md1ns.tpr -o md1ns.trr -c md1ns.gro -e md1ns.edr -cpo md1ns.cpt
+-->

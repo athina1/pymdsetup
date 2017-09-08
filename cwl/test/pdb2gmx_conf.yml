@@ -1,13 +1,13 @@
 #PDB2GMX
 p2g_script:
     class: File
-    path: ../../gromacs_wrapper/pdb2gmx.py
+    location: ../../gromacs_wrapper/pdb2gmx.py
 p2g_input_structure_pdb_path:
     class: File
-    path: ../../cwl/test/data/mutated.pdb
+    location: ../../cwl/test/data/mutated.pdb
 p2g_output_gro_path: p2g.gro
 p2g_output_top_tar_path: p2g_top.tar
 p2g_step: step4_p2g:linux
 p2g_properties:
     class: File
-    path: ../../workflows/conf_2mut_nt0.yaml
+    location: ../../workflows/conf_2mut_nt0.yaml

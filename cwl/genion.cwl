@@ -8,6 +8,9 @@ inputs:
     type: File
     inputBinding:
       position: 1
+    default:
+      class: File
+      location: ../gromacs_wrapper/genion.py
   gio_input_tpr_path:
     type: File
     inputBinding:
@@ -30,10 +33,14 @@ inputs:
     type: string
     inputBinding:
       position: 6
+    default: "step8_gio:linux"
   gio_properties:
     type: File
     inputBinding:
       position: 7
+    default:
+      class: File
+      location: "../workflows/conf_2mut_nt0.yaml"
 
 outputs:
   gio_output_gro_file:
