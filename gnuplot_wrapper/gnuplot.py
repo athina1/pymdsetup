@@ -39,7 +39,7 @@ class Gnuplot(object):
             ps.write('set output "' + self.output_png_path + '"'+lb)
             ps.write('plot')
             for k, v in self.input_xvg_path_dict.iteritems():
-                ps.write(' "' + v + '" u 1:2 w lp t "' + k + '",')
+                ps.write(' "' + v + '" using 1:2 w lp terminal "' + k + '",')
 
         gplot = 'gnuplot' if self.gnuplot_path is None else self.gnuplot_path
         cmd = [gplot, self.output_plotscript_path]
