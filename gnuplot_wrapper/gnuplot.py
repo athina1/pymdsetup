@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+import numpy as np
 from os.path import join as opj
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
@@ -34,18 +35,30 @@ class Gnuplot(object):
         out_log, err_log = settings.get_logs(self.path)
         # Create the input script for gnuplot
         lb = os.linesep
+        xvg_file_list = []
         with open(self.output_plotscript_path, 'w') as ps:
             ps.write('set term png'+lb)
             ps.write('set output "' + self.output_png_path + '"'+lb)
             ps.write('plot')
             for k, v in self.input_xvg_path_dict.iteritems():
-                ps.write(' "' + v + '" using 1:2 w lp terminal "' + k + '",')
+                if isinstance(v, basestring) and os.path.isfile(v):
+                    ps.write(' "' + v + '" u 1:3 w lp t "' + k + '",')
+                else:
+                    xvg_file = k + '.xvg'
+                    np.savetxt(xvg_file, v, fmt='%4.7f')
+                    out_log.info('Creating file: '+os.path.abspath(xvg_file))
+                    xvg_file_list.append(os.path.abspath(xvg_file))
+                    ps.write(' "' + xvg_file + '" u 0:2 w lp t "' + k + '", ')
+
 
         gplot = 'gnuplot' if self.gnuplot_path is None else self.gnuplot_path
         cmd = [gplot, self.output_plotscript_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
+        for f in xvg_file_list:
+            out_log.info('Removing file: '+os.path.abspath(f))
+            os.unlink(os.path.abspath(f))
 
 #Creating a main function to be compatible with CWL
 def main():

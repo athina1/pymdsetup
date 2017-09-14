@@ -122,8 +122,8 @@ step7_gppions:
     input_gro_path: dependency/step6_sol/output_gro_path
     input_top_tar_path: dependency/step6_sol/output_top_tar_path
     output_tpr_path: gppions.tpr
-  properties:
     input_mdp_path: gmx_full_ions_test.mdp
+  properties:
 
 # Step8: gio -- Running: Add ions to neutralice the charge
 step8_gio:
@@ -146,8 +146,8 @@ step9_gppmin:
     input_gro_path: dependency/step8_gio/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     output_tpr_path: gppmin.tpr
-  properties:
     input_mdp_path: gmx_full_min_test.mdp
+  properties:
 
 # Step10: mdmin -- Running: Energy minimization
 step10_mdmin:
@@ -155,6 +155,7 @@ step10_mdmin:
     input_tpr_path: dependency/step9_gppmin/output_tpr_path
     output_trr_path: mdmin.trr
     output_gro_path: mdmin.gro
+    output_cpt_path: mdmin.cpt
   properties:
     output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
@@ -166,8 +167,8 @@ step11_gppnvt:
     input_gro_path: dependency/step10_mdmin/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     output_tpr_path: gppnvt.tpr
-  properties:
     input_mdp_path: gmx_full_nvt_test.mdp
+  properties:
 
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
 step12_mdnvt:
@@ -188,8 +189,8 @@ step13_gppnpt:
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     input_cpt_path: dependency/step12_mdnvt/output_cpt_path
     output_tpr_path: npt.tpr
-  properties:
     input_mdp_path: gmx_full_npt_test.mdp
+  properties:
 
 # Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
 step14_mdnpt:
@@ -210,8 +211,8 @@ step15_gppeq:
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     input_cpt_path: dependency/step14_mdnpt/output_cpt_path
     output_tpr_path: gppeq.tpr
-  properties:
     input_mdp_path: gmx_full_md_test.mdp
+  properties:
 
 # Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration
 step16_mdeq:

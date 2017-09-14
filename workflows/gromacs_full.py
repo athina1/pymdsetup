@@ -35,7 +35,7 @@ def main():
     paths_glob = conf.get_paths_dic()
     prop_glob = conf.get_prop_dic()
 
-    out_log.info('_______GROMACS FULL WORKFLOW_______')
+    out_log.info('_______GROMACS FULL WORKFLOW_______\n')
 
     # If no PDB structure is provided the structure will be downloaded
     if ( conf.properties[system].get('initial_structure_pdb_path') is None or
@@ -77,7 +77,7 @@ def main():
     out_log.info('')
     out_log.info('Number of mutations to be modelled: ' + str(mutations_limit))
 
-    rmsd_xvg_path_dict = {}
+    rms_list = []
     mutations_counter = 0
     for mut in mutations:
         if mutations_counter == mutations_limit:
@@ -142,7 +142,7 @@ def main():
         mdrun.Mdrun(properties=prop['step14_mdnpt'], **paths['step14_mdnpt']).launch()
 
         out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
-        fu.create_change_dir(prop['step15_gppeq']['path'])
+        fu.create_dir(prop['step15_gppeq']['path'])
         grompp.Grompp(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
 
         out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
@@ -151,15 +151,14 @@ def main():
 
         out_log.info('step17: rmsd ----- Computing RMSD')
         fu.create_dir(prop['step17_rmsd']['path'])
-        rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch()
-        rmsd_xvg_path_dict[mut] = paths['step17_rmsd']['output_xvg_path']
+        rms_list.append(rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
 
         out_log.info( '***************************************************************')
         out_log.info( '')
 
     out_log.info('step18: gnuplot ----- Creating RMSD plot')
     fu.create_dir(prop_glob['step18_gnuplot']['path'])
-    gnuplot.Gnuplot(input_xvg_path_dict=rmsd_xvg_path_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
+    gnuplot.Gnuplot(input_xvg_path_dict=reduce(lambda a, b: dict(a, **b), rms_list), properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
 
     elapsed_time = time.time() - start_time
     out_log.info('')

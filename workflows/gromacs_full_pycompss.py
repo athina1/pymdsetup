@@ -81,7 +81,6 @@ def main():
     out_log.info('')
     out_log.info('Number of mutations to be modelled: ' + str(mutations_limit))
 
-    rmsd_xvg_path_dict = {}
     mutations_counter = 0
     for mut in mutations:
         if mutations_counter == mutations_limit:
@@ -109,54 +108,54 @@ def main():
         fu.create_dir(prop['step5_ec']['path'])
         editconf_pc(properties=prop['step5_ec'], **paths['step5_ec'])
 
-    #     out_log.info('step6:  sol ------ Fill the box with water molecules')
-    #     fu.create_dir(prop['step6_sol']['path'])
-    #     solvate_pc(properties=prop['step6_sol'], **paths['step6_sol']).launch()
-    #
-    #     out_log.info('step7:  gppions -- Preprocessing: Add ions to neutralice the charge')
-    #     fu.create_dir(prop['step7_gppions']['path'])
-    #     grompp_pc(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
-    #
-    #     out_log.info('step8:  gio ------ Running: Add ions to neutralice the charge')
-    #     fu.create_dir(prop['step8_gio']['path'])
-    #     genion_pc(properties=prop['step8_gio'], **paths['step8_gio']).launch()
-    #
-    #     out_log.info('step9:  gppmin --- Preprocessing: Energy minimization')
-    #     fu.create_dir(prop['step9_gppmin']['path'])
-    #     grompp_pc(properties=prop['step9_gppmin'], **paths['step9_gppmin']).launch()
-    #
-    #     out_log.info('step10: mdmin ---- Running: Energy minimization')
-    #     fu.create_dir(prop['step10_mdmin']['path'])
-    #     mdrun_pc(properties=prop['step10_mdmin'], **paths['step10_mdmin']).launch()
-    #
-    #     out_log.info('step11: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
-    #     fu.create_dir(prop['step11_gppnvt']['path'])
-    #     grompp_pc(properties=prop['step11_gppnvt'], **paths['step11_gppnvt']).launch()
-    #
-    #     out_log.info('step12: mdnvt ---- Running: nvt constant number of molecules, volume and temp')
-    #     fu.create_dir(prop['step12_mdnvt']['path'])
-    #     mdrun_pc(properties=prop['step12_mdnvt'], **paths['step12_mdnvt']).launch()
-    #
-    #     out_log.info('step13: gppnpt --- Preprocessing: npt constant number of molecules, pressure and temp')
-    #     fu.create_dir(prop['step13_gppnpt']['path'])
-    #     grompp_pc(properties=prop['step13_gppnpt'], **paths['step13_gppnpt']).launch()
-    #
-    #     out_log.info('step14: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
-    #     fu.create_dir(prop['step14_mdnpt']['path'])
-    #     mdrun_pc(properties=prop['step14_mdnpt'], **paths['step14_mdnpt']).launch()
-    #
-    #     out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
-    #     fu.create_change_dir(prop['step15_gppeq']['path'])
-    #     grompp_pc(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
-    #
-    #     out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
-    #     fu.create_dir(prop['step16_mdeq']['path'])
-    #     mdrun_pc(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
-    #
-    #     out_log.info('step17: rmsd ----- Computing RMSD')
-    #     fu.create_dir(prop['step17_rmsd']['path'])
-    #     rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
-    #
+        out_log.info('step6:  sol ------ Fill the box with water molecules')
+        fu.create_dir(prop['step6_sol']['path'])
+        solvate_pc(properties=prop['step6_sol'], **paths['step6_sol']).launch()
+
+        out_log.info('step7:  gppions -- Preprocessing: Add ions to neutralice the charge')
+        fu.create_dir(prop['step7_gppions']['path'])
+        grompp_pc(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
+
+        out_log.info('step8:  gio ------ Running: Add ions to neutralice the charge')
+        fu.create_dir(prop['step8_gio']['path'])
+        genion_pc(properties=prop['step8_gio'], **paths['step8_gio']).launch()
+
+        out_log.info('step9:  gppmin --- Preprocessing: Energy minimization')
+        fu.create_dir(prop['step9_gppmin']['path'])
+        grompp_pc(properties=prop['step9_gppmin'], **paths['step9_gppmin']).launch()
+
+        out_log.info('step10: mdmin ---- Running: Energy minimization')
+        fu.create_dir(prop['step10_mdmin']['path'])
+        mdrun_pc(properties=prop['step10_mdmin'], **paths['step10_mdmin']).launch()
+
+        out_log.info('step11: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step11_gppnvt']['path'])
+        grompp_pc(properties=prop['step11_gppnvt'], **paths['step11_gppnvt']).launch()
+
+        out_log.info('step12: mdnvt ---- Running: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step12_mdnvt']['path'])
+        mdrun_pc(properties=prop['step12_mdnvt'], **paths['step12_mdnvt']).launch()
+
+        out_log.info('step13: gppnpt --- Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step13_gppnpt']['path'])
+        grompp_pc_cpt(properties=prop['step13_gppnpt'], **paths['step13_gppnpt']).launch()
+
+        out_log.info('step14: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step14_mdnpt']['path'])
+        mdrun_pc(properties=prop['step14_mdnpt'], **paths['step14_mdnpt']).launch()
+
+        out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
+        fu.create_dir(prop['step15_gppeq']['path'])
+        grompp_pc_cpt(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
+
+        out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
+        fu.create_dir(prop['step16_mdeq']['path'])
+        mdrun_pc(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
+
+        out_log.info('step17: rmsd ----- Computing RMSD')
+        fu.create_dir(prop['step17_rmsd']['path'])
+        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
+
     out = reduce(extractValueString, rms_list)
     # out_log.info('step18: gnuplot ----- Creating RMSD plot')
     # fu.create_dir(prop_glob['step18_gnuplot']['path'])
@@ -202,154 +201,44 @@ def editconf_pc(input_gro_path, output_gro_path, properties, **kwargs):
     """Launches the GROMACS editconf module using the PyCOMPSs library."""
     editconf.Editconf(input_gro_path, output_gro_path, properties, **kwargs).launch()
 
-# @task(input_solute_gro_path=FILE_IN, output_gro_path=FILE_OUT, input_top_tar_path=FILE_IN,
-#       output_top_path=IN,
-#       output_top_tar_path=IN,
-#       input_solvent_gro_path=IN,
-#       log_path=IN, error_path=IN, gmx_path=IN)
-# def solvatePyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-#                     input_solute_gro_path,
-#                     output_gro_path,
-#                     input_top_tar_path,
-#                     output_top_path,
-#                     output_top_tar_path,
-#                     input_solvent_gro_path,
-#                     log_path, error_path, gmx_path):
-#     """Launches the GROMACS solvate module using the PyCOMPSs library."""
-#     fu.create_change_dir(task_path)
-#     solvate.Solvate512(input_solute_gro_path,
-#                        output_gro_path,
-#                        input_top_tar_path,
-#                        output_top_path,
-#                        output_top_tar_path,
-#                        input_solvent_gro_path,
-#                        log_path, error_path, gmx_path).launch()
-#
-#     open(dependency_file_out, 'a').close()
-#
-#
-# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-#       input_mdp_path=IN,
-#       input_gro_path=IN,
-#       input_top_tar_path=IN,
-#       output_tpr_path=IN,
-#       input_cpt_path=IN,
-#       log_path=IN, error_path=IN, gmx_path=IN)
-# def gromppPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-#                    input_mdp_path,
-#                    input_gro_path,
-#                    input_top_tar_path,
-#                    output_tpr_path,
-#                    input_cpt_path,
-#                    log_path, error_path, gmx_path):
-#     """Launches the GROMACS grompp module using the PyCOMPSs library."""
-#     input_cpt_path = None if input_cpt_path.lower() == 'none' else input_cpt_path
-#     fu.create_change_dir(task_path)
-#     grompp.Grompp512(input_mdp_path,
-#                      input_gro_path,
-#                      input_top_tar_path,
-#                      output_tpr_path,
-#                      input_cpt_path,
-#                      log_path, error_path, gmx_path).launch()
-#     open(dependency_file_out, 'a').close()
-#
-#
-# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-#       input_tpr_path=IN,
-#       output_gro_path=IN,
-#       input_top_tar_path=IN,
-#       output_top_path=IN,
-#       output_top_tar_path=IN,
-#       replaced_group=IN,
-#       neutral=IN,
-#       concentration=IN,
-#       seed=IN,
-#       log_path=IN, error_path=IN, gmx_path=IN)
-# def genionPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-#                    input_tpr_path,
-#                    output_gro_path,
-#                    input_top_tar_path,
-#                    output_top_path,
-#                    output_top_tar_path,
-#                    replaced_group,
-#                    neutral,
-#                    concentration,
-#                    seed,
-#                    log_path, error_path, gmx_path):
-#     """Launches the GROMACS genion module using the PyCOMPSs library."""
-#     seed = None if seed.lower() == 'none' else seed
-#     fu.create_change_dir(task_path)
-#     genion.Genion512(input_tpr_path,
-#                      output_gro_path,
-#                      input_top_tar_path,
-#                      output_top_path,
-#                      output_top_tar_path,
-#                      replaced_group,
-#                      neutral,
-#                      concentration,
-#                      seed,
-#                      log_path, error_path, gmx_path).launch()
-#     open(dependency_file_out, 'a').close()
-#
-#
-# #@constraint(ComputingUnits="16")
-# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-#       input_tpr_path=IN,
-#       output_gro_path=IN,
-#       output_trr_path=IN,
-#       output_edr_path=IN,
-#       output_xtc_path=IN,
-#       output_cpt_path=IN,
-#       log_path=IN, error_path=IN, gmx_path=IN,
-#       num_threads=IN)
-# def mdrunPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-#                   input_tpr_path,
-#                   output_gro_path,
-#                   output_trr_path,
-#                   output_edr_path,
-#                   output_xtc_path,
-#                   output_cpt_path,
-#                   log_path, error_path, gmx_path,
-#                   num_threads):
-#     """Launches the GROMACS mdrun module using the PyCOMPSs library."""
-#     output_xtc_path = None if output_xtc_path.lower() == 'none' else output_xtc_path
-#     output_cpt_path = None if output_cpt_path.lower() == 'none' else output_cpt_path
-#     fu.create_change_dir(task_path)
-#     mdrun.Mdrun512(input_tpr_path=input_tpr_path,
-#                    output_gro_path=output_gro_path,
-#                    output_trr_path=output_trr_path,
-#                    output_edr_path=output_edr_path,
-#                    output_xtc_path=output_xtc_path,
-#                    output_cpt_path=output_cpt_path,
-#                    log_path=log_path, error_path=error_path, gmx_path=gmx_path,
-#                    num_threads=num_threads).launch()
-#
-#     open(dependency_file_out, 'a').close()
-#
-#
-# @task(dependency_file_in=FILE_IN, dependency_file_out=FILE_OUT, task_path=IN,
-#       input_gro_path=IN,
-#       input_trr_path=IN,
-#       output_xvg_path=IN,
-#       log_path=IN, error_path=IN, gmx_path=IN)
-# def rmsdPyCOMPSs(dependency_file_in, dependency_file_out, task_path,
-#                  input_gro_path,
-#                  input_trr_path,
-#                  output_xvg_path,
-#                  log_path, error_path, gmx_path):
-#     fu.create_change_dir(task_path)
-#     rms.Rms512(input_gro_path=input_gro_path,
-#                input_trr_path=input_trr_path,
-#                output_xvg_path=output_xvg_path,
-#                log_path=log_path, error_path=error_path, gmx_path=gmx_path).launch()
-#     open(dependency_file_out, 'a').close()
-#
-# @task(output_png_path=FILE_OUT)
-# def gnuplot_pc(input_xvg_path_dict, output_png_path, properties, **kwargs):
-#     gnuplot.Gnuplot(input_xvg_path_dict, output_png_path, properties, **kwargs).launch()
+@task(input_solute_gro_path=FILE_IN, output_gro_path=FILE_OUT, input_top_tar_path=FILE_IN, output_top_tar_path=FILE_OUT)
+def solvate_pc(input_solute_gro_path, output_gro_path, input_top_tar_path,
+               output_top_tar_path, properties, **kwargs):
+    """Launches the GROMACS solvate module using the PyCOMPSs library."""
+    solvate.Solvate(input_solute_gro_path, output_gro_path, input_top_tar_path,
+                    output_top_tar_path, properties, **kwargs).launch()
+
+@task(input_gro_path=FILE_IN, input_top_tar_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT,  input_cpt_path=FILE_IN)
+def grompp_pc_cpt(input_gro_path, input_top_tar_path, output_tpr_path, properties, input_cpt_path, **kwargs):
+    """Launches the GROMACS grompp module using the PyCOMPSs library."""
+    grompp.Grompp(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path,
+                  properties, input_cpt_path, **kwargs).launch()
+
+@task(input_gro_path=FILE_IN, input_top_tar_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT)
+def grompp_pc(input_gro_path, input_top_tar_path, output_tpr_path, properties, **kwargs):
+    """Launches the GROMACS grompp module using the PyCOMPSs library."""
+    grompp.Grompp(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path,
+                  properties, **kwargs).launch()
+
+@task(input_tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top_tar_path=FILE_IN, output_top_tar_path=FILE_OUT)
+def genion_pc(input_tpr_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs):
+    """Launches the GROMACS genion module using the PyCOMPSs library."""
+    genion.Genion(input_tpr_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs).launch()
+
+@task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT, output_cpt_path=FILE_OUT)
+def mdrun_pc(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path=None, **kwargs):
+    """Launches the GROMACS mdrun module using the PyCOMPSs library."""
+    mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs).launch()
+
+@task(input_gro_path=FILE_IN, input_trr_path=FILE_IN, output_xvg_path=FILE_OUT)
+def rmsdPyCOMPSs(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs):
+    rms.Rms(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs).launch()
+
+@task(output_png_path=FILE_OUT)
+def gnuplot_pc(input_xvg_path_dict, output_png_path, properties, **kwargs):
+    gnuplot.Gnuplot(input_xvg_path_dict, output_png_path, properties, **kwargs).launch()
 
 ##############################################################################
-
 
 if __name__ == '__main__':
     main()

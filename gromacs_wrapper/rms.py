@@ -1,7 +1,10 @@
 """Python wrapper for the GROMACS rms module
 """
+import os
 import sys
 import json
+import ntpath
+import numpy as np
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 
@@ -23,6 +26,7 @@ class Rms(object):
         self.input_trr_path = input_trr_path
         self.output_xvg_path = output_xvg_path
         self.gmx_path = properties['gmx_path']
+        self.mutation = properties.get('mutation','')
         self.path = properties.get('path','')
 
     def launch(self):
@@ -38,6 +42,8 @@ class Rms(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
+        xvg = self.output_xvg_path if os.path.isfile(self.output_xvg_path) else ntpath.basename(self.output_xvg_path)
+        return {self.mutation: np.loadtxt(xvg)}
 
 #Creating a main function to be compatible with CWL
 def main():

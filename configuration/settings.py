@@ -65,6 +65,8 @@ class YamlReader(object):
                         dependency_step=value.split('/')[1]
                         value = prop_dic[value.split('/')[1]][value.split('/')[2]]
                     prop_dic[key][key2] = opj(self.properties[self.system]['workflow_path'], mutation, dependency_step, value)
+                elif isinstance(key2, basestring) and key2 == 'input_mdp_path':
+                    prop_dic[key][key2] = value
                 else:
                     prop_dic[key][key2] = opj(self.properties[self.system]['workflow_path'], mutation, key, value)
         return prop_dic

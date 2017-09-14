@@ -18,13 +18,12 @@ class Grompp(object):
         input_top_tar_path (str): Path the input GROMACS topology TOP file.
         output_tpr_path (str): Path to the output portable binary run file TPR.
         input_cpt_path (str): Path to the input GROMACS checkpoint file CPT.
+        input_mdp_path (str): Path to the input GROMACS parameter input file MDP.
         properties (dic):
-            mdp_path (str): Path to the input GROMACS parameter input file MDP.
-                            stored.
             gmx_path (str): Path to the GROMACS executable binary.
     """
 
-    def __init__(self, input_gro_path, input_top_tar_path,
+    def __init__(self, input_gro_path, input_top_tar_path, input_mdp_path,
                  output_tpr_path, properties, input_cpt_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
@@ -32,10 +31,10 @@ class Grompp(object):
         self.input_top_tar_path = input_top_tar_path
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
-        if os.path.isfile(properties['input_mdp_path']):
-            self.input_mdp_path=properties['input_mdp_path']
+        if os.path.isfile(input_mdp_path):
+            self.input_mdp_path=input_mdp_path
         else:
-            self.input_mdp_path = opj(properties['mdp_path'], properties['input_mdp_path'])
+            self.input_mdp_path = opj(properties['mdp_path'], input_mdp_path)
         self.gmx_path = properties['gmx_path']
         self.path = properties.get('path','')
 
