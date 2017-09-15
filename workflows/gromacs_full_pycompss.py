@@ -81,6 +81,7 @@ def main():
     out_log.info('')
     out_log.info('Number of mutations to be modelled: ' + str(mutations_limit))
 
+    rms_list = []
     mutations_counter = 0
     for mut in mutations:
         if mutations_counter == mutations_limit:
@@ -110,80 +111,83 @@ def main():
 
         out_log.info('step6:  sol ------ Fill the box with water molecules')
         fu.create_dir(prop['step6_sol']['path'])
-        solvate_pc(properties=prop['step6_sol'], **paths['step6_sol']).launch()
+        solvate_pc(properties=prop['step6_sol'], **paths['step6_sol'])
 
         out_log.info('step7:  gppions -- Preprocessing: Add ions to neutralice the charge')
         fu.create_dir(prop['step7_gppions']['path'])
-        grompp_pc(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
+        grompp_pc(properties=prop['step7_gppions'], **paths['step7_gppions'])
 
         out_log.info('step8:  gio ------ Running: Add ions to neutralice the charge')
         fu.create_dir(prop['step8_gio']['path'])
-        genion_pc(properties=prop['step8_gio'], **paths['step8_gio']).launch()
+        genion_pc(properties=prop['step8_gio'], **paths['step8_gio'])
 
         out_log.info('step9:  gppmin --- Preprocessing: Energy minimization')
         fu.create_dir(prop['step9_gppmin']['path'])
-        grompp_pc(properties=prop['step9_gppmin'], **paths['step9_gppmin']).launch()
+        grompp_pc(properties=prop['step9_gppmin'], **paths['step9_gppmin'])
 
         out_log.info('step10: mdmin ---- Running: Energy minimization')
         fu.create_dir(prop['step10_mdmin']['path'])
-        mdrun_pc(properties=prop['step10_mdmin'], **paths['step10_mdmin']).launch()
+        mdrun_pc(properties=prop['step10_mdmin'], **paths['step10_mdmin'])
 
         out_log.info('step11: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
         fu.create_dir(prop['step11_gppnvt']['path'])
-        grompp_pc(properties=prop['step11_gppnvt'], **paths['step11_gppnvt']).launch()
+        grompp_pc(properties=prop['step11_gppnvt'], **paths['step11_gppnvt'])
 
         out_log.info('step12: mdnvt ---- Running: nvt constant number of molecules, volume and temp')
         fu.create_dir(prop['step12_mdnvt']['path'])
-        mdrun_pc(properties=prop['step12_mdnvt'], **paths['step12_mdnvt']).launch()
+        mdrun_pc(properties=prop['step12_mdnvt'], **paths['step12_mdnvt'])
 
         out_log.info('step13: gppnpt --- Preprocessing: npt constant number of molecules, pressure and temp')
         fu.create_dir(prop['step13_gppnpt']['path'])
-        grompp_pc_cpt(properties=prop['step13_gppnpt'], **paths['step13_gppnpt']).launch()
+        grompp_pc_cpt(properties=prop['step13_gppnpt'], **paths['step13_gppnpt'])
 
         out_log.info('step14: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
         fu.create_dir(prop['step14_mdnpt']['path'])
-        mdrun_pc(properties=prop['step14_mdnpt'], **paths['step14_mdnpt']).launch()
+        mdrun_pc(properties=prop['step14_mdnpt'], **paths['step14_mdnpt'])
 
         out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
         fu.create_dir(prop['step15_gppeq']['path'])
-        grompp_pc_cpt(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
+        grompp_pc_cpt(properties=prop['step15_gppeq'], **paths['step15_gppeq'])
 
         out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
         fu.create_dir(prop['step16_mdeq']['path'])
-        mdrun_pc(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
+        mdrun_pc(properties=prop['step16_mdeq'], **paths['step16_mdeq'])
 
-        out_log.info('step17: rmsd ----- Computing RMSD')
-        fu.create_dir(prop['step17_rmsd']['path'])
-        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
-
-    out = reduce(extractValueString, rms_list)
-    # out_log.info('step18: gnuplot ----- Creating RMSD plot')
-    # fu.create_dir(prop_glob['step18_gnuplot']['path'])
-    # gnuplot_pc(input_xvg_path_dict=rmsd_xvg_path_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
-    # png = compss_wait_on(paths_glob['step18_gnuplot']['output_png_path'])
-
-    elapsed_time = time.time() - start_time
-    print "Elapsed time: ", elapsed_time
-    with open(opj(workflow_path, 'time.txt'), 'a') as time_file:
-        time_file.write('Elapsed time: ')
-        time_file.write(str(elapsed_time))
-        time_file.write('\n')
-        time_file.write('Config File: ')
-        time_file.write(sys.argv[1])
-        time_file.write('\n')
-        time_file.write('Sytem: ')
-        time_file.write(sys.argv[2])
-        time_file.write('\n')
-        if len(sys.argv) >= 4:
-            time_file.write('Nodes: ')
-            time_file.write(sys.argv[3])
-            time_file.write('\n')
-
-@task(returns=list)
-def extractValueString(a,b):
-    return a.append(b)
+#         out_log.info('step17: rmsd ----- Computing RMSD')
+#         fu.create_dir(prop['step17_rmsd']['path'])
+#         rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
+# ######## End mutations for loop ########
+#     xvg_dict= merge_dictionaries(rms_list)
+#     print xvg_dict
+#     xvg_dict= compss_wait_on(xvg_dict)
+#     print xvg_dict
+#     out_log.info('step18: gnuplot ----- Creating RMSD plot')
+#     fu.create_dir(prop_glob['step18_gnuplot']['path'])
+#     gnuplot_pc(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot'])
+#     png = compss_wait_on(paths_glob['step18_gnuplot']['output_png_path'])
+#
+#     elapsed_time = time.time() - start_time
+#     print "Elapsed time: ", elapsed_time
+#     with open(opj(workflow_path, 'time.txt'), 'a') as time_file:
+#         time_file.write('Elapsed time: ')
+#         time_file.write(str(elapsed_time))
+#         time_file.write('\n')
+#         time_file.write('Config File: ')
+#         time_file.write(sys.argv[1])
+#         time_file.write('\n')
+#         time_file.write('Sytem: ')
+#         time_file.write(sys.argv[2])
+#         time_file.write('\n')
+#         if len(sys.argv) >= 4:
+#             time_file.write('Nodes: ')
+#             time_file.write(sys.argv[3])
+#             time_file.write('\n')
 
 ############################## PyCOMPSs functions #############################
+@task(returns=dict)
+def merge_dictionaries(dict_list):
+    return reduce(lambda a, b: dict(a, **b), dict_list)
+
 @task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT)
 def scwrl_pc(input_pdb_path, output_pdb_path, properties, **kwargs):
     """ Launches SCWRL 4 using the PyCOMPSs library."""
@@ -209,13 +213,13 @@ def solvate_pc(input_solute_gro_path, output_gro_path, input_top_tar_path,
                     output_top_tar_path, properties, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, input_top_tar_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT,  input_cpt_path=FILE_IN)
-def grompp_pc_cpt(input_gro_path, input_top_tar_path, output_tpr_path, properties, input_cpt_path, **kwargs):
+def grompp_pc_cpt(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs):
     """Launches the GROMACS grompp module using the PyCOMPSs library."""
     grompp.Grompp(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path,
                   properties, input_cpt_path, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, input_top_tar_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT)
-def grompp_pc(input_gro_path, input_top_tar_path, output_tpr_path, properties, **kwargs):
+def grompp_pc(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path, properties, **kwargs):
     """Launches the GROMACS grompp module using the PyCOMPSs library."""
     grompp.Grompp(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path,
                   properties, **kwargs).launch()

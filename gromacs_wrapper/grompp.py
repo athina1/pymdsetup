@@ -31,10 +31,7 @@ class Grompp(object):
         self.input_top_tar_path = input_top_tar_path
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
-        if os.path.isfile(input_mdp_path):
-            self.input_mdp_path=input_mdp_path
-        else:
-            self.input_mdp_path = opj(properties['mdp_path'], input_mdp_path)
+        self.input_mdp_path=input_mdp_path
         self.gmx_path = properties['gmx_path']
         self.path = properties.get('path','')
 
@@ -44,7 +41,7 @@ class Grompp(object):
         out_log, err_log = settings.get_logs(self.path)
         # Untar topology in de directory of the output_tpr_path and get the
         # topology path
-        topology_path = fu.untar_top(self.input_top_tar_path, dest_dir=self.output_tpr_path)
+        topology_path = fu.untar_top(self.input_top_tar_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'grompp', '-f', self.input_mdp_path,
                '-c', self.input_gro_path,

@@ -1,5 +1,6 @@
 """Python wrapper for the GROMACS mdrun module
 """
+import os
 import sys
 import json
 import configuration.settings as settings
@@ -41,15 +42,15 @@ class Mdrun(object):
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'mdrun', '-s', self.input_tpr_path,
                '-o', self.output_trr_path,
-               '-g', opj(self.path, 'md.log')]
+               '-g', 'md.log']
 
         if not self.output_xtc_path is None:
             cmd.append('-x')
-            cmd.append(self.output_xtc_path)
+            cmd.append(os.path.basename(self.output_xtc_path))
         if not self.output_cpt_path is None:
             cmd.append('-cpo')
             cmd.append(self.output_cpt_path)
-        cmd += ['-c', self.output_gro_path, '-e', self.output_edr_path]
+        cmd += ['-c', self.output_gro_path, '-e', os.path.basename(self.output_edr_path)]
 
         #Number of threads to run (0 is guess)
         if not self.num_threads is None:

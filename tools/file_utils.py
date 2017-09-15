@@ -83,23 +83,15 @@ def tar_top(top_file, tar_file):
 
 def untar_top(tar_file, dest_dir=None, top_file=None):
     if dest_dir is None:
-        if top_file is not None:
-            dest_dir = os.path.dirname(top_file)
-    else:
-        if not os.path.isdir(dest_dir):
-            dest_dir = os.path.dirname(dest_dir)
+        dest_dir = os.getcwd()
 
-    new_tar_file = os.path.join(dest_dir, tar_file)
-    if not os.path.exists(new_tar_file):
-        shutil.copy2(tar_file, dest_dir)
-
-    with tarfile.open(new_tar_file) as tar:
+    with tarfile.open(tar_file) as tar:
         tar_name = next(name for name in tar.getnames() if name.endswith(".top"))
         tar.extractall(path=dest_dir)
     if top_file is not None:
-        shutil.copyfile(os.path.join(dest_dir, tar_name), top_file)
-    return os.path.join(dest_dir, tar_name)
-
+        shutil.copyfile(os.path.join(dest_dir, tar_name), os.path.basename(top_file))
+        return top_file
+    return tar_name
 
 def rm_hash_bakup():
     filelist = [f for f in os.listdir(".") if f.startswith("#") and

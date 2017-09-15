@@ -1,5 +1,6 @@
 """Python wrapper for the GROMACS genion module
 """
+import os
 import sys
 import json
 import configuration.settings as settings
@@ -46,12 +47,12 @@ class Genion(object):
         """
         out_log, err_log = settings.get_logs(self.path)
         # Untar topology to topology_out
-        fu.untar_top(self.input_top_tar_path, top_file=self.output_top_path)
+        fu.untar_top(tar_file=self.input_top_tar_path, top_file=self.output_top_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = ['echo', self.replaced_group, '|', gmx, 'genion',
                '-s', self.input_tpr_path,
                '-o', self.output_gro_path,
-               '-p', self.output_top_path]
+               '-p', os.path.basename(self.output_top_path)]
 
         if self.neutral:
             cmd.append('-neutral')
@@ -67,7 +68,7 @@ class Genion(object):
         command.launch()
 
         # Tar new_topology
-        fu.tar_top(self.output_top_path, self.output_top_tar_path)
+        fu.tar_top(os.path.basename(self.output_top_path), self.output_top_tar_path)
 
 #Creating a main function to be compatible with CWL
 def main():
