@@ -152,7 +152,8 @@ def main():
         out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
         fu.create_dir(prop['step16_mdeq']['path'])
         mdrun_pc(properties=prop['step16_mdeq'], **paths['step16_mdeq'])
-
+        # time.sleep(10*60)
+    barrier()
 #         out_log.info('step17: rmsd ----- Computing RMSD')
 #         fu.create_dir(prop['step17_rmsd']['path'])
 #         rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
