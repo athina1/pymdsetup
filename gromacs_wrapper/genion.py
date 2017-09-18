@@ -34,12 +34,12 @@ class Genion(object):
         self.output_gro_path = output_gro_path
         self.input_top_tar_path = input_top_tar_path
         self.output_top_tar_path = output_top_tar_path
-        self.output_top_path = opj(properties.get('path',''), properties['output_top_path'])
-        self.replaced_group = properties['replaced_group']
-        self.neutral = properties['neutral']
-        self.concentration = properties['concentration']
-        self.seed = properties['seed']
-        self.gmx_path = properties['gmx_path']
+        self.output_top_path = properties.get('output_top_path','gio.top')
+        self.replaced_group = properties.get('replaced_group','SOL')
+        self.neutral = properties.get('neutral',False)
+        self.concentration = properties.get('concentration',0.05)
+        self.seed = properties.get('seed',1993)
+        self.gmx_path = properties.get('gmx_path',None)
         self.path = properties.get('path','')
 
     def launch(self):
@@ -52,7 +52,7 @@ class Genion(object):
         cmd = ['echo', self.replaced_group, '|', gmx, 'genion',
                '-s', self.input_tpr_path,
                '-o', self.output_gro_path,
-               '-p', os.path.basename(self.output_top_path)]
+               '-p', self.output_top_path]
 
         if self.neutral:
             cmd.append('-neutral')
@@ -68,7 +68,7 @@ class Genion(object):
         command.launch()
 
         # Tar new_topology
-        fu.tar_top(os.path.basename(self.output_top_path), self.output_top_tar_path)
+        fu.tar_top(self.output_top_path, self.output_top_tar_path)
 
 #Creating a main function to be compatible with CWL
 def main():

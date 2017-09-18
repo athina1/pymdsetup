@@ -30,6 +30,17 @@ def get_workflow_path(dir_path):
     return dir_path
 
 
+def remove_temp_files(endswith_list, source_dir=None):
+    removed_list = []
+    source_dir = os.getcwd() if source_dir is None else os.path.abspath(source_dir)
+    files = [f for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f))]
+    for f in files:
+        if f.endswith(tuple(endswith_list)):
+            os.remove(f)
+            removed_list.append(f)
+    return removed_list
+
+
 def rm_ext(ext, source_dir=None):
     if source_dir is None:
         source_dir = os.getcwd()

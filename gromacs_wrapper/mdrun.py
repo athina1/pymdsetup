@@ -29,12 +29,10 @@ class Mdrun(object):
         self.output_trr_path = output_trr_path
         self.output_gro_path = output_gro_path
         self.output_cpt_path = output_cpt_path
-        self.output_edr_path = None
-        self.output_xtc_path = None
-        # self.output_edr_path = opj(properties.get('path',''), properties['output_edr_path'])
-        # self.output_xtc_path = opj(properties.get('path',''), properties['output_xtc_path'])
-        self.num_threads = properties['num_threads']
-        self.gmx_path = properties['gmx_path']
+        self.output_edr_path = properties.get('output_edr_path',None)
+        self.output_xtc_path = properties.get('output_xtc_path',None)
+        self.num_threads = properties.get('num_threads',None)
+        self.gmx_path = properties.get('gmx_path',None)
         self.path = properties.get('path','')
 
     def launch(self):
@@ -43,20 +41,18 @@ class Mdrun(object):
         out_log, err_log = settings.get_logs(self.path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'mdrun', '-s', self.input_tpr_path,
-               '-o', self.output_trr_path,
+               '-o', self.output_trr_path, '-c', self.output_gro_path,
                '-g', 'md.log']
 
         if not self.output_xtc_path is None:
             cmd.append('-x')
-            cmd.append(os.path.basename(self.output_xtc_path))
+            cmd.append(self.output_xtc_path)
         if not self.output_edr_path is None:
             cmd.append('-e')
             cmd.append(self.output_edr_path)
         if not self.output_cpt_path is None:
             cmd.append('-cpo')
             cmd.append(self.output_cpt_path)
-        cmd += ['-c', self.output_gro_path, '-e', os.path.basename(self.output_edr_path)]
-
         #Number of threads to run (0 is guess)
         if not self.num_threads is None:
             cmd.append('-nt')

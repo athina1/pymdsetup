@@ -32,7 +32,7 @@ class Grompp(object):
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
         self.input_mdp_path=input_mdp_path
-        self.gmx_path = properties['gmx_path']
+        self.gmx_path = properties.get('gmx_path', None)
         self.path = properties.get('path','')
 
     def launch(self):

@@ -33,12 +33,12 @@ class Pdb2gmx(object):
         self.input_structure_pdb_path = input_structure_pdb_path
         self.output_gro_path = output_gro_path
         self.output_top_tar_path = output_top_tar_path
-        self.output_top_path = opj(properties.get('path',''), properties['output_top_path'])
-        self.output_itp_path = opj(properties.get('path',''), properties['output_itp_path'])
-        self.water_type = properties['water_type']
-        self.force_field = properties['force_field']
-        self.ignh = properties['ignh']
-        self.gmx_path = properties['gmx_path']
+        self.output_top_path = properties.get('output_top_path','p2g.top')
+        self.output_itp_path = properties.get('output_itp_path',None)
+        self.water_type = properties.get('water_type','spce')
+        self.force_field = properties.get('force_field','amber99sb-ildn')
+        self.ignh = properties.get('ignh',False)
+        self.gmx_path = properties.get('gmx_path',None)
         self.path = properties.get('path','')
 
     def launch(self):
@@ -47,12 +47,12 @@ class Pdb2gmx(object):
         out_log, err_log = settings.get_logs(self.path)
         gmx = "gmx" if self.gmx_path is None else self.gmx_path
         cmd = [gmx, "pdb2gmx", "-f", self.input_structure_pdb_path,
-               "-o", self.output_gro_path, "-p", os.path.basename(self.output_top_path),
+               "-o", self.output_gro_path, "-p", self.output_top_path,
                "-water", self.water_type, "-ff", self.force_field]
 
         if self.output_itp_path is not None:
             cmd.append("-i")
-            cmd.append(os.path.basename(self.output_itp_path))
+            cmd.append(self.output_itp_path)
         if self.ignh:
             cmd.append("-ignh")
 
@@ -67,7 +67,7 @@ class Pdb2gmx(object):
             fout.writelines(data)
 
         # Tar topology
-        fu.tar_top(os.path.basename(self.output_top_path), self.output_top_tar_path)
+        fu.tar_top(self.output_top_path, self.output_top_tar_path)
 
 #Creating a main function to be compatible with CWL
 def main():

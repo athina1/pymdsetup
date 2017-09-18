@@ -25,7 +25,7 @@ class Rms(object):
         self.input_gro_path = input_gro_path
         self.input_trr_path = input_trr_path
         self.output_xvg_path = output_xvg_path
-        self.gmx_path = properties['gmx_path']
+        self.gmx_path = properties.get('gmx_path',None)
         self.mutation = properties.get('mutation','')
         self.path = properties.get('path','')
 

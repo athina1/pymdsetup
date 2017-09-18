@@ -25,8 +25,8 @@ class Gnuplot(object):
             properties=json.loads(properties)
         self.input_xvg_path_dict = input_xvg_path_dict
         self.output_png_path = output_png_path
-        self.output_plotscript_path = opj(properties.get('path',''), properties['output_plotscript_path'])
-        self.gnuplot_path = properties['gnuplot_path']
+        self.output_plotscript_path = properties.get('output_plotscript_path','gplot.plotscript')
+        self.gnuplot_path = properties.get('gnuplot_path',None)
         self.path = properties.get('path','')
 
     def launch(self):

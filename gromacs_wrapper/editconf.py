@@ -23,10 +23,10 @@ class Editconf(object):
             properties=json.loads(properties)
         self.input_gro_path = input_gro_path
         self.output_gro_path = output_gro_path
-        self.distance_to_molecule = properties['distance_to_molecule']
-        self.box_type = properties['box_type']
-        self.center_molecule = properties['center_molecule']
-        self.gmx_path = properties['gmx_path']
+        self.distance_to_molecule = properties.get('distance_to_molecule',1.0)
+        self.box_type = properties.get('box_type', 'cubic')
+        self.center_molecule = properties.get('center_molecule',False)
+        self.gmx_path = properties.get('gmx_path',None)
         self.path = properties.get('path','')
 
     def launch(self):

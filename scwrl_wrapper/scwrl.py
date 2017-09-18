@@ -24,7 +24,7 @@ class Scwrl4(object):
         self.output_pdb_path = output_pdb_path
         pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(properties['mutation']).groupdict()
-        self.scwrl4_path = properties['scwrl4_path']
+        self.scwrl4_path = properties.get('scwrl4_path',None)
         self.path = properties.get('path','')
 
     def launch(self):
