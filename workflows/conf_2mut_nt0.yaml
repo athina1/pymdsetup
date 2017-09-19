@@ -155,7 +155,6 @@ step10_mdmin:
     input_tpr_path: dependency/step9_gppmin/output_tpr_path
     output_trr_path: mdmin.trr
     output_gro_path: mdmin.gro
-    output_cpt_path: mdmin.cpt
   properties:
     output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
@@ -220,7 +219,6 @@ step16_mdeq:
     input_tpr_path: dependency/step15_gppeq/output_tpr_path
     output_trr_path: mdeq.trr
     output_gro_path: mdeq.gro
-    output_cpt_path: mdeq.cpt
   properties:
     output_edr_path: mdeq.edr
     output_xtc_path: mdeq.xtc

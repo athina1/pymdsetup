@@ -135,7 +135,7 @@ def main():
 
         out_log.info('step12: mdnvt ---- Running: nvt constant number of molecules, volume and temp')
         fu.create_dir(prop['step12_mdnvt']['path'])
-        mdrun_pc(properties=prop['step12_mdnvt'], **paths['step12_mdnvt'])
+        mdrun_pc_cpt(properties=prop['step12_mdnvt'], **paths['step12_mdnvt'])
 
         out_log.info('step13: gppnpt --- Preprocessing: npt constant number of molecules, pressure and temp')
         fu.create_dir(prop['step13_gppnpt']['path'])
@@ -143,7 +143,7 @@ def main():
 
         out_log.info('step14: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
         fu.create_dir(prop['step14_mdnpt']['path'])
-        mdrun_pc(properties=prop['step14_mdnpt'], **paths['step14_mdnpt'])
+        mdrun_pc_cpt(properties=prop['step14_mdnpt'], **paths['step14_mdnpt'])
 
         out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
         fu.create_dir(prop['step15_gppeq']['path'])
@@ -152,37 +152,36 @@ def main():
         out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
         fu.create_dir(prop['step16_mdeq']['path'])
         mdrun_pc(properties=prop['step16_mdeq'], **paths['step16_mdeq'])
-        # time.sleep(10*60)
-    barrier()
-#         out_log.info('step17: rmsd ----- Computing RMSD')
-#         fu.create_dir(prop['step17_rmsd']['path'])
-#         rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
-# ######## End mutations for loop ########
-#     xvg_dict= merge_dictionaries(rms_list)
-#     print xvg_dict
-#     xvg_dict= compss_wait_on(xvg_dict)
-#     print xvg_dict
-#     out_log.info('step18: gnuplot ----- Creating RMSD plot')
-#     fu.create_dir(prop_glob['step18_gnuplot']['path'])
-#     gnuplot_pc(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot'])
-#     png = compss_wait_on(paths_glob['step18_gnuplot']['output_png_path'])
-#
-#     elapsed_time = time.time() - start_time
-#     print "Elapsed time: ", elapsed_time
-#     with open(opj(workflow_path, 'time.txt'), 'a') as time_file:
-#         time_file.write('Elapsed time: ')
-#         time_file.write(str(elapsed_time))
-#         time_file.write('\n')
-#         time_file.write('Config File: ')
-#         time_file.write(sys.argv[1])
-#         time_file.write('\n')
-#         time_file.write('Sytem: ')
-#         time_file.write(sys.argv[2])
-#         time_file.write('\n')
-#         if len(sys.argv) >= 4:
-#             time_file.write('Nodes: ')
-#             time_file.write(sys.argv[3])
-#             time_file.write('\n')
+
+        out_log.info('step17: rmsd ----- Computing RMSD')
+        fu.create_dir(prop['step17_rmsd']['path'])
+        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
+######## End mutations for loop ########
+    xvg_dict= merge_dictionaries(rms_list)
+    print xvg_dict
+    xvg_dict= compss_wait_on(xvg_dict)
+    print xvg_dict
+    out_log.info('step18: gnuplot ----- Creating RMSD plot')
+    fu.create_dir(prop_glob['step18_gnuplot']['path'])
+    gnuplot_pc(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot'])
+    png = compss_wait_on(paths_glob['step18_gnuplot']['output_png_path'])
+
+    elapsed_time = time.time() - start_time
+    print "Elapsed time: ", elapsed_time
+    with open(opj(workflow_path, 'time.txt'), 'a') as time_file:
+        time_file.write('Elapsed time: ')
+        time_file.write(str(elapsed_time))
+        time_file.write('\n')
+        time_file.write('Config File: ')
+        time_file.write(sys.argv[1])
+        time_file.write('\n')
+        time_file.write('Sytem: ')
+        time_file.write(sys.argv[2])
+        time_file.write('\n')
+        if len(sys.argv) >= 4:
+            time_file.write('Nodes: ')
+            time_file.write(sys.argv[3])
+            time_file.write('\n')
 
 ############################## PyCOMPSs functions #############################
 @task(returns=dict)
@@ -231,9 +230,15 @@ def genion_pc(input_tpr_path, output_gro_path, input_top_tar_path, output_top_ta
     genion.Genion(input_tpr_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs).launch()
 
 @task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT, output_cpt_path=FILE_OUT)
-def mdrun_pc(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path=None, **kwargs):
+def mdrun_pc_cpt(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs):
     """Launches the GROMACS mdrun module using the PyCOMPSs library."""
     mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs).launch()
+
+@task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT)
+def mdrun_pc(input_tpr_path, output_trr_path, output_gro_path, properties, **kwargs):
+    """Launches the GROMACS mdrun module using the PyCOMPSs library."""
+    mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, **kwargs).launch()
+
 
 @task(input_gro_path=FILE_IN, input_trr_path=FILE_IN, output_xvg_path=FILE_OUT)
 def rmsdPyCOMPSs(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs):
