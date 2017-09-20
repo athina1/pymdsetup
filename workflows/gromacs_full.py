@@ -164,7 +164,7 @@ def main():
 
     removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp'])
     out_log.info('')
-    out_log.info('Removing unwanted files:')
+    out_log.info('Removing unwanted files: ')
     for removed_file in removed_list:
         out_log.info('    X    ' + removed_file)
 
