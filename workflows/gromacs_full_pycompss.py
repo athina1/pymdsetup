@@ -28,7 +28,7 @@ from pycompss.api.constraint import constraint
 
 def main():
     from pycompss.api.api import barrier
-    from pycompss.api.api import compss_wait_on
+    from pycompss.api.api import compss_wait_on, compss_open
     start_time = time.time()
     yaml_path=sys.argv[1]
     system=sys.argv[2]
@@ -156,15 +156,17 @@ def main():
         out_log.info('step17: rmsd ----- Computing RMSD')
         fu.create_dir(prop['step17_rmsd']['path'])
         rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
-######## End mutations for loop ########
+        ######## End mutations for loop ########
 
     xvg_dict = reduce(merge_dictionaries, rms_list)
     #xvg_dict = compss_wait_on(reduce(merge_dictionaries, rms_list))
 
     out_log.info('step18: gnuplot ----- Creating RMSD plot')
     fu.create_dir(prop_glob['step18_gnuplot']['path'])
-    gnuplot_pc(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot'])
-    png = compss_wait_on(paths_glob['step18_gnuplot']['output_png_path'])
+    output_png_path = paths_glob['step18_gnuplot']['output_png_path']
+    properties = prop_glob['step18_gnuplot']
+    gnuplot_pc(xvg_dict, output_png_path, properties)
+    png = compss_open(output_png_path)
 
     elapsed_time = time.time() - start_time
     print "Elapsed time: ", elapsed_time
@@ -182,13 +184,14 @@ def main():
             time_file.write('Nodes: ')
             time_file.write(sys.argv[3])
             time_file.write('\n')
+    print " ----- End ----- "
 
 ############################## PyCOMPSs functions #############################
-computing_units = "3"
+computing_units = "2"
 
 @task(returns=dict)
 def merge_dictionaries(a, b):
-    return lambda a, b: dict(a, **b)
+    return dict(a, **b)
 
 @task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT)
 def scwrl_pc(input_pdb_path, output_pdb_path, properties, **kwargs):
@@ -233,8 +236,8 @@ def rms_pc(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs
     return rms.Rms(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs).launch()
 
 @task(output_png_path=FILE_OUT)
-def gnuplot_pc(input_xvg_path_dict, output_png_path, properties, **kwargs):
-    gnuplot.Gnuplot(input_xvg_path_dict, output_png_path, properties, **kwargs).launch()
+def gnuplot_pc(input_xvg_path_dict, output_png_path, properties):
+    gnuplot.Gnuplot(input_xvg_path_dict, output_png_path, properties).launch()
 
 if __name__ == '__main__':
     main()
