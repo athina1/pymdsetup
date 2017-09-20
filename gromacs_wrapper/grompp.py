@@ -32,6 +32,7 @@ class Grompp(object):
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
         self.input_mdp_path=input_mdp_path
+        self.output_mdp_path= properties.get('output_mdp_path', None)
         self.gmx_path = properties.get('gmx_path', None)
         self.path = properties.get('path','')
 
@@ -46,11 +47,13 @@ class Grompp(object):
         cmd = [gmx, 'grompp', '-f', self.input_mdp_path,
                '-c', self.input_gro_path,
                '-p', topology_path,
-               '-o', self.output_tpr_path,
-               '-po', opj(self.path, 'mdout.mdp')]
+               '-o', self.output_tpr_path]
         if self.input_cpt_path is not None:
             cmd.append('-t')
             cmd.append(self.input_cpt_path)
+        if self.output_mdp_path is not None:
+            cmd.append('-po')
+            cmd.append(self.output_mdp_path)
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()

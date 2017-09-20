@@ -91,11 +91,9 @@ def tar_top(top_file, tar_file):
             tar.add(f, arcname=os.path.basename(f))
         tar.add(top_file, arcname=os.path.basename(top_file))
 
-
 def untar_top(tar_file, dest_dir=None, top_file=None):
     if dest_dir is None:
         dest_dir = os.getcwd()
-
     with tarfile.open(tar_file) as tar:
         tar_name = next(name for name in tar.getnames() if name.endswith(".top"))
         tar.extractall(path=dest_dir)

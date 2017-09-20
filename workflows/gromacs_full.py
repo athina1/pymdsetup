@@ -156,14 +156,15 @@ def main():
         out_log.info( '***************************************************************')
         out_log.info( '')
 
+    xvg_dict=reduce(lambda a, b: dict(a, **b), rms_list)
     out_log.info('step18: gnuplot ----- Creating RMSD plot')
     fu.create_dir(prop_glob['step18_gnuplot']['path'])
-    gnuplot.Gnuplot(input_xvg_path_dict=reduce(lambda a, b: dict(a, **b), rms_list), properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
+    gnuplot.Gnuplot(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
     elapsed_time = time.time() - start_time
 
-    removed_list = fu.remove_temp_files(['#','.top','.plotscript','.edr','.xtc','.itp','.top','.log'])
+    removed_list = fu.remove_temp_files(['#','.top','.plotscript','.edr','.xtc','.itp','.top','.log', '.pdb'])
     out_log.info('')
-    out_log.('Removing unwanted files:')
+    out_log.info('Removing unwanted files:')
     for removed_file in removed_list:
         out_log.info('    X    ' + removed_file)
 

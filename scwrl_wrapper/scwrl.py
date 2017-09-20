@@ -26,6 +26,7 @@ class Scwrl4(object):
         self.mutation = pattern.match(properties['mutation']).groupdict()
         self.scwrl4_path = properties.get('scwrl4_path',None)
         self.path = properties.get('path','')
+        self.mut = properties['mutation']
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
@@ -60,7 +61,7 @@ class Scwrl4(object):
             # Write resultant structure
             w = PDBIO()
             w.set_structure(st)
-            prepared_file_path = os.path.join(self.path , 'prepared.pdb')
+            prepared_file_path = self.mut+'prepared.pdb'
             w.save(prepared_file_path)
         else:
             prepared_file_path = self.input_pdb_path

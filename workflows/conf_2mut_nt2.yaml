@@ -155,11 +155,10 @@ step10_mdmin:
     input_tpr_path: dependency/step9_gppmin/output_tpr_path
     output_trr_path: mdmin.trr
     output_gro_path: mdmin.gro
-    output_cpt_path: mdmin.cpt
   properties:
     output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
-    num_threads: 1
+    num_threads: 2
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules, volume and temp
 step11_gppnvt:
@@ -180,7 +179,7 @@ step12_mdnvt:
   properties:
     output_xtc_path: mdnvt.xtc
     output_edr_path: mdnvt.edr
-    num_threads: 1
+    num_threads: 2
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure and temp
 step13_gppnpt:
@@ -202,7 +201,7 @@ step14_mdnpt:
   properties:
     output_edr_path: mdnpt.edr
     output_xtc_path: mdnpt.xtc
-    num_threads: 1
+    num_threads: 2
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
@@ -220,11 +219,10 @@ step16_mdeq:
     input_tpr_path: dependency/step15_gppeq/output_tpr_path
     output_trr_path: mdeq.trr
     output_gro_path: mdeq.gro
-    output_cpt_path: mdeq.cpt
   properties:
     output_edr_path: mdeq.edr
     output_xtc_path: mdeq.xtc
-    num_threads: 1
+    num_threads: 2
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:
