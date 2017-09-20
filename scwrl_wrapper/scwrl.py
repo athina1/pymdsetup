@@ -26,12 +26,14 @@ class Scwrl4(object):
         self.mutation = pattern.match(properties['mutation']).groupdict()
         self.scwrl4_path = properties.get('scwrl4_path',None)
         self.path = properties.get('path','')
-        self.mut = properties['mutation']
+        self.mut = properties.get('mutation','')
+        self.step = properties.get('step','')
+
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
         """
-        out_log, err_log = settings.get_logs(self.path)
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mut, step=self.step)
         if self.mutation is not None:
             # Read structure with Biopython
             parser = PDBParser(PERMISSIVE=1)
@@ -61,7 +63,7 @@ class Scwrl4(object):
             # Write resultant structure
             w = PDBIO()
             w.set_structure(st)
-            prepared_file_path = self.mut+'prepared.pdb'
+            prepared_file_path = self.mut+self.step+'prepared.pdb'
             w.save(prepared_file_path)
         else:
             prepared_file_path = self.input_pdb_path

@@ -28,11 +28,15 @@ class Gnuplot(object):
         self.output_plotscript_path = properties.get('output_plotscript_path','gplot.plotscript')
         self.gnuplot_path = properties.get('gnuplot_path',None)
         self.path = properties.get('path','')
+        self.mutation = properties.get('mutation',None)
+        self.step = properties.get('step',None)
 
     def launch(self):
         """Launches the execution of the GNUPLOT binary.
         """
-        out_log, err_log = settings.get_logs(self.path)
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
+        self.output_plotscript_path = self.output_plotscript_path if self.step is None else self.step+'_'+self.output_plotscript_path
+        self.output_plotscript_path = self.output_plotscript_path if self.mutation is None else self.mutation+'_'+self.output_plotscript_path
         # Create the input script for gnuplot
         lb = os.linesep
         xvg_file_list = []

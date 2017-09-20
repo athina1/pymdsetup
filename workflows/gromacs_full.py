@@ -31,7 +31,7 @@ def main():
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
-    out_log, err_log = settings.get_logs(workflow_path, console=True)
+    out_log, err_log = fu.get_logs(path=workflow_path, console=True)
     paths_glob = conf.get_paths_dic()
     prop_glob = conf.get_prop_dic()
 
@@ -162,7 +162,7 @@ def main():
     gnuplot.Gnuplot(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
     elapsed_time = time.time() - start_time
 
-    removed_list = fu.remove_temp_files(['#','.top','.plotscript','.edr','.xtc','.itp','.top','.log', '.pdb'])
+    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp'])
     out_log.info('')
     out_log.info('Removing unwanted files:')
     for removed_file in removed_list:

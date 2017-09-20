@@ -7,6 +7,7 @@ import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
 from os.path import join as opj
+from tools import file_utils as fu
 
 class Solvate(object):
     """Wrapper for the 5.1.2 version of the GROMACS solvate module
@@ -33,26 +34,29 @@ class Solvate(object):
         self.output_top_path = properties.get('output_top_path','sol.top')
         self.input_solvent_gro_path = properties.get('input_solvent_gro_path','spc216.gro')
         self.gmx_path = properties.get('gmx_path',None)
+        self.mutation = properties.get('mutation',None)
+        self.step = properties.get('step',None)
         self.path = properties.get('path','')
-        self.mutation = properties.get('mutation','')
 
     def launch(self):
         """Launches the execution of the GROMACS solvate module.
         """
-        out_log, err_log = settings.get_logs(self.path)
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
+        self.output_top_path = self.output_top_path if self.step is None else self.step+'_'+self.output_top_path
+        self.output_top_path = self.output_top_path if self.mutation is None else self.mutation+'_'+self.output_top_path
         # Untar topology to topology_out
-        fu.untar_top(tar_file=self.input_top_tar_path, top_file=self.mutation+self.output_top_path)
+        fu.untar_top(tar_file=self.input_top_tar_path, top_file=self.output_top_path)
 
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'solvate',
                '-cp', self.input_solute_gro_path,
                '-cs', self.input_solvent_gro_path,
                '-o',  self.output_gro_path,
-               '-p',  self.mutation+self.output_top_path]
+               '-p',  self.output_top_path]
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
 
-        with open(self.mutation+self.output_top_path) as topology_file:
+        with open(self.output_top_path) as topology_file:
             out_log.info('Last 5 lines of new top file: ')
             lines = topology_file.readlines()
             for index in [-i for i in range(5,0,-1)]:
@@ -60,10 +64,8 @@ class Solvate(object):
 
 
         # Tar new_topology
-        fu.tar_top(self.mutation+self.output_top_path, self.output_top_tar_path)
+        fu.tar_top(self.output_top_path, self.output_top_tar_path)
 
-        # Remove temp files
-        fu.rm_hash_bakup()
 
 #Creating a main function to be compatible with CWL
 def main():

@@ -34,12 +34,14 @@ class Grompp(object):
         self.input_mdp_path=input_mdp_path
         self.output_mdp_path= properties.get('output_mdp_path', None)
         self.gmx_path = properties.get('gmx_path', None)
+        self.mutation = properties.get('mutation',None)
+        self.step = properties.get('step',None)
         self.path = properties.get('path','')
 
     def launch(self):
         """Launches the execution of the GROMACS grompp module.
         """
-        out_log, err_log = settings.get_logs(self.path)
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         # Untar topology in de directory of the output_tpr_path and get the
         # topology path
         topology_path = fu.untar_top(self.input_top_tar_path)

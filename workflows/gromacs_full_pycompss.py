@@ -35,7 +35,7 @@ def main():
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
-    out_log, err_log = settings.get_logs(workflow_path, console=True)
+    out_log, err_log = fu.get_logs(path=workflow_path, console=True)
     paths_glob = conf.get_paths_dic()
     prop_glob = conf.get_prop_dic()
 
@@ -184,7 +184,7 @@ def main():
             time_file.write('\n')
 
 ############################## PyCOMPSs functions #############################
-computing_units = "2"
+computing_units = "3"
 
 @task(returns=dict)
 def merge_dictionaries(a, b):

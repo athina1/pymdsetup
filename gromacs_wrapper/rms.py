@@ -7,6 +7,7 @@ import ntpath
 import numpy as np
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
+from tools import file_utils as fu
 
 class Rms(object):
     """Wrapper for the 5.1.2 version of the rms module
@@ -26,13 +27,15 @@ class Rms(object):
         self.input_trr_path = input_trr_path
         self.output_xvg_path = output_xvg_path
         self.gmx_path = properties.get('gmx_path',None)
-        self.mutation = properties.get('mutation','')
+        self.mutation = properties.get('mutation',None)
+        self.step = properties.get('step',None)
         self.path = properties.get('path','')
+
 
     def launch(self):
         """Launches the execution of the GROMACS rms module.
         """
-        out_log, err_log = settings.get_logs(self.path)
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         gmx = 'gmx' if self.gmx_path is 'None' else self.gmx_path
         cmd = ['echo', '0 0', '|', gmx, 'rms',
                '-s', self.input_gro_path,
@@ -43,6 +46,7 @@ class Rms(object):
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
         xvg = self.output_xvg_path if os.path.isfile(self.output_xvg_path) else ntpath.basename(self.output_xvg_path)
+        self.mutation = '' if self.mutation is None else self.mutation
         return {self.mutation: np.loadtxt(xvg)}
 
 #Creating a main function to be compatible with CWL
