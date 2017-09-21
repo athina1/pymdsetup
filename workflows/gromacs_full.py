@@ -1,14 +1,8 @@
-"""
-Gromacs full setup from a PDB code
-"""
-
-
 import os
 import sys
 import time
 import shutil
 from os.path import join as opj
-
 import tools.file_utils as fu
 import configuration.settings as settings
 import gromacs_wrapper.pdb2gmx as pdb2gmx
@@ -35,56 +29,37 @@ def main():
     paths_glob = conf.get_paths_dic()
     prop_glob = conf.get_prop_dic()
 
-    out_log.info('_______GROMACS FULL WORKFLOW_______\n')
+    out_log.info('')
+    out_log.info('_______GROMACS FULL WORKFLOW_______')
+    out_log.info('')
 
-    # If no PDB structure is provided the structure will be downloaded
-    if ( conf.properties[system].get('initial_structure_pdb_path') is None or
-         not os.path.isfile(conf.properties[system].get('initial_structure_pdb_path'))):
-        out_log.info( 'step1:  mmbpdb -- Get PDB')
+    out_log.info( 'step1:  mmbpdb -- Get PDB')
+    structure = conf.properties[system].get('initial_structure_pdb_path', None)
+    if structure is None or not os.path.isfile(structure):
         out_log.info( '     Selected PDB code: ' + prop_glob['step1_mmbpdb']['pdb_code'])
         fu.create_dir(prop_glob['step1_mmbpdb']['path'])
         pdb.MmbPdb(prop_glob['step1_mmbpdb']['pdb_code'], paths_glob['step1_mmbpdb']['output_pdb_path']).get_pdb()
-        initial_structure_pdb_path = paths_glob['step1_mmbpdb']['output_pdb_path']
-    else:
-        initial_structure_pdb_path = conf.properties[system].get('initial_structure_pdb_path')
+        structure = paths_glob['step1_mmbpdb']['output_pdb_path']
 
-    # If no mapped to pdb structure mutation list is provided the mutation list
-    # will be downloaded from the MMB rest API
-    if ( conf.properties.get('input_mapped_mutations_list') is None or
-         len(conf.properties.get('input_mapped_mutations_list')) < 7 ):
-        out_log.info( 'step2:  mmbuniprot -- Get mutations')
+    out_log.info( 'step2:  mmbuniprot -- Get mutations')
+    mutations = conf.properties.get('input_mapped_mutations_list', None)
+    if mutations is None or len(mutations) < 7:
         mmbuniprot = uniprot.MmbVariants(prop_glob['step1_mmbpdb']['pdb_code'])
         mutations = mmbuniprot.get_pdb_variants()
-        # This is part of the code prints some feedback to the user
-        out_log.info( '     Uniprot code: ' + mmbuniprot.get_uniprot())
-        if mutations is None or len(mutations) == 0:
-            out_log.info( (prop_glob['step1_mmbpdb']['pdb_code'] + " " + mmbuniprot.get_uniprot() + ": No variants"))
-            return
-        else:
-            out_log.info( ('     Found ' + str(len(mmbuniprot.get_variants())) + ' uniprot variants'))
-            out_log.info( ('     Mapped to ' + str(len(mutations)) + ' ' + prop_glob['step1_mmbpdb']['pdb_code'] + ' PDB variants'))
-
+        if mutations is None or len(mutations) == 0: return
     else:
         mutations = [m.strip() for m in conf.properties.get('input_mapped_mutations_list').split(',')]
 
-    # Number of mutations to be modelled
-    if ( conf.properties.get('mutations_limit') is None
-         or int(conf.properties.get('mutations_limit')) == 0 ):
-        mutations_limit = len(mutations)
-    else:
-        mutations_limit = min(len(mutations), int(prop['mutations_limit']))
-
+    mutations_limit = min(len(mutations), int(prop_glob.get('mutations_limit', len(mutations))))
     out_log.info('')
     out_log.info('Number of mutations to be modelled: ' + str(mutations_limit))
 
     rms_list = []
     mutations_counter = 0
     for mut in mutations:
-        if mutations_counter == mutations_limit:
-            break
+        if mutations_counter == mutations_limit: break
         mutations_counter += 1
         paths = conf.get_paths_dic(mut)
-        paths['step3_scw']['input_pdb_path']=initial_structure_pdb_path
         prop = conf.get_prop_dic(mut)
 
         out_log.info('')
@@ -95,6 +70,7 @@ def main():
 
         out_log.info('step3:  scw ------ Model mutation')
         fu.create_dir(prop['step3_scw']['path'])
+        paths['step3_scw']['input_pdb_path']=structure
         scwrl.Scwrl4(properties=prop['step3_scw'], **paths['step3_scw']).launch()
 
         out_log.info('step4:  p2g ------ Create gromacs topology')
@@ -153,9 +129,6 @@ def main():
         fu.create_dir(prop['step17_rmsd']['path'])
         rms_list.append(rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
 
-        out_log.info( '***************************************************************')
-        out_log.info( '')
-
     xvg_dict=reduce(lambda a, b: dict(a, **b), rms_list)
     out_log.info('step18: gnuplot ----- Creating RMSD plot')
     fu.create_dir(prop_glob['step18_gnuplot']['path'])
@@ -169,15 +142,16 @@ def main():
         out_log.info('    X    ' + removed_file)
 
     out_log.info('')
-    out_log.info('***********************************')
+    out_log.info('')
     out_log.info('Execution sucessful: ')
-    out_log.info('Workflow_path: '+workflow_path)
-    out_log.info('Config File: '+yaml_path)
-    out_log.info('System: '+system)
+    out_log.info('  Workflow_path: '+workflow_path)
+    out_log.info('  Config File: '+yaml_path)
+    out_log.info('  System: '+system)
     if len(sys.argv) >= 4:
-        out_log.info('Nodes: '+sys.argv[3])
+        out_log.info('  Nodes: '+sys.argv[3])
+    out_log.info('')
     out_log.info('Elapsed time: '+str(elapsed_time)+' seconds')
-    out_log.info('***********************************')
+    out_log.info('')
 
 if __name__ == '__main__':
     main()

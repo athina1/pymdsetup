@@ -11,7 +11,7 @@ variable.
 import yaml
 import os
 from os.path import join as opj
-import tools.file_utils as fu
+from tools import file_utils as fu
 
 class YamlReader(object):
     """Configuration file loader for yaml format files.
