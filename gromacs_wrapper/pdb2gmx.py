@@ -64,7 +64,7 @@ class Pdb2gmx(object):
             cmd.append("-ignh")
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        command.launch()
+        returncode = command.launch()
 
         #Remove comment (first line) from gro file
         with open(self.output_gro_path, 'r') as fin:
@@ -75,7 +75,8 @@ class Pdb2gmx(object):
 
         # Tar topology
         fu.tar_top(self.output_top_path, self.output_top_tar_path)
-
+        
+        return returncode
 #Creating a main function to be compatible with CWL
 def main():
     step=sys.argv[4]

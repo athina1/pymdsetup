@@ -6,50 +6,38 @@ import shutil
 from os.path import join as opj
 from configuration import settings
 from gromacs_wrapper.pdb2gmx import Pdb2gmx
+from tools import file_utils as fu
+from os.path import isfile
+from os.path import getsize
 
 class TestPdb2gmx(object):
     """Unittests for the gromacs_wrapper.pdb2gmx.Pdb2gmx class.
     """
     def setUp(self):
-        test_dir = self.__class__.__name__
-        data_dir = os.path.dirname(os.path.abspath(sys.modules[__name__].__file__))
-        self.yaml_path= opj(data_dir, 'conf.yaml')
+        self.test_dir = self.__class__.__name__
+        fu.create_dir(self.test_dir)
+        self.data_dir = opj(os.path.dirname(os.path.abspath(sys.modules[__name__].__file__)),'data')
+        self.yaml_path= opj(self.data_dir, 'conf.yaml')
         self.system=os.getenv('testsys')
         if self.system is None:
             print 'WARNING: "testsys" env variable should be set, "linux" will be used by default value.'
+            print '     try "export testsys=linux"'
             self.system='linux'
         conf = settings.YamlReader(self.yaml_path, self.system)
-        self.properties = conf.get_prop_dic()
-        self.paths = conf.get_paths_dic()
+        self.properties = conf.get_prop_dic()['pdb2gmx']
 
     def tearDown(self):
-        pass
-        #shutil.rmtree(self.p_p2g.h)
+        shutil.rmtree(self.test_dir)
+        fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp'])
 
     def test_launch(self):
-        print self.properties
-        print self.paths
-        # Pdb2gmx(input_structure_pdb_path=opj(self.root_dir, self.prop['p2g']['paths']['in_pdb']),
-        #            output_gro_path=self.p_p2g.gro,
-        #            output_top_path=self.p_p2g.top,
-        #            output_itp_path=self.prop['p2g']['paths']['itp'],
-        #            output_top_tar_path=self.p_p2g.tar,
-        #            water_type=self.p_p2g.water_type,
-        #            force_field=self.p_p2g.force_field,
-        #            ignh=settings.str2bool(self.p_p2g.ignh),
-        #            gmx_path=self.prop['gmx_path'],
-        #            log_path=self.p_p2g.out, error_path=self.p_p2g.err).launch()
-        #
-        # print self.p_p2g.out
-        # with open(self.p_p2g.gro, 'r') as out_gro, open(opj(self.root_dir, self.prop['p2g']['paths']['gold_gro']), 'r') as gold_gro:
-        #     self.assertMultiLineEqual(out_gro.read(), gold_gro.read())
-        #
-        # with open(self.p_p2g.top, 'r') as out_top, open(opj(self.root_dir, self.prop['p2g']['paths']['gold_top']), 'r') as gold_top:
-        #     out_top_list = " ".join([line if not line.startswith(';') else '' for line in out_top])
-        #     out_top_gold_list = " ".join([line if not line.startswith(';') else '' for line in gold_top])
-        #     self.assertItemsEqual(out_top_list, out_top_gold_list)
-        #
-        # with open(self.p_p2g.itp, 'r') as out_itp, open(opj(self.root_dir, self.prop['p2g']['paths']['gold_itp']), 'r') as gold_itp:
-        #     out_itp_list = " ".join([line if not line.startswith(';') else '' for line in out_itp])
-        #     out_itp_gold_list = " ".join([line if not line.startswith(';') else '' for line in gold_itp])
-        #     self.assertItemsEqual(out_itp_list, out_itp_gold_list)
+        output_gro_path=opj(self.test_dir, self.properties['output_gro_path'])
+        output_top_tar_path=opj(self.test_dir, self.properties['output_top_tar_path'])
+        returncode = Pdb2gmx(input_structure_pdb_path=opj(self.data_dir, self.properties['input_structure_pdb_path']),
+                             output_gro_path=output_gro_path,
+                             output_top_tar_path=output_top_tar_path,
+                             properties=self.properties).launch()
+
+        assert returncode == 0
+        assert ( os.path.isfile(output_gro_path) and os.path.getsize(output_gro_path) > 0 )
+        assert ( os.path.isfile(output_top_tar_path) and os.path.getsize(output_top_tar_path) > 0 )
