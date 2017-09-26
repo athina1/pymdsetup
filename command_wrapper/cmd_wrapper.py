@@ -40,5 +40,5 @@ class CmdWrapper(object):
         if self.err_log is not None:
             if err is not None:
                 self.err_log.info(err)
-                
+        
         return process.returncode

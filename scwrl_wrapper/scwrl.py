@@ -72,7 +72,7 @@ class Scwrl4(object):
         cmd = [scrwl, '-i', prepared_file_path, '-o', self.output_pdb_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        command.launch()
+        return command.launch()
 
 #Creating a main function to be compatible with CWL
 def main():

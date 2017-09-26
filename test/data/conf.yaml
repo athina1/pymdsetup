@@ -1,14 +1,9 @@
-######################## pymdsetup configuration file ########################
-
-########################## System dependent paths ############################
 linux:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
   workflow_path: /home/pau/projects/pymdsetup/testworkflow
   mdp_path: /home/pau/projects/pymdsetup/workflows/mdp
   gnuplot_path: /usr/bin/gnuplot
-  # Path to the initial pdb structure (if this field is empty
-  # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 macos:
@@ -17,8 +12,6 @@ macos:
   workflow_path: /Users/pau/projects/pymdsetup/testworkflow
   mdp_path: /Users/pau/projects/pymdsetup/workflows/mdp
   gnuplot_path: /usr/bin/gnuplot
-  # Path to the initial pdb structure (if this field is empty
-  # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 virtualbox:
@@ -27,8 +20,6 @@ virtualbox:
   workflow_path: /home/compss/pymdsetup/testworkflow
   mdp_path: /home/compss/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
-  # Path to the initial pdb structure (if this field is empty
-  # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 open_nebula:
@@ -37,8 +28,6 @@ open_nebula:
   workflow_path: /home/user/pymdsetup/testworkflow
   mdp_path: /home/user/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
-  # Path to the initial pdb structure (if this field is empty
-  # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /home/user/structure.pdb
 
 mare_nostrum:
@@ -47,35 +36,20 @@ mare_nostrum:
   workflow_path: /gpfs/home/bsc51/bsc51210/pymdsetup/testworkflow
   mdp_path: /gpfs/home/bsc51/bsc51210/pymdsetup/workflows/mdp/
   gnuplot_path: /gpfs/apps/MN3/GNUPLOT/5.0.1/bin/gnuplot
-  # Path to the initial pdb structure (if this field is empty
-  # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /gpfs/home/bsc51/bsc51210/structure.pdb
 
-##############################################################################
-
-# List of coma separated mutations (if this field is empty
-# pdb_code field will be used to download the list).
-# Format example:  A.Lys58Glu, A.Thr74Ala
-#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
-#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
-
-# Max number of mutations
-# Available values None, Integer
-mutations_limit: 0
-
-########################## Step paths & properties ##########################
-# Step 1: mmbpdb -- Get PDB
 step1_mmbpdb:
   paths:
     output_pdb_path: structure.pdb
   properties:
     pdb_code: 2JQ3
 
-# Step3: scw -- Model mutation
-step3_scw:
-  paths:
-    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
+
+scwrl:
+  properties:
+    input_pdb_path: structure.pdb
     output_pdb_path: mutated.pdb
+    mutation: A.Lys58Glu
 
 # Step4: p2g -- Create gromacs topology
 pdb2gmx:
