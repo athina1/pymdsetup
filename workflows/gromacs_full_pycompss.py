@@ -132,7 +132,7 @@ def main():
 
         out_log.info('step17: rmsd ----- Computing RMSD')
         fu.create_dir(prop['step17_rmsd']['path'])
-        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
+        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd'])[0])
 
     xvg_dict = reduce(merge_dictionaries, rms_list)
     out_log.info('step18: gnuplot ----- Creating RMSD plot')

@@ -1,60 +1,22 @@
-"""Unittests for gromacs_wrapper.mdrun module
-"""
-import unittest
-from pymdsetup.gromacs_wrapper.mdrun import Mdrun512
-import os
 from os.path import join as opj
-import filecmp
+from test import fixtures as fx
+from gromacs_wrapper.mdrun import Mdrun
 
 
-class TestMdrun512(unittest.TestCase):
-
+class TestMdrun(object):
     def setUp(self):
-        self.data_dir = opj(os.path.dirname(__file__), 'data')
-        self.results = opj(self.data_dir, "temp_results")
+        fx.test_setup(self,'mdrun')
 
     def tearDown(self):
-        # Remove all files in the temp_results directory
-        for the_file in os.listdir(self.results):
-            file_path = opj(self.results, the_file)
-            try:
-                # Not removing directories
-                if os.path.isfile(file_path) and not the_file == 'README.txt':
-                    os.unlink(file_path)
-            except Exception, e:
-                print e
+        fx.test_teardown(self)
 
-    def test_launch_minimization(self):
-        tpr_path = opj(self.data_dir, 'grompp512_min_gold.tpr')
-        trr_path = opj(self.results, 'mdrun512_min.trr')
-        gold_trr_path = opj(self.data_dir, 'mdrun512_min_gold.trr')
-        gro_path = opj(self.results, 'mdrun512_min.gro')
-        gold_gro_path = opj(self.data_dir, 'mdrun512_min_gold.gro')
-        edr_path = opj(self.results, 'mdrun512_min.edr')
-        gold_edr_path = opj(self.data_dir, 'mdrun512_min_gold.edr')
-        mdr = Mdrun512(tpr_path, trr_path, gro_path, edr_path)
-        mdr.launch()
-
-        self.assertTrue(filecmp.cmp(trr_path, gold_trr_path))
-        self.assertTrue(filecmp.cmp(gro_path, gold_gro_path))
-        self.assertTrue(filecmp.cmp(edr_path, gold_edr_path))
-
-    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
-                         "Skip PyCOMPSs test")
-    def test_launch_minimizationPycompss(self):
-        tpr_path = opj(self.data_dir, 'grompp512_min_gold.tpr')
-        trr_path = opj(self.results, 'mdrun512_min.trr')
-        gold_trr_path = opj(self.data_dir, 'mdrun512_min_gold.trr')
-        gro_path = opj(self.results, 'mdrun512_min.gro')
-        gold_gro_path = opj(self.data_dir, 'mdrun512_min_gold.gro')
-        edr_path = opj(self.results, 'mdrun512_min.edr')
-        gold_edr_path = opj(self.data_dir, 'mdrun512_min_gold.edr')
-        mdr = Mdrun512(tpr_path, trr_path, gro_path, edr_path)
-        mdr.launchPyCOMPSs()
-
-        self.assertTrue(filecmp.cmp(trr_path, gold_trr_path))
-        self.assertTrue(filecmp.cmp(gro_path, gold_gro_path))
-        self.assertTrue(filecmp.cmp(edr_path, gold_edr_path))
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_launch(self):
+        output_trr_path = opj(self.test_dir, self.properties['output_trr_path'])
+        output_gro_path = opj(self.test_dir, self.properties['output_gro_path'])
+        returncode = Mdrun(input_tpr_path=opj(self.data_dir, self.properties['input_tpr_path']),
+                              output_trr_path=output_trr_path,
+                              output_gro_path=output_gro_path,
+                              properties=self.properties).launch()
+        assert fx.exe_success(returncode)
+        assert fx.not_empty(output_trr_path)
+        assert fx.not_empty(output_gro_path)

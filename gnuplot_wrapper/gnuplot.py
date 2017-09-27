@@ -59,11 +59,12 @@ class Gnuplot(object):
         cmd = [gplot, self.output_plotscript_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        command.launch()
+        returncode = command.launch()
         for f in xvg_file_list:
             out_log.info('Removing file: '+os.path.abspath(f))
             os.unlink(os.path.abspath(f))
-
+        return returncode
+        
 #Creating a main function to be compatible with CWL
 def main():
     step=sys.argv[3]

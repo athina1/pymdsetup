@@ -43,7 +43,7 @@ class Genion(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
-        
+
     def launch(self):
         """Launches the execution of the GROMACS genion module.
         """
@@ -69,11 +69,12 @@ class Genion(object):
             cmd.append(str(self.seed))
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        command.launch()
+        returncode = command.launch()
 
         # Tar new_topology
         fu.tar_top(self.output_top_path, self.output_top_tar_path)
-
+        return returncode
+        
 #Creating a main function to be compatible with CWL
 def main():
     step=sys.argv[5]

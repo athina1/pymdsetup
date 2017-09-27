@@ -58,7 +58,7 @@ class Grompp(object):
             cmd.append(self.output_mdp_path)
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        command.launch()
+        return command.launch()
 
 #Creating a main function to be compatible with CWL
 def main():

@@ -54,7 +54,7 @@ class Solvate(object):
                '-o',  self.output_gro_path,
                '-p',  self.output_top_path]
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        command.launch()
+        returncode = command.launch()
 
         with open(self.output_top_path) as topology_file:
             out_log.info('Last 5 lines of new top file: ')
@@ -65,7 +65,7 @@ class Solvate(object):
 
         # Tar new_topology
         fu.tar_top(self.output_top_path, self.output_top_tar_path)
-
+        return returncode
 
 #Creating a main function to be compatible with CWL
 def main():
