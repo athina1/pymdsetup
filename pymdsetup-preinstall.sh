@@ -1,6 +1,6 @@
 sudo apt-get -y install git vim htop cmake gnuplot
 pip install --upgrade pip
-sudo pip install numpy biopython pyyaml requests
+sudo pip install numpy biopython pyyaml requests nose
 
 #Clone the project
 git clone http://mmb.pcb.ub.es/gitlab/BioExcel/pymdsetup.git
