@@ -1,10 +1,9 @@
 #!/bin/bash
-
-#BSUB -n 1
-#BSUB -oo output_serial_1_thread.out
-#BSUB -eo output_serial_1_thread.err
-#BSUB -J sequential
-#BSUB -W 08:00
-
-export PYTHONPATH=${PYTHONPATH}:/gpfs/home/bsc51/bsc51210/pymdsetup
-python workflows/gromacs_full.py
+#SBATCH --job-name="pymdsetup"
+#SBATCH -D .
+#SBATCH --output=serial_%j.out
+#SBATCH --error=serial_%j.err
+#SBATCH --ntasks=1
+#SBATCH --time=00:10:00
+#SBATCH --qos=debug
+python workflows/gromacs_full.py workflows/conf_2mut_nt0.yaml mare_nostrum > out.txt

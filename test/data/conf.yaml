@@ -31,12 +31,12 @@ open_nebula:
   initial_structure_pdb_path: /home/user/structure.pdb
 
 mare_nostrum:
-  gmx_path: /gpfs/home/bsc51/bsc51210/gromacs/bin/gmx
-  scwrl4_path: /gpfs/home/bsc51/bsc51210/scwrl4/Scwrl4
-  workflow_path: /gpfs/home/bsc51/bsc51210/pymdsetup/testworkflow
-  mdp_path: /gpfs/home/bsc51/bsc51210/pymdsetup/workflows/mdp/
-  gnuplot_path: /gpfs/apps/MN3/GNUPLOT/5.0.1/bin/gnuplot
-  initial_structure_pdb_path: /gpfs/home/bsc51/bsc51210/structure.pdb
+  gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
+  scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
+  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
+  mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
+  gnuplot_path: gnuplot
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
 scwrl:
   properties:
