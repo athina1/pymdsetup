@@ -57,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'pymdsetup'
-copyright = u'2016, Bioexcel'
+copyright = u'2017, Bioexcel'
 author = u'Bioexcel'
 
 # The version info for the project you're documenting, acts as replacement for
