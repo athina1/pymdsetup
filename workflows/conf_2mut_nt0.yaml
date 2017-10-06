@@ -56,7 +56,7 @@ mare_nostrum:
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
-#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
+input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
 #input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
 
 # Max number of mutations

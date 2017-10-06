@@ -47,7 +47,7 @@ class Rms(object):
         returncode = command.launch()
         xvg = self.output_xvg_path if os.path.isfile(self.output_xvg_path) else ntpath.basename(self.output_xvg_path)
         self.mutation = '' if self.mutation is None else self.mutation
-        return {self.mutation: np.loadtxt(xvg)}, returncode
+        return {self.mutation: np.loadtxt(xvg)}
 
 #Creating a main function to be compatible with CWL
 def main():

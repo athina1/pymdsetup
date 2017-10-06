@@ -12,9 +12,7 @@ class TestRms(object):
 
     def test_launch(self):
         output_xvg_path = opj(self.test_dir, self.properties['output_xvg_path'])
-        returncode = Rms(input_gro_path=opj(self.data_dir, self.properties['input_gro_path']),
-                         input_trr_path=opj(self.data_dir, self.properties['input_trr_path']),
-                         output_xvg_path=output_xvg_path,
-                         properties=self.properties).launch()[1]
-        assert fx.exe_success(returncode)
+        Rms(input_gro_path=opj(self.data_dir, self.properties['input_gro_path']),
+            input_trr_path=opj(self.data_dir, self.properties['input_trr_path']),
+            output_xvg_path=output_xvg_path, properties=self.properties).launch()
         assert fx.not_empty(output_xvg_path)

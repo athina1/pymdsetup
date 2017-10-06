@@ -132,7 +132,7 @@ def main():
 
         out_log.info('step17: rmsd ----- Computing RMSD')
         fu.create_dir(prop['step17_rmsd']['path'])
-        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd'])[0])
+        rms_list.append(rms_pc(properties=prop['step17_rmsd'], **paths['step17_rmsd']))
 
     xvg_dict = reduce(merge_dictionaries, rms_list)
     out_log.info('step18: gnuplot ----- Creating RMSD plot')
@@ -160,7 +160,7 @@ def main():
 
 
 ############################## PyCOMPSs functions #############################
-computing_units = "2"
+computing_units = "48"
 
 @task(returns=dict)
 def merge_dictionaries(a, b):

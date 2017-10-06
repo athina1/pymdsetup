@@ -1,18 +1,17 @@
 #!/bin/bash
 
 enqueue_compss \
-  --exec_time=$1 \
-  --num_nodes=$2 \
-  --queue=bsc_ls \
-  --tasks_per_node=1 \
-  --master_working_dir=. \
+  --job_dependency=$1 \
+  --exec_time=$2 \
+  --num_nodes=$3 \
+  --qos=bsc_ls \
   --worker_working_dir=gpfs \
   --network=infiniband \
   --lang=python \
   --pythonpath=/gpfs/home/bsc23/bsc23210/pymdsetup/:/gpfs/home/bsc23/bsc23210/ \
-  --tracing=$3 \
-  --graph=$4 \
+  --tracing=$4 \
+  --graph=$5 \
   --log_level=off \
-/gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $5 $6 $2 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
+/gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $6 $2 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
 
-#./run_pycompss_mn.sh 10 3 false false
+#./run_pycompss_mn.sh None 2 3 true true workflows/conf_2mut_nt0.yaml mare_nostrum
