@@ -13,4 +13,4 @@ scp /home/pau/Downloads/biopython-1.69-np113py27_0.tar.bz2 mn:/home/bsc23/bsc232
 conda install /home/bsc23/bsc23210/anaconda2/pkgs/biopython-1.69-np113py27_0.tar.bz2
 conda install --use-index-cache --offline --use-local  numpy pyyaml requests nose
 echo "/home/bsc23/bsc23210/pymdsetup" > /home/bsc23/bsc23210/anaconda2/lib/python2.7/site-packages/pymdsetup.pth
-#change /home/bsc23/bsc23210/pymdsetup/scwrl4/Scwrl4.ini
+#REMEMBER: Change /home/bsc23/bsc23210/pymdsetup/scwrl4/Scwrl4.ini

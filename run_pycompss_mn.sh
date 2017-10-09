@@ -12,6 +12,6 @@ enqueue_compss \
   --tracing=$4 \
   --graph=$5 \
   --log_level=off \
-/gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $6 $2 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
+/gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $6 $7 $3 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
 
-#./run_pycompss_mn.sh None 2 3 true true workflows/conf_2mut_nt0.yaml mare_nostrum
+#./run_pycompss_mn.sh None 30 3 false false workflows/conf_2mut_nt0.yaml mare_nostrum
