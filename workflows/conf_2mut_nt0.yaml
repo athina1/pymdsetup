@@ -44,7 +44,7 @@ open_nebula:
 mare_nostrum:
   gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
   scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
-  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
+  workflow_path: /gpfs/scratch/bsc23/bsc23210/testworkflow
   mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
   gnuplot_path: gnuplot
   # Path to the initial pdb structure (if this field is empty
@@ -57,7 +57,7 @@ mare_nostrum:
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
 input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
-#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile, A.Leu9Ile, A.Ser10Thr, A.Phe11Ile, A.Met12Leu, A.Gln13Arg, A.Gly14Ala, A.Tyr15Phe, A.Met16Leu, A.Lys17Arg, A.His18Asn, A.Ala19Ser, A.Thr20Ser, A.Lys21Arg, A.Thr22Ser, A.Ala23Ser, A.Lys24Arg, A.Asp25Glu, A.Ala26Ser, A.Leu27Ile, A.Ser28Ala, A.Ser29Ala, A.Val30Met 
+#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile, A.Leu9Ile, A.Ser10Thr, A.Phe11Ile, A.Met12Leu, A.Gln13Arg, A.Gly14Ala, A.Tyr15Phe, A.Met16Leu, A.Lys17Arg, A.His18Asn, A.Ala19Ser, A.Thr20Ser, A.Lys21Arg, A.Thr22Ser, A.Ala23Ser, A.Lys24Arg, A.Asp25Glu, A.Ala26Ser, A.Leu27Ile, A.Ser28Ala, A.Ser29Ala, A.Val30Met
 
 
 # Max number of mutations

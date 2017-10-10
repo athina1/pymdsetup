@@ -9,6 +9,8 @@ enqueue_compss \
   --network=infiniband \
   --lang=python \
   --pythonpath=/gpfs/home/bsc23/bsc23210/pymdsetup/:/gpfs/home/bsc23/bsc23210/ \
+  --master_working_dir=/gpfs/scratch/bsc23/bsc23210/ \
+  --worker_working_dir=/gpfs/scratch/bsc23/bsc23210/ \
   --tracing=$4 \
   --graph=$5 \
   --log_level=off \
