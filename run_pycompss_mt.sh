@@ -7,6 +7,7 @@ module load openmpi/1.8.1 gcc/4.9.1 cuda/7.0 mkl/11.1 GROMACS/5.1
 enqueue_compss \
   --job_dependency=$1 \
   --exec_time=$2 \
+  --gpus_per_node=2 \
   --num_nodes=$3 \
   --worker_working_dir=gpfs \
   --network=infiniband \
