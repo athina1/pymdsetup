@@ -160,11 +160,10 @@ def main():
 
 
 ############################## PyCOMPSs functions #############################
-
-if sys.argv[2]=='minotauro':
-    computing_units = "2"
-elif sys.argv[2]=='mare_nostrum':
-    computing_units = "48"
+#Minotauro
+computing_units = "2"
+#MareNostrum4
+#computing_units = "48"
 
 
 @task(returns=dict)
