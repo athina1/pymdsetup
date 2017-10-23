@@ -51,24 +51,12 @@ mare_nostrum:
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
-minotauro:
-  gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
-  scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
-  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
-  mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
-  gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot
-  # Path to the initial pdb structure (if this field is empty
-  #   # pdb_code field will be used to download the structure)
-  #     initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
-
 ##############################################################################
 
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
-input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
-#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
-
+input_mapped_mutations_list: A.Tyr15Phe, A.Met16Leu, A.Lys17Arg, A.His18Asn, A.Ala19Ser, A.Thr20Ser, A.Lys21Arg, A.Thr22Ser, A.Ala23Ser, A.Lys24Arg, A.Asp25Glu, A.Ala26Ser, A.Leu27Ile, A.Ser28Ala, A.Ser29Ala, A.Val30Met
 # Max number of mutations
 # Available values None, Integer
 mutations_limit: 0
@@ -132,7 +120,7 @@ step7_gppions:
     input_gro_path: dependency/step6_sol/output_gro_path
     input_top_tar_path: dependency/step6_sol/output_top_tar_path
     output_tpr_path: gppions.tpr
-    input_mdp_path: gmx_full_ions_test.mdp
+    input_mdp_path: gmx_full_ions.mdp
   properties:
 
 # Step8: gio -- Running: Add ions to neutralice the charge
@@ -156,7 +144,7 @@ step9_gppmin:
     input_gro_path: dependency/step8_gio/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     output_tpr_path: gppmin.tpr
-    input_mdp_path: gmx_full_min_test.mdp
+    input_mdp_path: gmx_full_min.mdp
   properties:
 
 # Step10: mdmin -- Running: Energy minimization
@@ -176,7 +164,7 @@ step11_gppnvt:
     input_gro_path: dependency/step10_mdmin/output_gro_path
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     output_tpr_path: gppnvt.tpr
-    input_mdp_path: gmx_full_nvt_test.mdp
+    input_mdp_path: gmx_full_nvt.mdp
   properties:
 
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
@@ -198,7 +186,7 @@ step13_gppnpt:
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     input_cpt_path: dependency/step12_mdnvt/output_cpt_path
     output_tpr_path: npt.tpr
-    input_mdp_path: gmx_full_npt_test.mdp
+    input_mdp_path: gmx_full_npt.mdp
   properties:
 
 # Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
@@ -220,7 +208,7 @@ step15_gppeq:
     input_top_tar_path: dependency/step8_gio/output_top_tar_path
     input_cpt_path: dependency/step14_mdnpt/output_cpt_path
     output_tpr_path: gppeq.tpr
-    input_mdp_path: gmx_full_md_test.mdp
+    input_mdp_path: gmx_full_md.mdp
   properties:
 
 # Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration

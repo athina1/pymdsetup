@@ -1,10 +1,13 @@
 #!/bin/bash
+module purge
+module load COMPSs/2.1.rc1709
+module unload PYTHON
+module load openmpi/1.8.1 gcc/4.9.1 cuda/7.0 mkl/11.1 GROMACS/5.1
 
 enqueue_compss \
   --job_dependency=$1 \
   --exec_time=$2 \
   --num_nodes=$3 \
-  --qos=bsc_ls \
   --worker_working_dir=gpfs \
   --network=infiniband \
   --lang=python \
@@ -16,4 +19,4 @@ enqueue_compss \
   --log_level=debug \
 /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $6 $7 $3 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
 
-#./run_pycompss_mn.sh None 30 3 false false workflows/conf_2mut_nt0.yaml mare_nostrum
+#/gpfs/home/bsc23/bsc23210/pymdsetup/run_pycompss_mt.sh None 20 3 false false /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/conf_2mut_gpu_test.yaml minotauro

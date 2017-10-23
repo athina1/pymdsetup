@@ -40,6 +40,16 @@ mare_nostrum:
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
+minotauro:
+  gmx_path: gmx_mpi
+  scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
+  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
+  mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
+  gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
+
 scwrl:
   properties:
     input_pdb_path: structure.pdb
@@ -115,7 +125,6 @@ mdrun:
     output_gro_path: mdmin.gro
     output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
-    num_threads: 1
 
 rms:
   properties:

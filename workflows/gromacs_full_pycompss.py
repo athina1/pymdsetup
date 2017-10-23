@@ -160,7 +160,12 @@ def main():
 
 
 ############################## PyCOMPSs functions #############################
-computing_units = "48"
+
+if sys.argv[2]=='minotauro':
+    computing_units = "2"
+elif sys.argv[2]=='mare_nostrum':
+    computing_units = "48"
+
 
 @task(returns=dict)
 def merge_dictionaries(a, b):

@@ -52,14 +52,14 @@ mare_nostrum:
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
 minotauro:
-  gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
+  gmx_path: gmx_mpi
   scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
-  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
+  workflow_path: /gpfs/scratch/bsc23/bsc23210/gpuworkflow
   mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
   gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   #   # pdb_code field will be used to download the structure)
-  #     initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
 ##############################################################################
 
@@ -168,7 +168,6 @@ step10_mdmin:
   properties:
     output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
-    num_threads: 0
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules, volume and temp
 step11_gppnvt:
@@ -189,7 +188,6 @@ step12_mdnvt:
   properties:
     output_xtc_path: mdnvt.xtc
     output_edr_path: mdnvt.edr
-    num_threads: 0
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure and temp
 step13_gppnpt:
@@ -211,7 +209,6 @@ step14_mdnpt:
   properties:
     output_edr_path: mdnpt.edr
     output_xtc_path: mdnpt.xtc
-    num_threads: 0
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
@@ -232,7 +229,6 @@ step16_mdeq:
   properties:
     output_edr_path: mdeq.edr
     output_xtc_path: mdeq.xtc
-    num_threads: 0
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:
