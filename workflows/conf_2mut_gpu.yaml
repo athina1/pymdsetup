@@ -54,7 +54,7 @@ mare_nostrum:
 minotauro:
   gmx_path: gmx_mpi
   scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
-  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
+  workflow_path: /gpfs/scratch/bsc23/bsc23210/gpuworkflow
   mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
   gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
