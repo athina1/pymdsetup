@@ -20,15 +20,15 @@ inputs:
     inputBinding:
       position: 3
     default: "gio.gro"
-  gio_input_top_tar_path:
+  gio_input_top_zip_path:
     type: File
     inputBinding:
       position: 4
-  gio_output_top_tar_path:
+  gio_output_top_zip_path:
     type: string
     inputBinding:
       position: 5
-    default: "gio_tar.top"
+    default: "gio_zip.top"
   gio_step:
     type: string
     inputBinding:
@@ -47,7 +47,7 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.gio_output_gro_path)
-  gio_output_top_tar_file:
+  gio_output_top_zip_file:
     type: File
     outputBinding:
-      glob: $(inputs.gio_output_top_tar_path)
+      glob: $(inputs.gio_output_top_zip_path)

@@ -15,7 +15,7 @@ class Grompp(object):
     run input file TPR.
     Args:
         input_gro_path (str): Path to the input GROMACS structure GRO file.
-        input_top_tar_path (str): Path the input GROMACS topology TOP file.
+        input_top_zip_path (str): Path the input GROMACS topology TOP file.
         output_tpr_path (str): Path to the output portable binary run file TPR.
         input_cpt_path (str): Path to the input GROMACS checkpoint file CPT.
         input_mdp_path (str): Path to the input GROMACS parameter input file MDP.
@@ -23,12 +23,12 @@ class Grompp(object):
             gmx_path (str): Path to the GROMACS executable binary.
     """
 
-    def __init__(self, input_gro_path, input_top_tar_path, input_mdp_path,
+    def __init__(self, input_gro_path, input_top_zip_path, input_mdp_path,
                  output_tpr_path, properties, input_cpt_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_gro_path = input_gro_path
-        self.input_top_tar_path = input_top_tar_path
+        self.input_top_zip_path = input_top_zip_path
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
         self.input_mdp_path=input_mdp_path
@@ -42,9 +42,9 @@ class Grompp(object):
         """Launches the execution of the GROMACS grompp module.
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        # Untar topology in de directory of the output_tpr_path and get the
+        # Unzip topology in de directory of the output_tpr_path and get the
         # topology path
-        topology_path = fu.untar_top(self.input_top_tar_path)
+        topology_path = fu.unzip_top(self.input_top_zip_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'grompp', '-f', self.input_mdp_path,
                '-c', self.input_gro_path,
@@ -70,7 +70,7 @@ def main():
     prop = settings.YamlReader(prop, system).get_prop_dic()[step]
     prop['path']=''
     Grompp(input_gro_path = sys.argv[1],
-              input_top_tar_path = sys.argv[2],
+              input_top_zip_path = sys.argv[2],
               output_tpr_path = sys.argv[3],
               step=step,
               properties=prop,

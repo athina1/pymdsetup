@@ -3,7 +3,7 @@
 import os
 import shutil
 import glob
-import tarfile
+import zipfile
 import logging
 from os.path import join as opj
 
@@ -32,26 +32,27 @@ def remove_temp_files(endswith_list, source_dir=None):
             removed_list.append(f)
     return removed_list
 
-def tar_top(top_file, tar_file):
+def zip_top(top_file, zip_file):
     top_dir = os.path.abspath(os.path.dirname(top_file))
     files = glob.iglob(os.path.join(top_dir, "*.itp"))
     if os.path.abspath(os.getcwd()) != top_dir:
         files = glob.iglob(os.path.join(os.getcwd(), "*.itp"))
-    with tarfile.open(tar_file, 'w') as tar:
+    with zipfile.ZipFile(zip_file, 'w') as zip:
         for f in files:
-            tar.add(f, arcname=os.path.basename(f))
-        tar.add(top_file, arcname=os.path.basename(top_file))
+            zip.write(f, arcname=os.path.basename(f))
+        zip.write(top_file, arcname=os.path.basename(top_file))
 
-def untar_top(tar_file, dest_dir=None, top_file=None):
+def unzip_top(zip_file, dest_dir=None, top_file=None):
     if dest_dir is None:
         dest_dir = os.getcwd()
-    with tarfile.open(tar_file) as tar:
-        tar_name = next(name for name in tar.getnames() if name.endswith(".top"))
-        tar.extractall(path=dest_dir)
+    with zipfile.ZipFile(zip_file) as zip:
+        zip_name = next(name for name in zip.namelist() if name.endswith(".top"))
+        zip.extractall(path=dest_dir)
     if top_file is not None:
-        shutil.copyfile(os.path.join(dest_dir, tar_name), os.path.basename(top_file))
+        shutil.copyfile(os.path.join(dest_dir, zip_name), os.path.basename(top_file))
         return top_file
-    return tar_name
+    return zip_name
+
 
 def get_logs(path, mutation=None, step=None, console=False):
     path = '' if (path is None or not os.path.isdir(path)) else path

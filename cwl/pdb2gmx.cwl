@@ -21,11 +21,11 @@ inputs:
     inputBinding:
       position: 3
     default: "p2g.gro"
-  p2g_output_top_tar_path:
+  p2g_output_top_zip_path:
     type: string
     inputBinding:
       position: 4
-    default: "p2g_top.tar"
+    default: "p2g_top.zip"
   p2g_step:
     type: string
     inputBinding:
@@ -43,7 +43,7 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.p2g_output_gro_path)
-  p2g_output_top_tar_file:
+  p2g_output_top_zip_file:
     type: File
     outputBinding:
-      glob: $(inputs.p2g_output_top_tar_path)
+      glob: $(inputs.p2g_output_top_zip_path)

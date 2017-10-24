@@ -14,8 +14,8 @@ class Solvate(object):
     Args:
         input_solute_gro_path (str): Path to the input GRO file.
         output_gro_path (str): Path to the output GRO file.
-        input_top_tar_path (str): Path the input TOP topology in TAR format.
-        output_top_tar_path (str): Path the output topology in TAR format.
+        input_top_zip_path (str): Path the input TOP topology in zip format.
+        output_top_zip_path (str): Path the output topology in zip format.
         properties (dic):
             output_top_path (str): Path the output TOP file.
             intput_solvent_gro_path (str): Path to the GRO file contanining the
@@ -24,13 +24,13 @@ class Solvate(object):
     """
 
     def __init__(self, input_solute_gro_path, output_gro_path,
-                 input_top_tar_path, output_top_tar_path, properties, **kwargs):
+                 input_top_zip_path, output_top_zip_path, properties, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_solute_gro_path = input_solute_gro_path
         self.output_gro_path = output_gro_path
-        self.input_top_tar_path = input_top_tar_path
-        self.output_top_tar_path = output_top_tar_path
+        self.input_top_zip_path = input_top_zip_path
+        self.output_top_zip_path = output_top_zip_path
         self.output_top_path = properties.get('output_top_path','sol.top')
         self.input_solvent_gro_path = properties.get('input_solvent_gro_path','spc216.gro')
         self.gmx_path = properties.get('gmx_path',None)
@@ -44,8 +44,8 @@ class Solvate(object):
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         self.output_top_path = self.output_top_path if self.step is None else self.step+'_'+self.output_top_path
         self.output_top_path = self.output_top_path if self.mutation is None else self.mutation+'_'+self.output_top_path
-        # Untar topology to topology_out
-        fu.untar_top(tar_file=self.input_top_tar_path, top_file=self.output_top_path)
+        # Unzip topology to topology_out
+        fu.unzip_top(zip_file=self.input_top_zip_path, top_file=self.output_top_path)
 
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'solvate',
@@ -63,8 +63,8 @@ class Solvate(object):
                 out_log.info(lines[index])
 
 
-        # Tar new_topology
-        fu.tar_top(self.output_top_path, self.output_top_tar_path)
+        # zip new_topology
+        fu.zip_top(self.output_top_path, self.output_top_zip_path)
         return returncode
 
 #Creating a main function to be compatible with CWL
@@ -76,8 +76,8 @@ def main():
     prop['path']=''
     Solvate(input_solute_gro_path=sys.argv[1],
             output_gro_path=sys.argv[2],
-            input_top_tar_path=sys.argv[3],
-            output_top_tar_path=sys.argv[4],
+            input_top_zip_path=sys.argv[3],
+            output_top_zip_path=sys.argv[4],
             step=step,
             properties=prop).launch()
 

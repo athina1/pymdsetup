@@ -13,7 +13,7 @@ class TestGrompp(object):
     def test_launch(self):
         output_tpr_path = opj(self.test_dir, self.properties['output_tpr_path'])
         returncode = Grompp(input_gro_path=opj(self.data_dir, self.properties['input_gro_path']),
-                              input_top_tar_path=opj(self.data_dir, self.properties['input_top_tar_path']),
+                              input_top_zip_path=opj(self.data_dir, self.properties['input_top_zip_path']),
                               input_mdp_path=opj(self.data_dir, self.properties['input_mdp_path']),
                               output_tpr_path=output_tpr_path,
                               properties=self.properties).launch()

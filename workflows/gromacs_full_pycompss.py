@@ -174,29 +174,29 @@ def merge_dictionaries(a, b):
 def scwrl_pc(input_pdb_path, output_pdb_path, properties, **kwargs):
     scwrl.Scwrl4(input_pdb_path, output_pdb_path, properties, **kwargs).launch()
 
-@task(input_structure_pdb_path=FILE_IN, output_gro_path=FILE_OUT, output_top_tar_path=FILE_OUT)
-def pdb2gmx_pc(input_structure_pdb_path, output_gro_path, output_top_tar_path, properties, **kwargs):
-    pdb2gmx.Pdb2gmx(input_structure_pdb_path, output_gro_path, output_top_tar_path, properties, **kwargs).launch()
+@task(input_structure_pdb_path=FILE_IN, output_gro_path=FILE_OUT, output_top_zip_path=FILE_OUT)
+def pdb2gmx_pc(input_structure_pdb_path, output_gro_path, output_top_zip_path, properties, **kwargs):
+    pdb2gmx.Pdb2gmx(input_structure_pdb_path, output_gro_path, output_top_zip_path, properties, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, output_gro_path=FILE_OUT)
 def editconf_pc(input_gro_path, output_gro_path, properties, **kwargs):
     editconf.Editconf(input_gro_path, output_gro_path, properties, **kwargs).launch()
 
-@task(input_solute_gro_path=FILE_IN, output_gro_path=FILE_OUT, input_top_tar_path=FILE_IN, output_top_tar_path=FILE_OUT)
-def solvate_pc(input_solute_gro_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs):
-    solvate.Solvate(input_solute_gro_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs).launch()
+@task(input_solute_gro_path=FILE_IN, output_gro_path=FILE_OUT, input_top_zip_path=FILE_IN, output_top_zip_path=FILE_OUT)
+def solvate_pc(input_solute_gro_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs):
+    solvate.Solvate(input_solute_gro_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs).launch()
 
-@task(input_gro_path=FILE_IN, input_top_tar_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT,  input_cpt_path=FILE_IN)
-def grompp_pc_cpt(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs):
-    grompp.Grompp(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs).launch()
+@task(input_gro_path=FILE_IN, input_top_zip_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT,  input_cpt_path=FILE_IN)
+def grompp_pc_cpt(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs):
+    grompp.Grompp(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs).launch()
 
-@task(input_gro_path=FILE_IN, input_top_tar_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT)
-def grompp_pc(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path, properties, **kwargs):
-    grompp.Grompp(input_gro_path, input_top_tar_path, input_mdp_path, output_tpr_path, properties, **kwargs).launch()
+@task(input_gro_path=FILE_IN, input_top_zip_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT)
+def grompp_pc(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, **kwargs):
+    grompp.Grompp(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, **kwargs).launch()
 
-@task(input_tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top_tar_path=FILE_IN, output_top_tar_path=FILE_OUT)
-def genion_pc(input_tpr_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs):
-    genion.Genion(input_tpr_path, output_gro_path, input_top_tar_path, output_top_tar_path, properties, **kwargs).launch()
+@task(input_tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top_zip_path=FILE_IN, output_top_zip_path=FILE_OUT)
+def genion_pc(input_tpr_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs):
+    genion.Genion(input_tpr_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs).launch()
 
 @constraint(ComputingUnits=computing_units)
 @task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT, output_cpt_path=FILE_OUT)

@@ -68,7 +68,7 @@ pdb2gmx:
     ignh: True
     input_structure_pdb_path: structure.pdb
     output_gro_path: p2g.gro
-    output_top_tar_path: p2g_top.tar
+    output_top_zip_path: p2g_top.zip
 
 editconf:
   paths:
@@ -85,15 +85,15 @@ solvate:
   properties:
     input_solute_gro_path: ec.gro
     output_gro_path: sol.gro
-    input_top_tar_path: p2g_top.tar
-    output_top_tar_path: sol_top.tar
+    input_top_zip_path: p2g_top.zip
+    output_top_zip_path: sol_top.zip
     output_top_path: sol.top
     input_solvent_gro_path: spc216.gro
 
 grompp:
   properties:
     input_gro_path: sol.gro
-    input_top_tar_path: sol_top.tar
+    input_top_zip_path: sol_top.zip
     output_tpr_path: gppions.tpr
     input_mdp_path: gmx_full_ions_test.mdp
 
@@ -101,9 +101,9 @@ grompp:
 genion:
   properties:
     input_tpr_path: gppions.tpr
-    input_top_tar_path: sol_top.tar
+    input_top_zip_path: sol_top.zip
     output_gro_path: gio.gro
-    output_top_tar_path: gio_top.tar
+    output_top_zip_path: gio_top.zip
     output_top_path: gio.top
     neutral: True
     # If neutral is True concentration value is not used
@@ -114,7 +114,7 @@ genion:
 gppmin:
   properties:
     input_gro_path: gio.gro
-    input_top_tar_path: gio_top.tar
+    input_top_zip_path: gio_top.zip
     output_tpr_path: gppmin.tpr
     input_mdp_path: gmx_full_min_test.mdp
 

@@ -32,7 +32,7 @@ steps:
     run: pdb2gmx.cwl
     in:
       p2g_input_structure_pdb_path: mutate_structure/scw_output_pdb_file
-    out: [p2g_output_gro_file, p2g_output_top_tar_file]
+    out: [p2g_output_gro_file, p2g_output_top_zip_file]
   create_water_box:
     run: editconf.cwl
     in:
@@ -42,14 +42,14 @@ steps:
     run: solvate.cwl
     in:
       sol_input_solute_gro_path: create_water_box/ec_output_gro_file
-      sol_input_top_tar_path: create_topology/p2g_output_top_tar_file
-    out: [sol_output_gro_file, sol_output_top_tar_file]
+      sol_input_top_zip_path: create_topology/p2g_output_top_zip_file
+    out: [sol_output_gro_file, sol_output_top_zip_file]
 
   ions_preprocess:
     run: grompp.cwl
     in:
       gpp_input_gro_path: solvate/sol_output_gro_file
-      gpp_input_top_tar_path: solvate/sol_output_top_tar_file
+      gpp_input_top_zip_path: solvate/sol_output_top_zip_file
     out: [gpp_output_tpr_file]
 
   add_ions:
@@ -57,14 +57,14 @@ steps:
     in:
       gio_input_tpr_path: ions_preprocess/gpp_output_tpr_file
       gio_input_gro_path: solvate/sol_output_gro_file
-      gio_input_top_tar_path: solvate/sol_output_top_tar_file
-    out: [gio_output_gro_file, gio_output_top_tar_file]
+      gio_input_top_zip_path: solvate/sol_output_top_zip_file
+    out: [gio_output_gro_file, gio_output_top_zip_file]
 
   minimization_preprocess:
     run: grompp.cwl
     in:
       gpp_input_gro_path: add_ions/gio_output_gro_file
-      gpp_input_top_tar_path: add_ions/gio_output_top_tar_file
+      gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
     out: [gpp_output_tpr_file]
 
   minimization:
@@ -77,7 +77,7 @@ steps:
     run: grompp.cwl
     in:
       gpp_input_gro_path: minimization/md_output_gro_file
-      gpp_input_top_tar_path: add_ions/gio_output_top_tar_file
+      gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
     out: [gpp_output_tpr_file]
 
   nvt_dynamics:
@@ -90,7 +90,7 @@ steps:
     run: grompp.cwl
     in:
       gpp_input_gro_path: nvt_dynamics/md_output_gro_file
-      gpp_input_top_tar_path: add_ions/gio_output_top_tar_file
+      gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
       gpp_input_cpt_path: nvt_dynamics/md_output_cpt_file
     out: [gpp_output_tpr_file]
 
@@ -104,7 +104,7 @@ steps:
     run: grompp.cwl
     in:
       gpp_input_gro_path: npt_dynamics/md_output_gro_file
-      gpp_input_top_tar_path: add_ions/gio_output_top_tar_file
+      gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
       gpp_input_cpt_path: npt_dynamics/md_output_cpt_file
     out: [gpp_output_tpr_file]
 

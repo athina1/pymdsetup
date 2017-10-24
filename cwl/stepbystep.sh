@@ -7,4 +7,4 @@ cwl-runner genion.cwl test/genion_conf.yml
 cwl-runner mdrun.cwl test/mdmin_conf.yml
 cwl-runner rms.cwl test/rms_conf.yml
 cwl-runner gnuplot.cwl test/gnuplot_conf.yml
-rm sol.gro sol_top.tar p2g.gro p2g_top.tar ec.gro gio.gro gio_top.tar gppions.tpr mdmin.gro mdmin.trr gplot.png mutated.pdb rms.xvg
+rm sol.gro sol_top.zip p2g.gro p2g_top.zip ec.gro gio.gro gio_top.zip gppions.tpr mdmin.gro mdmin.trr gplot.png mutated.pdb rms.xvg

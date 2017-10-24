@@ -20,15 +20,15 @@ inputs:
     inputBinding:
       position: 3
     default: "sol.gro"
-  sol_input_top_tar_path:
+  sol_input_top_zip_path:
     type: File
     inputBinding:
       position: 4
-  sol_output_top_tar_path:
+  sol_output_top_zip_path:
     type: string
     inputBinding:
       position: 5
-    default: "sol_top.tar"
+    default: "sol_top.zip"
   sol_step:
     type: string
     inputBinding:
@@ -46,7 +46,7 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.sol_output_gro_path)
-  sol_output_top_tar_file:
+  sol_output_top_zip_file:
     type: File
     outputBinding:
-      glob: $(inputs.sol_output_top_tar_path)
+      glob: $(inputs.sol_output_top_zip_path)

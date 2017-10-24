@@ -9,10 +9,10 @@ gio_output_gro_path: gio.gro
 gio_input_gro_path:
     class: File
     location: ../../cwl/test/data/sol.gro
-gio_input_top_tar_path:
+gio_input_top_zip_path:
     class: File
-    location: ../../cwl/test/data/sol_top.tar
-gio_output_top_tar_path: gio_top.tar
+    location: ../../cwl/test/data/sol_top.zip
+gio_output_top_zip_path: gio_top.zip
 gio_step: step8_gio:linux
 gio_properties:
     class: File

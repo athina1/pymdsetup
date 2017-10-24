@@ -51,15 +51,15 @@ mare_nostrum:
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
-minotauro: 
-  gmx_path: gmx_mpi 
-  scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4 
-  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow 
-  mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/ 
-  gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot 
-  # Path to the initial pdb structure (if this field is empty 
-  #   # pdb_code field will be used to download the structure) 
-  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb 
+minotauro:
+  gmx_path: gmx_mpi
+  scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
+  workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/testworkflow
+  mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
+  gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  #   # pdb_code field will be used to download the structure)
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
@@ -91,7 +91,7 @@ step4_p2g:
   paths:
     input_structure_pdb_path: dependency/step3_scw/output_pdb_path
     output_gro_path: p2g.gro
-    output_top_tar_path: p2g_top.tar
+    output_top_zip_path: p2g_top.zip
   properties:
     output_top_path: p2g.top
     output_itp_path: p2g.itp
@@ -118,9 +118,9 @@ step5_ec:
 step6_sol:
   paths:
     input_solute_gro_path: dependency/step5_ec/output_gro_path
-    input_top_tar_path: dependency/step4_p2g/output_top_tar_path
+    input_top_zip_path: dependency/step4_p2g/output_top_zip_path
     output_gro_path: sol.gro
-    output_top_tar_path: sol_top.tar
+    output_top_zip_path: sol_top.zip
   properties:
     output_top_path: sol.top
     input_solvent_gro_path: spc216.gro
@@ -129,7 +129,7 @@ step6_sol:
 step7_gppions:
   paths:
     input_gro_path: dependency/step6_sol/output_gro_path
-    input_top_tar_path: dependency/step6_sol/output_top_tar_path
+    input_top_zip_path: dependency/step6_sol/output_top_zip_path
     output_tpr_path: gppions.tpr
     input_mdp_path: gmx_full_ions.mdp
   properties:
@@ -138,9 +138,9 @@ step7_gppions:
 step8_gio:
   paths:
     input_tpr_path: dependency/step7_gppions/output_tpr_path
-    input_top_tar_path: dependency/step6_sol/output_top_tar_path
+    input_top_zip_path: dependency/step6_sol/output_top_zip_path
     output_gro_path: gio.gro
-    output_top_tar_path: gio_top.tar
+    output_top_zip_path: gio_top.zip
   properties:
     output_top_path: gio.top
     neutral: True
@@ -153,7 +153,7 @@ step8_gio:
 step9_gppmin:
   paths:
     input_gro_path: dependency/step8_gio/output_gro_path
-    input_top_tar_path: dependency/step8_gio/output_top_tar_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
     output_tpr_path: gppmin.tpr
     input_mdp_path: gmx_full_min.mdp
   properties:
@@ -172,7 +172,7 @@ step10_mdmin:
 step11_gppnvt:
   paths:
     input_gro_path: dependency/step10_mdmin/output_gro_path
-    input_top_tar_path: dependency/step8_gio/output_top_tar_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
     output_tpr_path: gppnvt.tpr
     input_mdp_path: gmx_full_nvt.mdp
   properties:
@@ -192,7 +192,7 @@ step12_mdnvt:
 step13_gppnpt:
   paths:
     input_gro_path: dependency/step12_mdnvt/output_gro_path
-    input_top_tar_path: dependency/step8_gio/output_top_tar_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
     input_cpt_path: dependency/step12_mdnvt/output_cpt_path
     output_tpr_path: npt.tpr
     input_mdp_path: gmx_full_npt.mdp
@@ -213,7 +213,7 @@ step14_mdnpt:
 step15_gppeq:
   paths:
     input_gro_path: dependency/step14_mdnpt/output_gro_path
-    input_top_tar_path: dependency/step8_gio/output_top_tar_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
     input_cpt_path: dependency/step14_mdnpt/output_cpt_path
     output_tpr_path: gppeq.tpr
     input_mdp_path: gmx_full_md.mdp

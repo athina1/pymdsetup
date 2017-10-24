@@ -13,7 +13,7 @@ class Pdb2gmx(object):
     Args:
         input_structure_pdb_path (str): Path to the input PDB file.
         output_gro_path (str): Path to the output GRO file.
-        output_top_tar_path (str): Path the output TOP topology in TAR format.
+        output_top_zip_path (str): Path the output TOP topology in zip format.
         properties (dic):
             output_top_path (str): Path the output TOP file.
             output_itp_path (str): Path the output itp file.
@@ -27,12 +27,12 @@ class Pdb2gmx(object):
     """
 
     def __init__(self, input_structure_pdb_path, output_gro_path,
-                 output_top_tar_path, properties, **kwargs):
+                 output_top_zip_path, properties, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_structure_pdb_path = input_structure_pdb_path
         self.output_gro_path = output_gro_path
-        self.output_top_tar_path = output_top_tar_path
+        self.output_top_zip_path = output_top_zip_path
         self.output_top_path = properties.get('output_top_path','p2g.top')
         self.output_itp_path = properties.get('output_itp_path',None)
         self.water_type = properties.get('water_type','spce')
@@ -73,8 +73,8 @@ class Pdb2gmx(object):
         with open(self.output_gro_path, 'w') as fout:
             fout.writelines(data)
 
-        # Tar topology
-        fu.tar_top(self.output_top_path, self.output_top_tar_path)
+        # zip topology
+        fu.zip_top(self.output_top_path, self.output_top_zip_path)
 
         return returncode
 #Creating a main function to be compatible with CWL
@@ -86,7 +86,7 @@ def main():
     prop['path']=''
     Pdb2gmx(input_structure_pdb_path=sys.argv[1],
             output_gro_path=sys.argv[2],
-            output_top_tar_path=sys.argv[3],
+            output_top_zip_path=sys.argv[3],
             step=step,
             properties=prop).launch()
 

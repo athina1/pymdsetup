@@ -15,7 +15,7 @@ inputs:
     type: File
     inputBinding:
       position: 2
-  gpp_input_top_tar_path:
+  gpp_input_top_zip_path:
     type: File
     inputBinding:
       position: 3
