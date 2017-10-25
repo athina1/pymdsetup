@@ -161,7 +161,7 @@ def main():
 
 ############################## PyCOMPSs functions #############################
 #Minotauro
-computing_units = "2"
+computing_units = "0"
 #MareNostrum4
 #computing_units = "48"
 
