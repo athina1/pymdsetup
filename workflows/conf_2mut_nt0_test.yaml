@@ -62,7 +62,7 @@ minotauro:
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
 archer:
-  gmx_path: gmx_mpi
+  gmx_path: gmx
   scwrl4_path: /home/d118/d118/andrio/scwrl/Scwrl4
   workflow_path: /home/d118/d118/andrio/pymdsetup/testworkflow
   mdp_path: /home/d118/d118/andrio/pymdsetup/workflows/mdp/
