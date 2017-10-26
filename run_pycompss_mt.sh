@@ -2,12 +2,13 @@
 module purge
 module load COMPSs/2.1.rc1709
 module unload PYTHON
-module load openmpi/1.8.1 gcc/4.9.1 cuda/7.0 mkl/11.1 GROMACS/5.1
 
 enqueue_compss \
   --job_dependency=$1 \
   --exec_time=$2 \
   --gpus_per_node=2 \
+  --cpus_per_node=12 \
+  --max_tasks_per_node=1 \
   --num_nodes=$3 \
   --worker_working_dir=gpfs \
   --network=infiniband \

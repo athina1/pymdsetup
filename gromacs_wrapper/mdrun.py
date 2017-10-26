@@ -33,6 +33,9 @@ class Mdrun(object):
         self.output_edr_path = properties.get('output_edr_path',None)
         self.output_xtc_path = properties.get('output_xtc_path',None)
         self.num_threads = properties.get('num_threads',None)
+        self.ntmpi = properties.get('ntmpi', None)
+        self.ntomp = properties.get('ntomp', None)
+        self.gpu_id = properties.get('gpu_id', None)
         self.gmx_path = properties.get('gmx_path',None)
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
@@ -64,6 +67,15 @@ class Mdrun(object):
         if not self.num_threads is None:
             cmd.append('-nt')
             cmd.append(str(self.num_threads))
+        if not self.ntmpi is None:
+            cmd.append('-ntmpi')
+            cmd.append(str(self.ntmpi))
+        if not self.ntomp is None:
+            cmd.append('-ntomp')
+            cmd.append(str(self.ntomp))
+        if not self.gpu_id is None:
+            cmd.append('-gpu_id')
+            cmd.append(str(self.gpu_id))
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         return command.launch()
