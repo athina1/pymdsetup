@@ -37,6 +37,8 @@ class Solvate(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
+        self.mpirun = properties.get('mpirun', False)
+        self.mpirun_np = properties.get('mpirun_np', None)
 
     def launch(self):
         """Launches the execution of the GROMACS solvate module.
@@ -53,6 +55,12 @@ class Solvate(object):
                '-cs', self.input_solvent_gro_path,
                '-o',  self.output_gro_path,
                '-p',  self.output_top_path]
+
+        if self.mpirun_np is not None:
+            cmd.insert(0, str(self.mpirun_np))
+            cmd.insert(0, '-np')
+        if self.mpirun:
+            cmd.insert(0, 'mpirun')
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
 

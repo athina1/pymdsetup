@@ -42,6 +42,8 @@ class Pdb2gmx(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
+        self.mpirun = properties.get('mpirun',False)
+        self.mpirun_np = properties.get('mpirun_np',None)
 
     def launch(self):
         """Launches the execution of the GROMACS pdb2gmx module.
@@ -55,6 +57,11 @@ class Pdb2gmx(object):
                "-o", self.output_gro_path, "-p", self.output_top_path,
                "-water", self.water_type, "-ff", self.force_field]
 
+        if self.mpirun_np is not None:
+            cmd.insert(0, str(self.mpirun_np))
+            cmd.insert(0, '-np')
+        if self.mpirun:
+            cmd.insert(0, 'mpirun')
         if self.output_itp_path is not None:
             self.output_itp_path = self.output_itp_path if self.step is None else self.step+'_'+self.output_itp_path
             self.output_itp_path = self.output_itp_path if self.mutation is None else self.mutation+'_'+self.output_itp_path

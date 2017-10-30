@@ -1,14 +1,17 @@
 #!/bin/bash
-# @ job_name="pymdsetup"
-# @ initialdir= .
-# @ output= k80_serial_%j.out
-# @ error= k80_serial_%j.err
-# @ total_tasks=  1
-# @ cpus_per_task=  6
-# @ gpus_per_node=  1
-# @ wall_clock_limit = 00:20:00
+#BATCH --job-name=k80_serial
+#SBATCH --time=00:05:00
+#SBATCH --nodes=1
+#SBATCH -o k80_serial_%j.out
+#SBATCH -e k80_serial_%j.err
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=4
+#SBATCH --constraint=k80
+#SBATCH --gres gpu:4
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
 module purge
-module load openmpi/1.8.1 gcc/4.9.1 cuda/7.0 GROMACS/5.0.4-cuda7
-python workflows/gromacs_full.py workflows/conf_2mut_gpu_test.yaml minotauro 1
+module load K80 intel/15.0.0 impi/5.1.3.181 cuda/7.5 mkl/11.2 GROMACS/5.1.2
+python /home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full.py /home/bsc23/bsc23210/pymdsetup/workflows/conf_2mut_gpu_test.yaml minotauro 1
 
 # mnsubmit mt_serial.sh

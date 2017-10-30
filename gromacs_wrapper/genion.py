@@ -43,6 +43,8 @@ class Genion(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
+        self.mpirun = properties.get('mpirun', False)
+        self.mpirun_np = properties.get('mpirun_np', None)
 
     def launch(self):
         """Launches the execution of the GROMACS genion module.
@@ -53,11 +55,21 @@ class Genion(object):
         # Unzip topology to topology_out
         fu.unzip_top(zip_file=self.input_top_zip_path, top_file=self.output_top_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
-        cmd = ['echo', self.replaced_group, '|', gmx, 'genion',
+        # cmd = ['echo', self.replaced_group, '|', gmx, 'genion',
+        #        '-s', self.input_tpr_path,
+        #        '-o', self.output_gro_path,
+        #        '-p', self.output_top_path]
+
+        cmd = [gmx, 'genion',
                '-s', self.input_tpr_path,
                '-o', self.output_gro_path,
                '-p', self.output_top_path]
 
+        if self.mpirun_np is not None:
+            cmd.insert(0, str(self.mpirun_np))
+            cmd.insert(0, '-np')
+        if self.mpirun:
+            cmd.insert(0, 'mpirun')
         if self.neutral:
             cmd.append('-neutral')
         elif self.concentration:
@@ -68,6 +80,8 @@ class Genion(object):
             cmd.append('-seed')
             cmd.append(str(self.seed))
 
+        cmd.append('<<<')
+        cmd.append(self.replaced_group)
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
 

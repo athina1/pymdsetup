@@ -30,6 +30,8 @@ class Rms(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
+        self.mpirun = properties.get('mpirun', False)
+        self.mpirun_np = properties.get('mpirun_np', None)
 
 
     def launch(self):
@@ -37,12 +39,25 @@ class Rms(object):
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         gmx = 'gmx' if self.gmx_path is 'None' else self.gmx_path
-        cmd = ['echo', '0 0', '|', gmx, 'rms',
+        # cmd = ['echo', '0 0', '|', gmx, 'rms',
+        #        '-s', self.input_gro_path,
+        #        '-f', self.input_trr_path,
+        #        '-o', self.output_xvg_path,
+        #        '-xvg', 'none']
+
+        cmd = [gmx, 'rms', '-xvg', 'none',
                '-s', self.input_gro_path,
                '-f', self.input_trr_path,
-               '-o', self.output_xvg_path,
-               '-xvg', 'none']
+               '-o', self.output_xvg_path]
 
+        if self.mpirun_np is not None:
+            cmd.insert(0, str(self.mpirun_np))
+            cmd.insert(0, '-np')
+        if self.mpirun:
+            cmd.insert(0, 'mpirun')
+
+        cmd.append('<<<')
+        cmd.append("$'0\n0\n'")
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
         xvg = self.output_xvg_path if os.path.isfile(self.output_xvg_path) else ntpath.basename(self.output_xvg_path)

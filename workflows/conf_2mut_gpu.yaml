@@ -167,9 +167,7 @@ step10_mdmin:
   properties:
     output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
-    ntomp: 12
-    gpu_id: "1"
-
+    mpirun: True
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules, volume and temp
 step11_gppnvt:
@@ -190,8 +188,7 @@ step12_mdnvt:
   properties:
     output_xtc_path: mdnvt.xtc
     output_edr_path: mdnvt.edr
-    ntomp: 12
-    gpu_id: "1"
+    mpirun: True
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure and temp
 step13_gppnpt:
@@ -213,8 +210,7 @@ step14_mdnpt:
   properties:
     output_edr_path: mdnpt.edr
     output_xtc_path: mdnpt.xtc
-    ntomp: 12
-    gpu_id: "1"
+    mpirun: True
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
@@ -235,8 +231,7 @@ step16_mdeq:
   properties:
     output_edr_path: mdeq.edr
     output_xtc_path: mdeq.xtc
-    ntomp: 12
-    gpu_id: "1"
+    mpirun: True
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:

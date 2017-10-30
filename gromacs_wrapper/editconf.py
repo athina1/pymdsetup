@@ -31,6 +31,8 @@ class Editconf(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
+        self.mpirun = properties.get('mpirun', False)
+        self.mpirun_np = properties.get('mpirun_np', None)
 
     def launch(self):
         """Launches the execution of the GROMACS editconf module.
@@ -41,6 +43,12 @@ class Editconf(object):
                '-o', self.output_gro_path,
                '-d', str(self.distance_to_molecule),
                '-bt', self.box_type]
+               
+        if self.mpirun_np is not None:
+            cmd.insert(0, str(self.mpirun_np))
+            cmd.insert(0, '-np')
+        if self.mpirun:
+            cmd.insert(0, 'mpirun')
         if self.center_molecule:
             cmd.append('-c')
 

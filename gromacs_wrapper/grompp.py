@@ -37,6 +37,8 @@ class Grompp(object):
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
         self.path = properties.get('path','')
+        self.mpirun = properties.get('mpirun', False)
+        self.mpirun_np = properties.get('mpirun_np', None)
 
     def launch(self):
         """Launches the execution of the GROMACS grompp module.
@@ -50,6 +52,12 @@ class Grompp(object):
                '-c', self.input_gro_path,
                '-p', topology_path,
                '-o', self.output_tpr_path]
+
+        if self.mpirun_np is not None:
+            cmd.insert(0, str(self.mpirun_np))
+            cmd.insert(0, '-np')
+        if self.mpirun:
+            cmd.insert(0, 'mpirun')
         if self.input_cpt_path is not None:
             cmd.append('-t')
             cmd.append(self.input_cpt_path)
