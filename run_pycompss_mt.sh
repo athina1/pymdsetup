@@ -2,12 +2,14 @@
 module purge
 module load COMPSs/2.1.rc1709
 module unload PYTHON
+module load K80 intel/15.0.0 impi/5.1.3.181 cuda/7.5 mkl/11.2 GROMACS/5.1.2
 
 enqueue_compss \
   --job_dependency=$1 \
   --exec_time=$2 \
-  --gpus_per_node=2 \
-  --cpus_per_node=12 \
+  --queue=projects \
+  --gpus_per_node=4 \
+  --cpus_per_node=16 \
   --max_tasks_per_node=1 \
   --num_nodes=$3 \
   --worker_working_dir=gpfs \

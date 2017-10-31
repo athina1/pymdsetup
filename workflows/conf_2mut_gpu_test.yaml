@@ -67,7 +67,7 @@ minotauro:
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
 input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
-#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
+#input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile, A.Leu9Ile, A.Ser10Thr, A.Phe11Ile, A.Met12Leu, A.Gln13Arg, A.Gly14Ala, A.Tyr15Phe, A.Met16Leu, A.Lys17Arg, A.His18Asn, A.Ala19Ser, A.Thr20Ser, A.Lys21Arg, A.Thr22Ser, A.Ala23Ser, A.Lys24Arg, A.Asp25Glu, A.Ala26Ser, A.Leu27Ile, A.Ser28Ala, A.Ser29Ala, A.Val30Met
 
 # Max number of mutations
 # Available values None, Integer
@@ -119,7 +119,6 @@ step5_ec:
     mpirun: True
     mpirun_np: 1
 
-
 # Step6: sol -- Fill the box with water molecules
 step6_sol:
   paths:
@@ -133,7 +132,6 @@ step6_sol:
     mpirun: True
     mpirun_np: 1
 
-
 # Step7: gppions -- Preprocessing: Add ions to neutralice the charge
 step7_gppions:
   paths:
@@ -144,7 +142,6 @@ step7_gppions:
   properties:
     mpirun: True
     mpirun_np: 1
-
 
 # Step8: gio -- Running: Add ions to neutralice the charge
 step8_gio:
@@ -163,7 +160,6 @@ step8_gio:
     mpirun: True
     mpirun_np: 1
 
-
 # Step9: gppmin -- Preprocessing: Energy minimization
 step9_gppmin:
   paths:
@@ -174,7 +170,6 @@ step9_gppmin:
   properties:
     mpirun: True
     mpirun_np: 1
-
 
 # Step10: mdmin -- Running: Energy minimization
 step10_mdmin:
@@ -198,7 +193,6 @@ step11_gppnvt:
     mpirun: True
     mpirun_np: 1
 
-
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
 step12_mdnvt:
   paths:
@@ -210,7 +204,6 @@ step12_mdnvt:
     output_xtc_path: mdnvt.xtc
     output_edr_path: mdnvt.edr
     mpirun: True
-
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure and temp
 step13_gppnpt:

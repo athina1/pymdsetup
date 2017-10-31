@@ -39,11 +39,6 @@ class Rms(object):
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         gmx = 'gmx' if self.gmx_path is 'None' else self.gmx_path
-        # cmd = ['echo', '0 0', '|', gmx, 'rms',
-        #        '-s', self.input_gro_path,
-        #        '-f', self.input_trr_path,
-        #        '-o', self.output_xvg_path,
-        #        '-xvg', 'none']
 
         cmd = [gmx, 'rms', '-xvg', 'none',
                '-s', self.input_gro_path,
@@ -55,9 +50,12 @@ class Rms(object):
             cmd.insert(0, '-np')
         if self.mpirun:
             cmd.insert(0, 'mpirun')
-
-        cmd.append('<<<')
-        cmd.append("$'0\n0\n'")
+            cmd.append('<<<')
+            cmd.append("$'0\n0\n'")
+        else:
+            cmd.insert(0, '|')
+            cmd.insert(0, '0 0')
+            cmd.insert(0, 'echo')
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
         xvg = self.output_xvg_path if os.path.isfile(self.output_xvg_path) else ntpath.basename(self.output_xvg_path)

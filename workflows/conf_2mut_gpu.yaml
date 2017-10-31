@@ -61,12 +61,13 @@ minotauro:
   #   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
+##############################################################################
+
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
 input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala
 #input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile, A.Leu9Ile, A.Ser10Thr, A.Phe11Ile, A.Met12Leu, A.Gln13Arg, A.Gly14Ala, A.Tyr15Phe, A.Met16Leu, A.Lys17Arg, A.His18Asn, A.Ala19Ser, A.Thr20Ser, A.Lys21Arg, A.Thr22Ser, A.Ala23Ser, A.Lys24Arg, A.Asp25Glu, A.Ala26Ser, A.Leu27Ile, A.Ser28Ala, A.Ser29Ala, A.Val30Met
-
 
 # Max number of mutations
 # Available values None, Integer
@@ -101,6 +102,8 @@ step4_p2g:
     force_field: amber99sb-ildn
     # Should be set to False in next release
     ignh: True
+    mpirun: True
+    mpirun_np: 1
 
 # Step5: ec -- Define box dimensions
 step5_ec:
@@ -113,6 +116,8 @@ step5_ec:
     # Distance of the box from the outermost atom in nm. ie 1.0nm = 10 Ångströms
     distance_to_molecule: 1.0
     center_molecule: True
+    mpirun: True
+    mpirun_np: 1
 
 # Step6: sol -- Fill the box with water molecules
 step6_sol:
@@ -124,6 +129,8 @@ step6_sol:
   properties:
     output_top_path: sol.top
     input_solvent_gro_path: spc216.gro
+    mpirun: True
+    mpirun_np: 1
 
 # Step7: gppions -- Preprocessing: Add ions to neutralice the charge
 step7_gppions:
@@ -133,6 +140,8 @@ step7_gppions:
     output_tpr_path: gppions.tpr
     input_mdp_path: gmx_full_ions.mdp
   properties:
+    mpirun: True
+    mpirun_np: 1
 
 # Step8: gio -- Running: Add ions to neutralice the charge
 step8_gio:
@@ -148,6 +157,8 @@ step8_gio:
     concentration: 0.05
     replaced_group: SOL
     seed: 1993
+    mpirun: True
+    mpirun_np: 1
 
 # Step9: gppmin -- Preprocessing: Energy minimization
 step9_gppmin:
@@ -157,6 +168,8 @@ step9_gppmin:
     output_tpr_path: gppmin.tpr
     input_mdp_path: gmx_full_min.mdp
   properties:
+    mpirun: True
+    mpirun_np: 1
 
 # Step10: mdmin -- Running: Energy minimization
 step10_mdmin:
@@ -177,6 +190,8 @@ step11_gppnvt:
     output_tpr_path: gppnvt.tpr
     input_mdp_path: gmx_full_nvt.mdp
   properties:
+    mpirun: True
+    mpirun_np: 1
 
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
 step12_mdnvt:
@@ -199,6 +214,8 @@ step13_gppnpt:
     output_tpr_path: npt.tpr
     input_mdp_path: gmx_full_npt.mdp
   properties:
+    mpirun: True
+    mpirun_np: 1
 
 # Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
 step14_mdnpt:
@@ -221,6 +238,8 @@ step15_gppeq:
     output_tpr_path: gppeq.tpr
     input_mdp_path: gmx_full_md.mdp
   properties:
+    mpirun: True
+    mpirun_np: 1
 
 # Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration
 step16_mdeq:
@@ -240,6 +259,8 @@ step17_rmsd:
     input_trr_path: dependency/step16_mdeq/output_trr_path
     output_xvg_path: rmsd.xvg
   properties:
+    mpirun: True
+    mpirun_np: 1
 
 # Step18: gnuplot ----- Creating RMSD plot
 step18_gnuplot:

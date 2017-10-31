@@ -55,11 +55,6 @@ class Genion(object):
         # Unzip topology to topology_out
         fu.unzip_top(zip_file=self.input_top_zip_path, top_file=self.output_top_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
-        # cmd = ['echo', self.replaced_group, '|', gmx, 'genion',
-        #        '-s', self.input_tpr_path,
-        #        '-o', self.output_gro_path,
-        #        '-p', self.output_top_path]
-
         cmd = [gmx, 'genion',
                '-s', self.input_tpr_path,
                '-o', self.output_gro_path,
@@ -80,8 +75,13 @@ class Genion(object):
             cmd.append('-seed')
             cmd.append(str(self.seed))
 
-        cmd.append('<<<')
-        cmd.append(self.replaced_group)
+        if self.mpirun:
+            cmd.append('<<<')
+            cmd.append(self.replaced_group)
+        else:
+            cmd.insert(0, '|')
+            cmd.insert(0, self.replaced_group)
+            cmd.insert(0, 'echo')
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
 
