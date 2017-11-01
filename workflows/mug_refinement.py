@@ -112,22 +112,25 @@ def main():
 
     out_log.info('trjconv ------ Extract last snapshot')
     step17_path=opj(workflow_path,'step17_trjconv')
+    step17_index=opj(step17_path, 'step17_make_ndx.ndx')
+    step17_pdb=opj(step17_path, 'step17_trjconv.pdb')
     fu.create_dir(step17_path)
 
     #TODO: source of problems
     # should create a wrapper for the make_ndx tool and call it using subprocess
-    os.system('printf "\\"Protein\\" | \\"DNA\\" \nq\n" | '+prop['step16_mdeq']['gmx_path']+' make_ndx -f '+paths['step16_mdeq']['output_gro_path']+' > '+opj(step17_path, 'make_ndx.out')+' 2> '+ opj(step17_path, 'make_ndx.err'))
+    os.system('printf "\\"Protein\\" | \\"DNA\\" \nq\n" | '+prop['step16_mdeq']['gmx_path']+' make_ndx -f '+paths['step16_mdeq']['output_gro_path']+' -o '+step17_index+' > '+opj(step17_path, 'make_ndx.out')+' 2> '+ opj(step17_path, 'make_ndx.err'))
     cmd = ['echo', 'Protein_DNA', '|',
            prop['step16_mdeq']['gmx_path'], "trjconv",
            "-s", paths['step15_gppeq']['output_tpr_path'],
            "-f", paths['step16_mdeq']['output_trr_path'],
-           "-o", structure_pdb_path_out,
-           "-n", "index.ndx",
+           "-o", step17_pdb,
+           "-n", step17_index,
            "-dump", '1']
     step17_out_log, step17_err_log = fu.get_logs(path=step17_path, step='step17_trjconv')
     command = cmd_wrapper.CmdWrapper(cmd, step17_out_log, step17_err_log)
     command.launch()
-
+    shutil.copy(step17_pdb, structure_pdb_path_out)
+    
     elapsed_time = time.time() - start_time
     removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.ndx'])
     out_log.info('')
