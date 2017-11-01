@@ -37,11 +37,11 @@ def main():
 
     out_log.info('\n\n_______MUG REFINEMENT_______\n\n')
 
-    out_log.info('in ------- Get PDB structure')
+    out_log.info('in ----------- Get PDB structure')
     fu.create_dir(prop['step1_mmbpdb']['path'])
     shutil.copy(structure_pdb_path_in, paths['step1_mmbpdb']['output_pdb_path'])
 
-    out_log.info('sed ------ Replacing atom names')
+    out_log.info('sed ---------- Replacing atom names')
     sed_path = opj(workflow_path, 'step2_sed')
     fu.create_dir(sed_path)
     sed_pdb_path = opj(sed_path,'sed_replaced.pdb')
@@ -62,7 +62,7 @@ def main():
                     output_gro_path=paths['step4_p2g']['output_gro_path'],
                     output_top_zip_path=paths['step4_p2g']['output_top_zip_path']).launch()
 
-    out_log.info('editconf ------- Define box dimensions')
+    out_log.info('editconf ----- Define box dimensions')
     fu.create_dir(prop['step5_ec']['path'])
     editconf.Editconf(properties=prop['step5_ec'], **paths['step5_ec']).launch()
 
@@ -74,7 +74,7 @@ def main():
     fu.create_dir(prop['step7_gppions']['path'])
     grompp.Grompp(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
 
-    out_log.info('genion ------ Running: Add ions to neutralice the charge')
+    out_log.info('genion ------- Running: Add ions to neutralice the charge')
     fu.create_dir(prop['step8_gio']['path'])
     genion.Genion(properties=prop['step8_gio'], **paths['step8_gio']).launch()
 
@@ -110,7 +110,7 @@ def main():
     fu.create_dir(prop['step16_mdeq']['path'])
     mdrun.Mdrun(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
 
-    out_log.info('trjconv -- Extract last snapshot')
+    out_log.info('trjconv ------ Extract last snapshot')
     step17_path=opj(workflow_path,'step17_trjconv')
     fu.create_dir(step17_path)
 
@@ -120,7 +120,7 @@ def main():
     cmd = ['echo', 'Protein_DNA', '|',
            prop['step16_mdeq']['gmx_path'], "trjconv",
            "-s", paths['step15_gppeq']['output_tpr_path'],
-           "-f", prop['step16_mdeq']['output_xtc_path'],
+           "-f", paths['step16_mdeq']['output_trr_path'],
            "-o", structure_pdb_path_out,
            "-n", "index.ndx",
            "-dump", '1']
@@ -129,7 +129,7 @@ def main():
     command.launch()
 
     elapsed_time = time.time() - start_time
-    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp'])
+    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.ndx'])
     out_log.info('')
     out_log.info('Removing unwanted files: ')
     for removed_file in removed_list:
