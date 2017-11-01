@@ -48,7 +48,7 @@ def main():
     shutil.copy(paths['step1_mmbpdb']['output_pdb_path'], sed_pdb_path)
     cmd = ['sed', '-i', "'s/  O1P  /  OP1  /g'", sed_pdb_path]
     sed1_out_log, sed1_err_log = fu.get_logs(path=sed_path, step='step2_sed1')
-    command = cmd_wrapper.CmdWrapper(cmd, sed1_out_log, sed1_err_log))
+    command = cmd_wrapper.CmdWrapper(cmd, sed1_out_log, sed1_err_log)
     command.launch()
     cmd = ['sed', '-i', "'s/  O2P  /  OP2  /g'", sed_pdb_path]
     sed2_out_log, sed2_err_log = fu.get_logs(path=sed_path, step='step2_sed2')
