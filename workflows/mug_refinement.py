@@ -59,8 +59,8 @@ def main():
     fu.create_dir(prop['step4_p2g']['path'])
     pdb2gmx.Pdb2gmx(properties=prop['step4_p2g'],
                     input_structure_pdb_path=sed_pdb_path,
-                    output_gro_path=paths['step4_p2g'][output_gro_path],
-                    output_top_zip_path=paths['step4_p2g'][output_top_zip_path]).launch()
+                    output_gro_path=paths['step4_p2g']['output_gro_path'],
+                    output_top_zip_path=paths['step4_p2g']['output_top_zip_path']).launch()
 
     out_log.info('editconf ------- Define box dimensions')
     fu.create_dir(prop['step5_ec']['path'])
