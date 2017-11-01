@@ -25,7 +25,7 @@ import gromacs_wrapper.rms as rms
 def main():
     start_time = time.time()
     structure_pdb_path_in=sys.argv[1]
-    structure_pdb_path_out=sys.argv[2]
+    structure_pdb_path_out=os.path.abspath(sys.argv[2])
     yaml_path='/home/user/pymdsetup/workflows/conf/conf_mug_refinement.yaml'
     system='pymd001_vms2'
     conf = settings.YamlReader(yaml_path, system)
@@ -139,6 +139,7 @@ def main():
         out_log.info('    X    ' + removed_file)
 
     out_log.info('\n\nExecution sucessful: ')
+    out_log.info('  Output_pdb_path: ' + structure_pdb_path_out)
     out_log.info('  Workflow_path: ' + workflow_path)
     out_log.info('  Config File: ' + yaml_path)
     out_log.info('  System: ' + system)
