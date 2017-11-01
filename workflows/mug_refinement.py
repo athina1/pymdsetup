@@ -38,7 +38,7 @@ def main():
     out_log.info('\n\n_______MUG REFINEMENT_______\n\n')
 
     out_log.info('in ------- Get PDB structure')
-    fu.create_dir(prop_glob['step1_mmbpdb']['path'])
+    fu.create_dir(prop['step1_mmbpdb']['path'])
     shutil.copy(structure_pdb_path_in, paths['step1_mmbpdb']['output_pdb_path'])
 
     out_log.info('sed ------ Replacing atom names')
