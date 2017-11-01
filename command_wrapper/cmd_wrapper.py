@@ -20,13 +20,10 @@ class CmdWrapper(object):
         if self.out_log is None:
             print ''
             print "cmd_wrapper commnand print: " + cmd
-        print "cmd_wrapper commnand print: " + cmd
         new_env = os.environ.copy()
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, shell=True,
                                    env=new_env)
-        # process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-        #                            stderr=subprocess.PIPE, shell=True)
 
         out, err = process.communicate()
         if self.out_log is None:
