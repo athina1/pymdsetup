@@ -47,10 +47,12 @@ def main():
     sed_pdb_path = opj(sed_path,'sed_replaced.pdb')
     shutil.copy(paths['step1_mmbpdb']['output_pdb_path'], sed_pdb_path)
     cmd = ['sed', '-i', "'s/  O1P  /  OP1  /g'", sed_pdb_path]
-    command = cmd_wrapper.CmdWrapper(cmd, opj(sed_path,'sed1.log'), opj(sed_path,'sed1.err'))
+    sed1_out_log, sed1_err_log = fu.get_logs(path=sed_path, step='step2_sed1')
+    command = cmd_wrapper.CmdWrapper(cmd, sed1_out_log, sed1_err_log))
     command.launch()
     cmd = ['sed', '-i', "'s/  O2P  /  OP2  /g'", sed_pdb_path]
-    command = cmd_wrapper.CmdWrapper(cmd, opj(sed_path,'sed2.log'), opj(sed_path,'sed2.err'))
+    sed2_out_log, sed2_err_log = fu.get_logs(path=sed_path, step='step2_sed2')
+    command = cmd_wrapper.CmdWrapper(cmd, sed2_out_log, sed2_err_log)
     command.launch()
 
     out_log.info('pdb2gmx ------ Create gromacs topology')
@@ -122,8 +124,8 @@ def main():
            "-o", structure_pdb_path_out,
            "-n", "index.ndx",
            "-dump", '1']
-
-    command = cmd_wrapper.CmdWrapper(cmd, 'trjconv.out', 'trjconv.err')
+    step17_out_log, step17_err_log = fu.get_logs(path=step17_path, step='step17_trjconv')
+    command = cmd_wrapper.CmdWrapper(cmd, step17_out_log, step17_err_log)
     command.launch()
 
     elapsed_time = time.time() - start_time
