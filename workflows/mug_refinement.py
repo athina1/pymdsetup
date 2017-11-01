@@ -118,9 +118,9 @@ def main():
     # should create a wrapper for the make_ndx tool and call it using subprocess
     os.system('printf "\\"Protein\\" | \\"DNA\\" \nq\n" | '+prop['step16_mdeq']['gmx_path']+' make_ndx -f '+paths['step16_mdeq']['output_gro_path']+' > '+opj(step17_path, 'make_ndx.out')+' 2> '+ opj(step17_path, 'make_ndx.err'))
     cmd = ['echo', 'Protein_DNA', '|',
-           gmx_path, "trjconv",
-           "-s", p_gppeq.tpr,
-           "-f", p_mdeq.xtc,
+           prop['step16_mdeq']['gmx_path'], "trjconv",
+           "-s", paths['step15_gppeq']['output_tpr_path'],
+           "-f", prop['step16_mdeq']['output_xtc_path'],
            "-o", structure_pdb_path_out,
            "-n", "index.ndx",
            "-dump", '1']
