@@ -91,12 +91,6 @@ step1_mmbpdb:
   properties:
     pdb_code: 2JQ3
 
-# Step3: scw -- Model mutation
-step3_scw:
-  paths:
-    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
-    output_pdb_path: mutated.pdb
-
 # Step4: p2g -- Create gromacs topology
 step4_p2g:
   paths:
