@@ -27,7 +27,7 @@ def main():
     structure_pdb_path_in=os.path.abspath(sys.argv[1])
     structure_pdb_path_out=os.path.abspath(sys.argv[2])
     yaml_path='/home/user/pymdsetup/workflows/conf/conf_mug_refinement.yaml'
-    system='pymd001_vms2'
+    system='mug_pymdsetup'
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
@@ -121,7 +121,7 @@ def main():
 
     #TODO: source of problems
     # should create a wrapper for the make_ndx tool and call it using subprocess
-    os.system('printf "\\"Protein\\" | \\"DNA\\" \nq\n" | '+prop['step16_mdeq']['gmx_path']+' make_ndx -f '+paths['step16_mdeq']['output_gro_path']+' -o '+step17_index+' > '+opj(step17_path, 'make_ndx.out')+' 2> '+ opj(step17_path, 'make_ndx.err'))
+    os.system('printf "! \\"Water_and_ions\\" \nq\n" | '+prop['step16_mdeq']['gmx_path']+' make_ndx -f '+paths['step16_mdeq']['output_gro_path']+' -o '+step17_index+' > '+opj(step17_path, 'make_ndx.out')+' 2> '+ opj(step17_path, 'make_ndx.err'))
     cmd = ['echo', 'Protein_DNA', '|',
            prop['step16_mdeq']['gmx_path'], "trjconv",
            "-s", paths['step15_gppeq']['output_tpr_path'],

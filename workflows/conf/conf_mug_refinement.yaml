@@ -1,7 +1,7 @@
 ######################## pymdsetup configuration file ########################
 
 ########################## System dependent paths ############################
-pymd001_vms2:
+mug_pymdsetup:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/user/scwrl4/Scwrl4
   workflow_path: /tmp/testworkflow
