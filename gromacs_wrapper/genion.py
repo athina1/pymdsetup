@@ -45,10 +45,16 @@ class Genion(object):
         self.path = properties.get('path','')
         self.mpirun = properties.get('mpirun', False)
         self.mpirun_np = properties.get('mpirun_np', None)
+        self.global_log= properties.get('global_log', None)
 
     def launch(self):
         """Launches the execution of the GROMACS genion module.
         """
+        if self.global_log is not None:
+            if self.neutral:
+                self.global_log.info('      To neutralize the system charge')
+            elif self.concentration:
+                self.global_log.info('      To reach up '+str(self.concentration)+' mol/litre concentration')
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         self.output_top_path = self.output_top_path if self.step is None else self.step+'_'+self.output_top_path
         self.output_top_path = self.output_top_path if self.mutation is None else self.mutation+'_'+self.output_top_path

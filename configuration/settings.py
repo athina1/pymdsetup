@@ -27,7 +27,7 @@ class YamlReader(object):
         with open(self.yaml_path, 'r') as stream:
             return yaml.load(stream)
 
-    def get_prop_dic(self, mutation=None):
+    def get_prop_dic(self, mutation=None, global_log=None):
         if mutation is None:
             mutation = ''
         prop_dic = dict()
@@ -38,7 +38,8 @@ class YamlReader(object):
                 if 'paths' in self.properties[key] or 'properties' in self.properties[key]:
                     prop_dic[key]={'path': opj(self.properties[self.system]['workflow_path'], mutation, key)}
                     prop_dic[key]['step']= key
-                    prop_dic[key]['mutation']=mutation
+                    prop_dic[key]['mutation']= mutation
+                    prop_dic[key]['global_log']= global_log
                     prop_dic[key].update(self.properties[self.system].copy())
                 if 'properties' in self.properties[key] and isinstance(self.properties[key]['properties'], dict):
                     prop_dic[key].update(self.properties[key]['properties'].copy())

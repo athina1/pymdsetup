@@ -33,7 +33,7 @@ def main():
     fu.create_dir(os.path.abspath(workflow_path))
     out_log, err_log = fu.get_logs(path=workflow_path, console=True)
     paths = conf.get_paths_dic()
-    prop = conf.get_prop_dic()
+    prop = conf.get_prop_dic(global_log=out_log)
     #TODO: Source of problems
     #Change directories always creates problems
     os.chdir(workflow_path)
@@ -73,7 +73,7 @@ def main():
     fu.create_dir(prop['step6_sol']['path'])
     solvate.Solvate(properties=prop['step6_sol'], **paths['step6_sol']).launch()
 
-    out_log.info('grompp_ions -- Preprocessing: Add ions to neutralice the charge')
+    out_log.info('grompp_ions -- Preprocessing: Add ions to neutralize the charge')
     fu.create_dir(prop['step7_gppions']['path'])
     grompp.Grompp(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
 

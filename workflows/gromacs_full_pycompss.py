@@ -67,6 +67,7 @@ def main():
         paths = conf.get_paths_dic(mut)
         prop = conf.get_prop_dic(mut)
 
+
         out_log.info('')
         out_log.info('-------------------------')
         out_log.info(str(mutations_counter) + '/' + str(mutations_limit) + ' ' + mut)
@@ -90,11 +91,11 @@ def main():
         fu.create_dir(prop['step6_sol']['path'])
         solvate_pc(properties=prop['step6_sol'], **paths['step6_sol'])
 
-        out_log.info('step7:  gppions -- Preprocessing: Add ions to neutralice the charge')
+        out_log.info('step7:  gppions -- Preprocessing: Adding monoatomic ions')
         fu.create_dir(prop['step7_gppions']['path'])
         grompp_pc(properties=prop['step7_gppions'], **paths['step7_gppions'])
 
-        out_log.info('step8:  gio ------ Running: Add ions to neutralice the charge')
+        out_log.info('step8:  gio ------ Running: Adding monoatomic ions')
         fu.create_dir(prop['step8_gio']['path'])
         genion_pc(properties=prop['step8_gio'], **paths['step8_gio'])
 

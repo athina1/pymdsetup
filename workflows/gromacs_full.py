@@ -60,7 +60,7 @@ def main():
         if mutations_counter == mutations_limit: break
         mutations_counter += 1
         paths = conf.get_paths_dic(mut)
-        prop = conf.get_prop_dic(mut)
+        prop = conf.get_prop_dic(mut, global_log=out_log)
 
         out_log.info('')
         out_log.info('-------------------------')
