@@ -52,9 +52,9 @@ class Genion(object):
         """
         if self.global_log is not None:
             if self.neutral:
-                self.global_log.info('      To neutralize the system charge')
+                self.global_log.info(19*' '+'To neutralize the system charge')
             elif self.concentration:
-                self.global_log.info('      To reach up '+str(self.concentration)+' mol/litre concentration')
+                self.global_log.info(19*' '+'To reach up '+str(self.concentration)+' mol/litre concentration')
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         self.output_top_path = self.output_top_path if self.step is None else self.step+'_'+self.output_top_path
         self.output_top_path = self.output_top_path if self.mutation is None else self.mutation+'_'+self.output_top_path

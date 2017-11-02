@@ -100,7 +100,7 @@ step1_mmbpdb:
   paths:
     output_pdb_path: structure.pdb
   properties:
-    pdb_code: 2JQ3
+    pdb_code:
 
 # Step3: scw -- Model mutation
 step3_scw:

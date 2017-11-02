@@ -73,11 +73,11 @@ def main():
     fu.create_dir(prop['step6_sol']['path'])
     solvate.Solvate(properties=prop['step6_sol'], **paths['step6_sol']).launch()
 
-    out_log.info('grompp_ions -- Preprocessing: Add ions to neutralize the charge')
+    out_log.info('grompp_ions -- Preprocessing: Adding monoatomic ions')
     fu.create_dir(prop['step7_gppions']['path'])
     grompp.Grompp(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
 
-    out_log.info('genion ------- Running: Add ions to neutralice the charge')
+    out_log.info('genion ------- Running: Adding monoatomic ions')
     fu.create_dir(prop['step8_gio']['path'])
     genion.Genion(properties=prop['step8_gio'], **paths['step8_gio']).launch()
 
