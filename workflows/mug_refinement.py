@@ -24,7 +24,7 @@ import gromacs_wrapper.rms as rms
 
 def main():
     start_time = time.time()
-    structure_pdb_path_in=sys.argv[1]
+    structure_pdb_path_in=os.path.abspath(sys.argv[1])
     structure_pdb_path_out=os.path.abspath(sys.argv[2])
     yaml_path='/home/user/pymdsetup/workflows/conf/conf_mug_refinement.yaml'
     system='pymd001_vms2'
@@ -34,6 +34,9 @@ def main():
     out_log, err_log = fu.get_logs(path=workflow_path, console=True)
     paths = conf.get_paths_dic()
     prop = conf.get_prop_dic()
+    #TODO: Source of problems
+    #Change directories always creates problems
+    os.chdir(workflow_path)
 
     out_log.info('\n\n_______MUG REFINEMENT_______\n\n')
 
@@ -129,10 +132,10 @@ def main():
     step17_out_log, step17_err_log = fu.get_logs(path=step17_path, step='step17_trjconv')
     command = cmd_wrapper.CmdWrapper(cmd, step17_out_log, step17_err_log)
     command.launch()
-    shutil.copy(step17_pdb, structure_pdb_path_out)
-    
+
     elapsed_time = time.time() - start_time
     removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.ndx'])
+    shutil.copy(step17_pdb, structure_pdb_path_out)
     out_log.info('')
     out_log.info('Removing unwanted files: ')
     for removed_file in removed_list:
