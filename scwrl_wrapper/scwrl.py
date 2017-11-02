@@ -22,7 +22,7 @@ class Scwrl4(object):
             properties=json.loads(properties)
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
-        pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
+        pattern = re.compile(("(?P<chain>[a-zA-Z]*[*]?{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(properties['mutation']).groupdict()
         self.scwrl4_path = properties.get('scwrl4_path',None)
         self.path = properties.get('path','')
@@ -40,25 +40,31 @@ class Scwrl4(object):
             st = parser.get_structure('s', self.input_pdb_path)  # s random id never used
 
             # Remove the side chain of the AA to be mutated
-            chain = self.mutation['chain']
+            if self.mutation['chain']!='*':
+                chains = [self.mutation['chain']]
+            else:
+                chains = [chain.id for chain in st[0]]
+                
             resnum = int(self.mutation['resnum'])
-            residue = st[0][chain][(' ', resnum, ' ')]
-            backbone_atoms = ['N', 'CA', 'C', 'O', 'CB']
-            not_backbone_atoms = []
 
-            # The following formula does not work. Biopython bug?
-            # for atom in residue:
-            #     if atom.id not in backbone_atoms:
-            #         residue.detach_child(atom.id)
+            for chain in chains:
+                residue = st[0][chain][(' ', resnum, ' ')]
+                backbone_atoms = ['N', 'CA', 'C', 'O', 'CB']
+                not_backbone_atoms = []
 
-            for atom in residue:
-                if atom.id not in backbone_atoms:
-                    not_backbone_atoms.append(atom)
-            for atom in not_backbone_atoms:
-                residue.detach_child(atom.id)
+                # The following formula does not work. Biopython bug?
+                # for atom in residue:
+                #     if atom.id not in backbone_atoms:
+                #         residue.detach_child(atom.id)
 
-            # Change residue name
-            residue.resname = self.mutation['mt'].upper()
+                for atom in residue:
+                    if atom.id not in backbone_atoms:
+                        not_backbone_atoms.append(atom)
+                for atom in not_backbone_atoms:
+                    residue.detach_child(atom.id)
+
+                # Change residue name
+                residue.resname = self.mutation['mt'].upper()
 
             # Write resultant structure
             w = PDBIO()
