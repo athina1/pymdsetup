@@ -22,7 +22,7 @@ class Scwrl4(object):
             properties=json.loads(properties)
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
-        pattern = re.compile(("(?P<chain>[a-zA-Z]*[*]?{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
+        pattern = re.compile(("(?P<chain>[a-zA-Z*]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(properties['mutation']).groupdict()
         self.scwrl4_path = properties.get('scwrl4_path',None)
         self.path = properties.get('path','')
@@ -44,7 +44,7 @@ class Scwrl4(object):
                 chains = [self.mutation['chain']]
             else:
                 chains = [chain.id for chain in st[0]]
-                
+
             resnum = int(self.mutation['resnum'])
 
             for chain in chains:

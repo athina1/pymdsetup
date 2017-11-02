@@ -9,7 +9,7 @@ linux:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  initial_structure_pdb_path: /home/pau/Desktop/2VGB.WT.pdb
 
 macos:
   gmx_path: /usr/local/bin/gmx
@@ -87,7 +87,7 @@ mug_pymdsetup:
 # List of coma separated mutations (if this field is empty
 # pdb_code field will be used to download the list).
 # Format example:  A.Lys58Glu, A.Thr74Ala
-input_mapped_mutations_list: A.Gly411Ser, A.Gly411Arg
+input_mapped_mutations_list: "*.Gly411Ser, *.Gly411Arg"
 #input_mapped_mutations_list: A.Lys58Glu, A.Thr74Ala, A.Ser1Thr, A.Glu2Asp, A.Ala3Val, A.Glu4Asp, A.Asp5Glu, A.Ala6Val, A.Ser7Thr, A.Leu8Ile
 
 # Max number of mutations
