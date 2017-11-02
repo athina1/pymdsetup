@@ -19,7 +19,7 @@ macos:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  initial_structure_pdb_path: /Users/pau/Desktop/2VGB.WT.pdb
 
 virtualbox:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -29,7 +29,7 @@ virtualbox:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  initial_structure_pdb_path: /home/compss/2VGB.WT.pdb
 
 open_nebula:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -39,7 +39,7 @@ open_nebula:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/user/structure.pdb
+  initial_structure_pdb_path: /home/user/2VGB.WT.pdb
 
 mare_nostrum:
   gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
@@ -49,7 +49,7 @@ mare_nostrum:
   gnuplot_path: gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/2VGB.WT.pdb
 
 minotauro:
   gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
@@ -59,7 +59,7 @@ minotauro:
   gnuplot_path: /gpfs/apps/NVIDIA/GNUPLOT/4.6.3/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   #   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/2VGB.WT.pdb
 
 archer:
   gmx_path: gmx
@@ -69,7 +69,7 @@ archer:
   gnuplot_path: gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/d118/d118/andrio/structure.pdb
+  initial_structure_pdb_path: /home/d118/d118/andrio/2VGB.WT.pdb
 
 mug_pymdsetup:
   gmx_path: /usr/local/gromacs/bin/gmx

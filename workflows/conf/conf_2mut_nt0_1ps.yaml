@@ -19,7 +19,7 @@ macos:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  initial_structure_pdb_path: /Users/pau/Desktop/structure.pdb
 
 virtualbox:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -29,7 +29,7 @@ virtualbox:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
+  initial_structure_pdb_path: /home/compss/structure.pdb
 
 open_nebula:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -80,7 +80,7 @@ mug_pymdsetup:
   scwrl4_path: /home/user/scwrl4/Scwrl4
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /orozco/homes/pluto/ljorda/public_html/2VGB.WT.pdb
+  initial_structure_pdb_path: /home/user/structure.pdb
 
 ##############################################################################
 
