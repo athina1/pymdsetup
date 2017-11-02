@@ -77,6 +77,7 @@ mug_pymdsetup:
   workflow_path: /tmp/testworkflow
   mdp_path: /home/user/pymdsetup/workflows/mdp/
   gnuplot_path: /usr/bin/gnuplot
+  scwrl4_path: /home/user/scwrl4/Scwrl4
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /orozco/homes/pluto/ljorda/public_html/2VGB.WT.pdb
@@ -100,6 +101,12 @@ step1_mmbpdb:
     output_pdb_path: structure.pdb
   properties:
     pdb_code: 2JQ3
+
+# Step3: scw -- Model mutation
+step3_scw:
+  paths:
+    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
+    output_pdb_path: mutated.pdb
 
 # Step4: p2g -- Create gromacs topology
 step4_p2g:
