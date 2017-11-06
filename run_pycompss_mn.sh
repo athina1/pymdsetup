@@ -1,7 +1,4 @@
 #!/bin/bash
-module purge
-module load COMPSs/2.2
-module unload PYTHON
 
 enqueue_compss \
   --job_dependency=$1 \

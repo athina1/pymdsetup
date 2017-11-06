@@ -164,7 +164,7 @@ def main():
 #Minotauro
 #computing_units = "0"
 #MareNostrum4
-#computing_units = "48"
+computing_units = "48"
 
 
 @task(returns=dict)
@@ -199,12 +199,12 @@ def grompp_pc(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_pat
 def genion_pc(input_tpr_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs):
     genion.Genion(input_tpr_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs).launch()
 
-#@constraint(ComputingUnits=computing_units)
+@constraint(ComputingUnits=computing_units)
 @task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT, output_cpt_path=FILE_OUT)
 def mdrun_pc_cpt(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs):
     mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs).launch()
 
-#@constraint(ComputingUnits=computing_units)
+@constraint(ComputingUnits=computing_units)
 @task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT)
 def mdrun_pc(input_tpr_path, output_trr_path, output_gro_path, properties, **kwargs):
     mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, **kwargs).launch()
