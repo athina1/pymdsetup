@@ -1,6 +1,6 @@
 #!/bin/bash
 module purge
-module load COMPSs/2.1.rc1709
+module load COMPSs/2.2
 module unload PYTHON
 module load K80 intel/15.0.0 impi/5.1.3.181 cuda/7.5 mkl/11.2 GROMACS/5.1.2
 

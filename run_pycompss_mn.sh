@@ -1,9 +1,13 @@
 #!/bin/bash
+module purge
+module load COMPSs/2.2
+module unload PYTHON
 
 enqueue_compss \
   --job_dependency=$1 \
   --exec_time=$2 \
   --num_nodes=$3 \
+  --max_tasks_per_node=1 \
   --qos=bsc_ls \
   --worker_working_dir=gpfs \
   --network=infiniband \
