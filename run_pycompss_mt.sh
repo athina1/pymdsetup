@@ -22,5 +22,4 @@ enqueue_compss \
   --graph=$5 \
   --log_level=off \
 /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $6 $7 $3 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
-
 #/gpfs/home/bsc23/bsc23210/pymdsetup/run_pycompss_mt.sh None 20 3 false false /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/conf_2mut_gpu_test.yaml minotauro
