@@ -52,7 +52,7 @@ mare_nostrum:
   initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
 
 minotauro:
-  gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
+  gmx_path: gmx_mpi
   scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
   workflow_path: /gpfs/home/bsc23/bsc23210/pymdsetup/gpu_2mut_10ns
   mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
