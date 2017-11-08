@@ -5,6 +5,7 @@ sudo pip install numpy biopython pyyaml requests nose
 #Clone the project
 #git clone http://mmb.pcb.ub.es/gitlab/BioExcel/pymdsetup.git
 git clone https://github.com/bioexcel/pymdsetup.git
+echo "export PYTHONPATH=~/pymdsetup:\$PYTHONPATH" >> ~/.bashrc
 
 # Register in http://dunbrack.fccc.edu/scwrl4/license/index.html and download
 # the "install_Scwrl4_Linux" executable
@@ -25,4 +26,5 @@ make
 make check
 sudo make install
 source /usr/local/gromacs/bin/GMXRC
-echo "bash /usr/local/gromacs/bin/GMXRC" >> ~/.bashrc
+echo "source /usr/local/gromacs/bin/GMXRC" >> ~/.bashrc
+source ~/.bashrc
