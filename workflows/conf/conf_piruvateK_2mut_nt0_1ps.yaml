@@ -82,6 +82,14 @@ mug_pymdsetup:
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /orozco/homes/pluto/ljorda/public_html/2VGB.WT.pdb
 
+pmes:
+  gmx_path: /usr/local/gromacs/bin/gmx
+  scwrl4_path: /home/pmes/scwrl4/Scwrl4
+  workflow_path: /home/pmes/pymdsetup/testworkflow
+  mdp_path: /home/pmes/pymdsetup/workflows/mdp
+  gnuplot_path: /usr/bin/gnuplot
+  initial_structure_pdb_path: /home/pmes/2jq3.pdb
+
 ##############################################################################
 
 # List of coma separated mutations (if this field is empty
