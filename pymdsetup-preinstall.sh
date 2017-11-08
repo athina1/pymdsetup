@@ -1,9 +1,10 @@
 sudo apt-get -y install git vim htop cmake gnuplot
-pip install --upgrade pip
+sudo pip install --upgrade pip
 sudo pip install numpy biopython pyyaml requests nose
 
 #Clone the project
-git clone http://mmb.pcb.ub.es/gitlab/BioExcel/pymdsetup.git
+#git clone http://mmb.pcb.ub.es/gitlab/BioExcel/pymdsetup.git
+git clone https://github.com/bioexcel/pymdsetup.git
 
 # Register in http://dunbrack.fccc.edu/scwrl4/license/index.html and download
 # the "install_Scwrl4_Linux" executable
