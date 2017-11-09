@@ -25,7 +25,7 @@ class YamlReader(object):
 
     def _read_yaml(self):
         with open(self.yaml_path, 'r') as stream:
-            return yaml.load(stream)
+            return yaml.safe_load(stream)
 
     def get_prop_dic(self, mutation=None, global_log=None):
         if mutation is None:
