@@ -75,6 +75,7 @@ def main():
     step, system = step.split(':')
     prop = settings.YamlReader(prop, system).get_prop_dic()[step]
     prop['path']=''
+    # Where is input_mdp_path???
     Grompp(input_gro_path = sys.argv[1],
               input_top_zip_path = sys.argv[2],
               output_tpr_path = sys.argv[3],
