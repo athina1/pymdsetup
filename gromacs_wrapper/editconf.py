@@ -43,7 +43,7 @@ class Editconf(object):
                '-o', self.output_gro_path,
                '-d', str(self.distance_to_molecule),
                '-bt', self.box_type]
-               
+       
         if self.mpirun_np is not None:
             cmd.insert(0, str(self.mpirun_np))
             cmd.insert(0, '-np')
