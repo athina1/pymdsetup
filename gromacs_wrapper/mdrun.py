@@ -1,10 +1,8 @@
 """Python wrapper for the GROMACS mdrun module
 """
-import os
 import sys
 import json
 import configuration.settings as settings
-from os.path import join as opj
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
 

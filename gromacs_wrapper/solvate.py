@@ -1,13 +1,9 @@
 """Python wrapper module for the GROMACS solvate module
 """
-import os
 import sys
 import json
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
-from tools import file_utils as fu
-from os.path import join as opj
-from tools import file_utils as fu
 
 class Solvate(object):
     """Wrapper for the 5.1.2 version of the GROMACS solvate module

@@ -2,7 +2,6 @@
 """
 import sys
 import re
-import os
 import json
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO

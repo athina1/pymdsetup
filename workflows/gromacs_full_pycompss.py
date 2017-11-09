@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import shutil
 from os.path import join as opj
 import tools.file_utils as fu
 import configuration.settings as settings
@@ -16,21 +15,19 @@ import mmb_api.pdb as pdb
 import mmb_api.uniprot as uniprot
 import gromacs_wrapper.rms as rms
 import gnuplot_wrapper.gnuplot as gnuplot
-from command_wrapper import cmd_wrapper
 from pycompss.api.parameter import *
 from pycompss.api.task import task
 from pycompss.api.constraint import constraint
 
 def main():
-    from pycompss.api.api import barrier
-    from pycompss.api.api import compss_wait_on, compss_open
+    from pycompss.api.api import compss_open
     start_time = time.time()
     yaml_path=sys.argv[1]
     system=sys.argv[2]
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
-    out_log, err_log = fu.get_logs(path=workflow_path, console=True)
+    out_log, _ = fu.get_logs(path=workflow_path, console=True)
     paths_glob = conf.get_paths_dic()
     prop_glob = conf.get_prop_dic()
 

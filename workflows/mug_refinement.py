@@ -17,10 +17,6 @@ import gromacs_wrapper.solvate as solvate
 import gromacs_wrapper.editconf as editconf
 import gromacs_wrapper.genion as genion
 import gromacs_wrapper.mdrun as mdrun
-import mmb_api.pdb as pdb
-import mmb_api.uniprot as uniprot
-import gromacs_wrapper.rms as rms
-
 
 def main():
     start_time = time.time()
@@ -31,7 +27,7 @@ def main():
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
-    out_log, err_log = fu.get_logs(path=workflow_path, console=True)
+    out_log, _ = fu.get_logs(path=workflow_path, console=True)
     paths = conf.get_paths_dic()
     prop = conf.get_prop_dic(global_log=out_log)
     #TODO: Source of problems

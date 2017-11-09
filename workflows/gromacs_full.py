@@ -1,8 +1,6 @@
 import os
 import sys
 import time
-import shutil
-from os.path import join as opj
 import tools.file_utils as fu
 import configuration.settings as settings
 import gromacs_wrapper.pdb2gmx as pdb2gmx
@@ -25,7 +23,7 @@ def main():
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
-    out_log, err_log = fu.get_logs(path=workflow_path, console=True)
+    out_log, _ = fu.get_logs(path=workflow_path, console=True)
     paths_glob = conf.get_paths_dic()
     prop_glob = conf.get_prop_dic()
 

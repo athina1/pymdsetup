@@ -4,7 +4,6 @@ import os
 import sys
 import json
 import numpy as np
-from os.path import join as opj
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
@@ -64,7 +63,7 @@ class Gnuplot(object):
             out_log.info('Removing file: '+os.path.abspath(f))
             os.unlink(os.path.abspath(f))
         return returncode
-        
+
 #Creating a main function to be compatible with CWL
 def main():
     step=sys.argv[3]

@@ -6,7 +6,6 @@ import shutil
 from os.path import join as opj
 from configuration import settings
 from tools import file_utils as fu
-import json
 def test_setup(test_object, dict_key):
     test_object.test_dir = test_object.__class__.__name__
     fu.create_dir(test_object.test_dir)

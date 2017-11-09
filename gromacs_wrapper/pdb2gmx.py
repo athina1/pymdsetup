@@ -1,12 +1,10 @@
 """Python wrapper module for the GROMACS pdb2gmx module
 """
-import os
 import sys
 import json
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
-from os.path import join as opj
 
 class Pdb2gmx(object):
     """Wrapper class for the 5.1.2 version of the GROMACS pdb2gmx module.

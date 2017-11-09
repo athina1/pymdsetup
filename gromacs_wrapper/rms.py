@@ -57,7 +57,7 @@ class Rms(object):
             cmd.insert(0, '0 0')
             cmd.insert(0, 'echo')
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
-        returncode = command.launch()
+        command.launch()
         xvg = self.output_xvg_path if os.path.isfile(self.output_xvg_path) else ntpath.basename(self.output_xvg_path)
         self.mutation = '' if self.mutation is None else self.mutation
         return {self.mutation: np.loadtxt(xvg)}
