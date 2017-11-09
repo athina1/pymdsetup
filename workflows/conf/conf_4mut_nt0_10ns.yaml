@@ -44,7 +44,7 @@ open_nebula:
 mare_nostrum:
   gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
   scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
-  workflow_path: /gpfs/scratch/bsc23/bsc23210/mn4+1/test_4mut_10ns
+  workflow_path: /gpfs/scratch/bsc23/bsc23210/test_4mut_10ns
   mdp_path: /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/mdp/
   gnuplot_path: gnuplot
   # Path to the initial pdb structure (if this field is empty
