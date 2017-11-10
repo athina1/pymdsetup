@@ -20,8 +20,8 @@ class Mdrun(object):
         output_cpt_path (str): Path to the output GROMACS checkpoint file CPT.
     """
 
-    def __init__(self, input_tpr_path, output_trr_path, output_gro_path,
-                 properties, output_cpt_path=None, **kwargs):
+    def __init__(self, input_tpr_path, output_gro_path, properties,
+                 output_trr_path=None, output_cpt_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_tpr_path = input_tpr_path
@@ -47,9 +47,12 @@ class Mdrun(object):
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'mdrun', '-s', self.input_tpr_path,
-               '-o', self.output_trr_path, '-c', self.output_gro_path,
+               '-c', self.output_gro_path,
                '-g', 'md.log']
 
+        if self.output_trr_path is not None:
+            cmd.append('-o')
+            cmd.append(self.output_trr_path)
         if self.mpirun_np is not None:
             cmd.insert(0, str(self.mpirun_np))
             cmd.insert(0, '-np')
