@@ -64,11 +64,11 @@ def main():
     fu.create_dir(prop['step7_gppmin']['path'])
     grompp.Grompp(properties=prop['step7_gppmin'], **paths['step7_gppmin']).launch()
 
-    out_log.info('step8: mdmin ---- Running: Energy minimization')
+    out_log.info('step8:  mdmin ---- Running: Energy minimization')
     fu.create_dir(prop['step8_mdmin']['path'])
     mdrun.Mdrun(properties=prop['step8_mdmin'], **paths['step8_mdmin']).launch()
 
-    out_log.info('step9: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
+    out_log.info('step9:  gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
     fu.create_dir(prop['step9_gppnvt']['path'])
     grompp.Grompp(properties=prop['step9_gppnvt'], **paths['step9_gppnvt']).launch()
 
