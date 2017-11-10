@@ -159,7 +159,7 @@ step13_gppeq:
     input_top_zip_path: dependency/step6_gio/output_top_zip_path
     input_cpt_path: dependency/step12_mdnpt/output_cpt_path
     output_tpr_path: gppeq.tpr
-    input_mdp_path: gmx_full_md_1ns.mdp
+    input_mdp_path: gmx_full_md_test.mdp
   properties:
 
 # step14: mdeq -- Running: 1ns Molecular dynamics Equilibration

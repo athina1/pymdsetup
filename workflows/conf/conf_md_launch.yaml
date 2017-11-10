@@ -28,7 +28,7 @@ step1_gppeq:
     input_top_zip_path: file:md_setup_wf/setupfiles/md_setup.zip
     input_cpt_path: file:md_setup_wf/setupfiles/md_setup.cpt
     output_tpr_path: gppeq.tpr
-    input_mdp_path: gmx_full_md_100ps.mdp
+    input_mdp_path: gmx_full_md_1ns.mdp
   properties:
 
 # step2: mdeq -- Running: 1ns Molecular dynamics Equilibration
