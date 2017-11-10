@@ -41,7 +41,7 @@ def main():
     mdrun.Mdrun(properties=prop['step2_mdeq'], **paths['step2_mdeq']).launch()
 
     #Create setupfiles dir and copy files
-    setupfiles_path = os.path.join(workflow_path,'setupfiles')
+    setupfiles_path = os.path.join(workflow_path,'mdfiles')
     fu.create_dir(setupfiles_path)
     shutil.copy(paths['step2_mdeq']['input_tpr_path'], os.path.join(setupfiles_path, 'md.tpr'))
     shutil.copy(paths['step2_mdeq']['output_cpt_path'], os.path.join(setupfiles_path, 'md.cpt'))
