@@ -41,12 +41,12 @@ def main():
     mdrun.Mdrun(properties=prop['step2_mdeq'], **paths['step2_mdeq']).launch()
 
     #Create setupfiles dir and copy files
-    setupfiles_path = os.path.join(workflow_path,'mdfiles')
-    fu.create_dir(setupfiles_path)
-    shutil.copy(paths['step2_mdeq']['input_tpr_path'], os.path.join(setupfiles_path, 'md.tpr'))
-    shutil.copy(paths['step2_mdeq']['output_cpt_path'], os.path.join(setupfiles_path, 'md.cpt'))
-    shutil.copy(paths['step2_mdeq']['output_gro_path'], os.path.join(setupfiles_path, 'md.gro'))
-    shutil.copy('_step2_mdeq_mdeq.xtc', os.path.join(setupfiles_path, 'md.xtc'))
+    mdfiles_path = os.path.join(workflow_path,'mdfiles')
+    fu.create_dir(mdfiles_path)
+    shutil.copy(paths['step2_mdeq']['input_tpr_path'], os.path.join(mdfiles_path, 'md.tpr'))
+    shutil.copy(paths['step2_mdeq']['output_cpt_path'], os.path.join(mdfiles_path, 'md.cpt'))
+    shutil.copy(paths['step2_mdeq']['output_gro_path'], os.path.join(mdfiles_path, 'md.gro'))
+    shutil.copy('_step2_mdeq_mdeq.xtc', os.path.join(mdfiles_path, 'md.xtc'))
 
     removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.trr'])
     out_log.info('')
