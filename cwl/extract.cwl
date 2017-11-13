@@ -14,7 +14,7 @@ inputs:
       position: 2
 
 outputs:
-  ec_output_gro_file:
+  refined_structure:
     type: File
     outputBinding:
       glob: refined_structure.pdb
