@@ -2,41 +2,39 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - python
+  - mdrun.py
 inputs:
-  md_script:
-    type: File
+  system:
+    type: string
     inputBinding:
       position: 1
+    default: "linux"
+  step:
+    type: string
+    inputBinding:
+      position: 2
+    default: "mdmin"
+  properties_file:
+    type: File
+    inputBinding:
+      position: 3
     default:
       class: File
-      location: "../gromacs_wrapper/mdrun.py"
+      location: test/conf_1ps.yaml
   md_input_tpr_path:
     type: File
     inputBinding:
-      position: 2
+      position: 4
   md_output_trr_path:
     type: string
     inputBinding:
-      position: 3
+      position: 5
     default: "md.trr"
   md_output_gro_path:
     type: string
     inputBinding:
-      position: 4
-    default: "md.gro"
-  md_step:
-    type: string
-    inputBinding:
-      position: 5
-    default: "step10_mdmin:linux"
-  md_properties:
-    type: File
-    inputBinding:
       position: 6
-    default:
-      class: File
-      location: "../workflows/conf_2mut_nt0.yaml"
+    default: "md.gro"
   md_output_cpt_path:
     type: string?
     inputBinding:

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper for the GROMACS mdrun module
 """
 import sys
@@ -90,19 +92,17 @@ class Mdrun(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    if len(sys.argv) < 7:
+    if len(sys.argv) < 8:
         sys.argv.append(None)
-    step=sys.argv[4]
-    prop=sys.argv[5]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Mdrun(input_tpr_path = sys.argv[1],
-          output_trr_path = sys.argv[2],
-          output_gro_path = sys.argv[3],
-          step=step,
-          properties=prop,
-          output_cpt_path = sys.argv[6]).launch()
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Mdrun(input_tpr_path = sys.argv[4],
+          output_trr_path = sys.argv[5],
+          output_gro_path = sys.argv[6],
+          output_cpt_path = sys.argv[7],
+          properties=prop).launch()
 
 if __name__ == '__main__':
     main()

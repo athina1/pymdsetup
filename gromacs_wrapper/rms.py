@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper for the GROMACS rms module
 """
 import os
@@ -64,15 +66,13 @@ class Rms(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[4]
-    prop=sys.argv[5]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Rms(input_gro_path=sys.argv[1],
-        input_trr_path=sys.argv[2],
-        output_xvg_path=sys.argv[3],
-        step=step,
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Rms(input_gro_path=sys.argv[4],
+        input_trr_path=sys.argv[5],
+        output_xvg_path=sys.argv[6],
         properties=prop).launch()
 
 if __name__ == '__main__':

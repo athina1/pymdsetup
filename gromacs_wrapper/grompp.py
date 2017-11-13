@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper for the GROMACS grompp module
 """
 import sys
@@ -68,20 +70,18 @@ class Grompp(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    if len(sys.argv) < 7:
+    if len(sys.argv) < 9:
         sys.argv.append(None)
-    step=sys.argv[4]
-    prop=sys.argv[5]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    # Where is input_mdp_path???
-    Grompp(input_gro_path = sys.argv[1],
-              input_top_zip_path = sys.argv[2],
-              output_tpr_path = sys.argv[3],
-              step=step,
-              properties=prop,
-              input_cpt_path = sys.argv[6]).launch()
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Grompp(input_gro_path = sys.argv[4],
+           input_top_zip_path = sys.argv[5],
+           input_mdp_path = sys.argv[6],
+           output_tpr_path = sys.argv[7],
+           input_cpt_path = sys.argv[8],
+           properties=prop).launch()
 
 if __name__ == '__main__':
     main()

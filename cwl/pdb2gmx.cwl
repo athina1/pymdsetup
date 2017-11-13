@@ -2,42 +2,41 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - python
+  - pdb2gmx.py
 inputs:
-  p2g_script:
-    type: File
+  system:
+    type: string
     inputBinding:
       position: 1
+    default: "linux"
+  step:
+    type: string
+    inputBinding:
+      position: 2
+    default: "pdb2gmx"
+  properties_file:
+    type: File
+    inputBinding:
+      position: 3
     default:
       class: File
-      location: ../gromacs_wrapper/pdb2gmx.py
+      location: test/conf_1ps.yaml
   p2g_input_structure_pdb_path:
     type: File
     format: http://edamontology.org/format_1476 #PDB format from EDAM
     inputBinding:
-      position: 2
+      position: 4
   p2g_output_gro_path:
     type: string
     inputBinding:
-      position: 3
+      position: 5
     default: "p2g.gro"
   p2g_output_top_zip_path:
     type: string
     inputBinding:
-      position: 4
-    default: "p2g_top.zip"
-  p2g_step:
-    type: string
-    inputBinding:
-      position: 5
-    default: "step4_p2g:linux"
-  p2g_properties:
-    type: File
-    inputBinding:
       position: 6
-    default:
-      class: File
-      location: "../workflows/conf_2mut_nt0.yaml"
+    default: "p2g_top.zip"
+
 outputs:
   p2g_output_gro_file:
     type: File

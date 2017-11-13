@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper module for the GROMACS pdb2gmx module
 """
 import sys
@@ -84,15 +86,13 @@ class Pdb2gmx(object):
         return returncode
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[4]
-    prop=sys.argv[5]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Pdb2gmx(input_structure_pdb_path=sys.argv[1],
-            output_gro_path=sys.argv[2],
-            output_top_zip_path=sys.argv[3],
-            step=step,
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Pdb2gmx(input_structure_pdb_path=sys.argv[4],
+            output_gro_path=sys.argv[5],
+            output_top_zip_path=sys.argv[6],
             properties=prop).launch()
 
 if __name__ == '__main__':

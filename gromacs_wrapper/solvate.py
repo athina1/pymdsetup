@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper module for the GROMACS solvate module
 """
 import sys
@@ -74,16 +76,14 @@ class Solvate(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[5]
-    prop=sys.argv[6]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Solvate(input_solute_gro_path=sys.argv[1],
-            output_gro_path=sys.argv[2],
-            input_top_zip_path=sys.argv[3],
-            output_top_zip_path=sys.argv[4],
-            step=step,
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Solvate(input_solute_gro_path=sys.argv[4],
+            output_gro_path=sys.argv[5],
+            input_top_zip_path=sys.argv[6],
+            output_top_zip_path=sys.argv[7],
             properties=prop).launch()
 
 if __name__ == '__main__':

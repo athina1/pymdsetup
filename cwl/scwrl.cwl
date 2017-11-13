@@ -5,27 +5,32 @@ class: CommandLineTool
 baseCommand:
   - scwrl.py
 inputs:
-  scw_input_pdb_path:
-    type: File
+  system:
+    type: string
     inputBinding:
       position: 1
-  scw_output_pdb_path:
+    default: "linux"
+  step:
     type: string
     inputBinding:
       position: 2
-    default: "mutated.pdb"
-  scw_step:
-    type: string
+    default: "scwrl"
+  properties_file:
+    type: File
     inputBinding:
       position: 3
-    default: "step3_scw:linux:A.Lys58Glu"
-  scw_properties:
+    default:
+      class: File
+      location: test/conf_1ps.yaml
+  scw_input_pdb_path:
     type: File
     inputBinding:
       position: 4
-    default:
-      class: File
-      location: ../workflows/conf/conf_2mut_nt0_1ps.yaml
+  scw_output_pdb_path:
+    type: string
+    inputBinding:
+      position: 5
+    default: "mutated.pdb"
 outputs:
   scw_output_pdb_file:
     type: File

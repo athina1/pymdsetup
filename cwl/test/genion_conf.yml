@@ -1,7 +1,4 @@
 #GENION
-gio_script:
-    class: File
-    location: ../../gromacs_wrapper/genion.py
 gio_input_tpr_path:
     class: File
     location: ../../cwl/test/data/gppions.tpr
@@ -13,7 +10,3 @@ gio_input_top_zip_path:
     class: File
     location: ../../cwl/test/data/sol_top.zip
 gio_output_top_zip_path: gio_top.zip
-gio_step: step8_gio:linux
-gio_properties:
-    class: File
-    location: ../../workflows/conf_2mut_nt0.yaml

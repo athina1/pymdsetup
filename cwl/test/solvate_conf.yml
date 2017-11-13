@@ -1,7 +1,4 @@
 #SOLVATE
-sol_script:
-    class: File
-    location: ../../gromacs_wrapper/solvate.py
 sol_input_solute_gro_path:
     class: File
     location: ../../cwl/test/data/ec.gro
@@ -10,7 +7,3 @@ sol_input_top_zip_path:
     class: File
     location: ../../cwl/test/data/p2g_top.zip
 sol_output_top_zip_path: sol_top.zip
-sol_step: step6_sol:linux
-sol_properties:
-    class: File
-    location: ../../workflows/conf_2mut_nt0.yaml

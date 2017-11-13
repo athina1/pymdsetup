@@ -1,4 +1,0 @@
-#MDMIN
-md_input_tpr_path:
-    class: File
-    location: ../../cwl/test/data/gppmin.tpr

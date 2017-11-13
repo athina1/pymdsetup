@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper module for SCWRL
 """
 import os
@@ -66,14 +68,12 @@ class Gnuplot(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[3]
-    prop=sys.argv[4]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Gnuplot(input_xvg_path_dict={'mutation':sys.argv[1]},
-            output_png_path=sys.argv[2],
-            step=step,
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Gnuplot(input_xvg_path_dict={'mutation':sys.argv[4]},
+            output_png_path=sys.argv[5],
             properties=prop).launch()
 
 if __name__ == '__main__':
