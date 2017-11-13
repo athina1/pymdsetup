@@ -42,6 +42,10 @@ steps:
     in:
       gpp_input_gro_path: solvate/sol_output_gro_file
       gpp_input_top_zip_path: solvate/sol_output_top_zip_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: ions.mdp
     out: [gpp_output_tpr_file]
 
   add_ions:
@@ -57,6 +61,10 @@ steps:
     in:
       gpp_input_gro_path: add_ions/gio_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: min.mdp
     out: [gpp_output_tpr_file]
 
   minimization:
@@ -70,6 +78,10 @@ steps:
     in:
       gpp_input_gro_path: minimization/md_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: nvt.mdp
     out: [gpp_output_tpr_file]
 
   nvt_dynamics:
@@ -84,6 +96,10 @@ steps:
       gpp_input_gro_path: nvt_dynamics/md_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
       gpp_input_cpt_path: nvt_dynamics/md_output_cpt_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: npt.mdp
     out: [gpp_output_tpr_file]
 
   npt_dynamics:
@@ -98,6 +114,10 @@ steps:
       gpp_input_gro_path: npt_dynamics/md_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
       gpp_input_cpt_path: npt_dynamics/md_output_cpt_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: eq.mdp
     out: [gpp_output_tpr_file]
 
   equilibration:

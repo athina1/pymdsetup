@@ -10,7 +10,7 @@ inputs:
       position: 1
 
 outputs:
-  ec_output_gro_file:
+  fixed_pdb:
     type: File
     outputBinding:
       glob: fixed.pdb
