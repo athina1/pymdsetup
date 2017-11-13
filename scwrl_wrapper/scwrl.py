@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper module for SCWRL
 """
 import sys
@@ -82,10 +84,11 @@ class Scwrl4(object):
 #Creating a main function to be compatible with CWL
 def main():
     step=sys.argv[3]
-    prop=sys.argv[4]
+    yaml_path=sys.argv[4]
     step, system, mut = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic(mut)[step]
+    prop = settings.YamlReader(yaml_path, 'macos').get_prop_dic(mut)[step]
     prop['path']=''
+    print prop
     Scwrl4(input_pdb_path=sys.argv[1],
            output_pdb_path=sys.argv[2],
            step=step,

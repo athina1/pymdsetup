@@ -1,0 +1,3 @@
+p2g_input_structure_pdb_path:
+    class: File
+    location: ../cwl/test/data/mutated.pdb

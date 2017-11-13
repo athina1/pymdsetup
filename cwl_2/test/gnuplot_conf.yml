@@ -1,0 +1,12 @@
+#GNUPLOT
+gnuplot_script:
+    class: File
+    location: ../../gnuplot_wrapper/gnuplot.py
+gnuplot_input_xvg_path:
+    class: File
+    location: ../../cwl/test/data/rmsd.xvg
+gnuplot_output_png_path: gplot.png
+gnuplot_step: step18_gnuplot:macos
+gnuplot_properties:
+    class: File
+    location: ../../workflows/conf_2mut_nt0_test.yaml
