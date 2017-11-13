@@ -4,7 +4,7 @@ cwlVersion: v1.0
 class: Workflow
 
 inputs:
-  scw_input_pdb_path: File
+  pdb_structure: File
 
 outputs:
   refined_structure:
@@ -15,7 +15,7 @@ steps:
   get_pdb_structure:
     run: scwrl.cwl
     in:
-      pdb_code: 1ubq
+      pdb_structure: pdb_structure
     out: [pdb_structure]
 
   replace_atom_names:
