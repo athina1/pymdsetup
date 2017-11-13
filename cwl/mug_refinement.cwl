@@ -7,18 +7,9 @@ inputs:
   scw_input_pdb_path: File
 
 outputs:
-  gnuplot_output_png_file:
+  refined_structure:
      type: File
-     outputSource: gnuplot/gnuplot_output_png_file
-  rms_output_xvg_file:
-     type: File
-     outputSource: rmsd/rms_output_xvg_file
-  md_output_gro_file:
-    type: File
-    outputSource: equilibration/md_output_gro_file
-  md_output_trr_file:
-    type: File
-    outputSource: equilibration/md_output_trr_file
+     outputSource: extract_last_snapshot/refined_structure
 
 steps:
   get_pdb_structure:
@@ -30,7 +21,7 @@ steps:
   replace_atom_names:
     run: scwrl.cwl
     in:
-      pdb_code: 1ubq
+      pdb_structure: get_pdb_structure/pdb_structure
     out: [fixed_pdb]
 
   create_topology:
