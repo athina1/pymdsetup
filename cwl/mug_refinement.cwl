@@ -13,13 +13,13 @@ outputs:
 
 steps:
   get_pdb_structure:
-    run: scwrl.cwl
+    run: foo.cwl
     in:
       pdb_structure: pdb_structure
     out: [pdb_structure]
 
   replace_atom_names:
-    run: scwrl.cwl
+    run: foo.cwl
     in:
       pdb_structure: get_pdb_structure/pdb_structure
     out: [fixed_pdb]
@@ -113,7 +113,7 @@ steps:
     out: [md_output_gro_file, md_output_trr_file, md_output_cpt_file]
 
   extract_last_snapshot:
-    run: rms.cwl
+    run: foo.cwl
     in:
       rms_input_gro_path: equilibration/md_output_gro_file
       rms_input_trr_path: equilibration/md_output_trr_file
