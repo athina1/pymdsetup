@@ -70,7 +70,7 @@ archer:
 
 jureca:
   gmx_path: gmx
-  scwrl4_path: /homea/ias-5/andrio/pymdsetup/scwrl/Scwrl4
+  scwrl4_path: /homea/ias-5/andrio/scwrl/Scwrl4
   workflow_path: /homea/ias-5/andrio/pymdsetup/testworkflow
   mdp_path: /homea/ias-5/andrio/pymdsetup/workflows/mdp/
   gnuplot_path: gnuplot
