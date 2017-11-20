@@ -87,6 +87,7 @@ https://www.anaconda.com/
 
     ```bash
     bash Anaconda2-5.0.0-Linux-x86_64.sh
+    source .bashrc
     mv biopython-1.69-np113py27_0.tar.bz2 anaconda2/pkgs/
     conda install anaconda2/pkgs/biopython-1.69-np113py27_0.tar.bz2
     conda install --use-index-cache --offline --use-local  numpy pyyaml requests nose
