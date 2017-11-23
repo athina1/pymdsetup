@@ -103,4 +103,4 @@ project.
 
 
 
-![Bioexcel](docs/source/_static/bioexcel_logo.png "Bioexcel")
+![](docs/source/_static/bioexcel_logo.png "Bioexcel")
