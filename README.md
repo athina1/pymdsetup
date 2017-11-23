@@ -103,4 +103,4 @@ project.
 
 
 
-![Bioexcel](https://i1.wp.com/bioexcel.eu/wp-content/uploads/2015/12/Bioexcell_logo_1080px_transp.png "Bioexcel")
+![Bioexcel](docs/source/_static/bioexcel_logo.png "Bioexcel")

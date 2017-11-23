@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 
-.. image:: https://i1.wp.com/bioexcel.eu/wp-content/uploads/2015/12/Bioexcell_logo_1080px_transp.png
+.. image:: _static/bioexcel_logo.png
 
 PYMDSETUP
 ---------
