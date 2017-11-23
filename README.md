@@ -101,6 +101,18 @@ This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the
 BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/)
 project.  
 
+## License
+
+* (c) 2015-2017 [Barcelona Supercomputing Center](https://www.bsc.es/)
+
+Licensed under the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), see the file
+[LICENSE](LICENSE) for details.
+
+<!--
+The file [NOTICE](NOTICE) contains any additional attributions and
+details about embedded third-party libraries and source code.
+-->
 
 
 ![](docs/source/_static/bioexcel_logo.png "Bioexcel")
