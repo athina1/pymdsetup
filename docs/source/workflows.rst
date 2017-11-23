@@ -20,6 +20,30 @@ workflows.gromacs_full_pycompss module
     :undoc-members:
     :show-inheritance:
 
+workflows.md_launch module
+--------------------------
+
+.. automodule:: workflows.md_launch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+workflows.md_setup module
+-------------------------
+
+.. automodule:: workflows.md_setup
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+workflows.mug_refinement module
+-------------------------------
+
+.. automodule:: workflows.mug_refinement
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

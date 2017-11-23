@@ -14,12 +14,10 @@ class Genion(object):
         input_tpr_path (str): Path to the input portable run input TPR file.
         output_gro_path (str): Path to the input structure GRO file.
         input_top_zip_path (str): Path the input TOP topology in zip format.
-        output_top_zip_path (str): Path the output topology TOP and ITP files
-                                   zipball.
+        output_top_zip_path (str): Path the output topology TOP and ITP files zipball.
         properties (dic):
             output_top_path (str): Path the output topology TOP file.
-            replaced_group (str): Group of molecules that will be replaced by the
-                                solvent.
+            replaced_group (str): Group of molecules that will be replaced by the solvent.
             neutral (bool): Neutralize the charge of the system.
             concentration (float): Concentration of the ions in (mol/liter).
             seed (int): Seed for random number generator.
