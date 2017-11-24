@@ -1,0 +1,43 @@
+######################## pymdsetup configuration file ########################
+
+########################## System dependent paths ############################
+linux:
+  cmip_root: /data/soft/CMIP
+  workflow_path: /data/DEVEL/BioExcel/pymdsetup/testworkflow
+  mdp_path: /data/DEVEL/BioExcel/pymdsetup/workflows/mdp
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  initial_structure_pdb_path: /data/DEVEL/BioExcel/pymdsetup/testworkflow/2VGB.WT.pdb
+
+macos:
+
+virtualbox:
+
+open_nebula:
+
+mare_nostrum:
+
+minotauro:
+
+archer:
+
+mug_pymdsetup:
+
+pmes:
+
+# Step: mmbpdb -- Get PDB
+step1_mmbpdb:
+  paths:
+    output_pdb_path: structure.pdb
+  properties:
+    pdb_code:
+
+# Step2: CMIP titration
+step2_CMIPtitr:
+  paths:
+    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
+    output_pdb_path: titrated.pdb
+  properties:
+    titwat:50
+    titip:0
+    titim:0
