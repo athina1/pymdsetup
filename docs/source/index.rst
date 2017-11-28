@@ -24,3 +24,6 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+`Github repository <https://github.com/bioexcel/pymdsetup>`_.
+=============================================================
