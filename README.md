@@ -6,8 +6,9 @@
 ### Introduction
 Pymdsetup is a python package to setup systems to run molecular
 dynamics simulations.
+If you have already installed the package you should check our [latest API documentation](http://pymdsetup.readthedocs.io/en/latest/).
 
-### Version 0.2 Alpha
+### Version 1.0
 This version is just an example of a functional workflow.
 In v0.2 Pymdsetup uses the following applications:
 
@@ -100,10 +101,11 @@ https://www.anaconda.com/
 
 ### Copyright & Licensing
 This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the
-BSC (http://www.bsc.es/) for the European BioExcel (http://bioexcel.eu/), funded by the European Commission
+BSC (http://www.bsc.es/) & IRB (https://www.irbbarcelona.org/) for the European BioExcel (http://bioexcel.eu/), funded by the European Commission
 (EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
 
 * (c) 2015-2017 [Barcelona Supercomputing Center](https://www.bsc.es/)
+* (c) 2015-2017 [Institute for Research in Biomedicine](https://www.irbbarcelona.org/)
 
 Licensed under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), see the file
