@@ -2,46 +2,43 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - python
+  - genion.py
 inputs:
-  gio_script:
-    type: File
+  system:
+    type: string
     inputBinding:
       position: 1
+    default: "linux"
+  step:
+    type: string
+    inputBinding:
+      position: 2
+    default: "genion"
+  properties_file:
+    type: File
+    inputBinding:
+      position: 3
     default:
       class: File
-      location: ../gromacs_wrapper/genion.py
+      location: test/conf_1ps.yaml
   gio_input_tpr_path:
     type: File
     inputBinding:
-      position: 2
+      position: 4
   gio_output_gro_path:
     type: string
     inputBinding:
-      position: 3
+      position: 5
     default: "gio.gro"
   gio_input_top_zip_path:
     type: File
     inputBinding:
-      position: 4
+      position: 6
   gio_output_top_zip_path:
     type: string
     inputBinding:
-      position: 5
-    default: "gio_zip.top"
-  gio_step:
-    type: string
-    inputBinding:
-      position: 6
-    default: "step8_gio:linux"
-  gio_properties:
-    type: File
-    inputBinding:
       position: 7
-    default:
-      class: File
-      location: "../workflows/conf_2mut_nt0.yaml"
-
+    default: "gio_zip.top"
 outputs:
   gio_output_gro_file:
     type: File

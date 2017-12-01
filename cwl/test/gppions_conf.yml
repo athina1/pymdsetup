@@ -1,7 +1,7 @@
 #GPPIONS
-gpp_script:
+gpp_input_mdp_path:
     class: File
-    location: ../../gromacs_wrapper/grompp.py
+    location: ../../workflows/mdp/gmx_full_ions_test.mdp
 gpp_input_gro_path:
     class: File
     location: ../../cwl/test/data/sol.gro
@@ -9,7 +9,3 @@ gpp_input_top_zip_path:
     class: File
     location: ../../cwl/test/data/sol_top.zip
 gpp_output_tpr_path: gppions.tpr
-gpp_step: step7_gppions:linux
-gpp_properties:
-    class: File
-    location: ../../workflows/conf_2mut_nt0.yaml

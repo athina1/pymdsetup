@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper for the GROMACS mdrun module
 """
 import sys
@@ -20,8 +22,8 @@ class Mdrun(object):
         output_cpt_path (str): Path to the output GROMACS checkpoint file CPT.
     """
 
-    def __init__(self, input_tpr_path, output_trr_path, output_gro_path,
-                 properties, output_cpt_path=None, **kwargs):
+    def __init__(self, input_tpr_path, output_gro_path, properties,
+                 output_trr_path=None, output_cpt_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_tpr_path = input_tpr_path
@@ -47,9 +49,12 @@ class Mdrun(object):
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
         cmd = [gmx, 'mdrun', '-s', self.input_tpr_path,
-               '-o', self.output_trr_path, '-c', self.output_gro_path,
+               '-c', self.output_gro_path,
                '-g', 'md.log']
 
+        if self.output_trr_path is not None:
+            cmd.append('-o')
+            cmd.append(self.output_trr_path)
         if self.mpirun_np is not None:
             cmd.insert(0, str(self.mpirun_np))
             cmd.insert(0, '-np')
@@ -87,19 +92,17 @@ class Mdrun(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    if len(sys.argv) < 7:
+    if len(sys.argv) < 8:
         sys.argv.append(None)
-    step=sys.argv[4]
-    prop=sys.argv[5]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Mdrun(input_tpr_path = sys.argv[1],
-          output_trr_path = sys.argv[2],
-          output_gro_path = sys.argv[3],
-          step=step,
-          properties=prop,
-          output_cpt_path = sys.argv[6]).launch()
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Mdrun(input_tpr_path = sys.argv[4],
+          output_trr_path = sys.argv[5],
+          output_gro_path = sys.argv[6],
+          output_cpt_path = sys.argv[7],
+          properties=prop).launch()
 
 if __name__ == '__main__':
     main()

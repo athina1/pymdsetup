@@ -6,7 +6,3 @@ ec_input_gro_path:
     class: File
     location: ../../cwl/test/data/p2g.gro
 ec_output_gro_path: ec.gro
-ec_step: step5_ec:linux
-ec_properties:
-    class: File
-    location: ../../workflows/conf_2mut_nt0.yaml

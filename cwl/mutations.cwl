@@ -5,14 +5,6 @@ class: Workflow
 
 inputs:
   scw_input_pdb_path: File
-  gppions_step: string
-  gppmin_step: string
-  gppnvt_step: string
-  mdnvt_step: string
-  gppnpt_step: string
-  mdnpt_step: string
-  gppeq_step: string
-  mdeq_step: string
 
 outputs:
   gnuplot_output_png_file:
@@ -40,23 +32,33 @@ steps:
     in:
       p2g_input_structure_pdb_path: mutate_structure/scw_output_pdb_file
     out: [p2g_output_gro_file, p2g_output_top_zip_file]
+
   create_water_box:
     run: editconf.cwl
     in:
       ec_input_gro_path: create_topology/p2g_output_gro_file
     out: [ec_output_gro_file]
+
   solvate:
     run: solvate.cwl
     in:
       sol_input_solute_gro_path: create_water_box/ec_output_gro_file
       sol_input_top_zip_path: create_topology/p2g_output_top_zip_file
     out: [sol_output_gro_file, sol_output_top_zip_file]
+
   ions_preprocess:
     run: grompp.cwl
     in:
+      step:
+        default: gppions
       gpp_input_gro_path: solvate/sol_output_gro_file
       gpp_input_top_zip_path: solvate/sol_output_top_zip_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: ../workflows/mdp/gmx_full_ions_test.mdp
     out: [gpp_output_tpr_file]
+
   add_ions:
     run: genion.cwl
     in:
@@ -64,65 +66,100 @@ steps:
       gio_input_gro_path: solvate/sol_output_gro_file
       gio_input_top_zip_path: solvate/sol_output_top_zip_file
     out: [gio_output_gro_file, gio_output_top_zip_file]
+
   minimization_preprocess:
     run: grompp.cwl
     in:
+      step:
+        default: gppmin
       gpp_input_gro_path: add_ions/gio_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
-      gpp_step: gppmin_step
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: ../workflows/mdp/gmx_full_min_test.mdp
     out: [gpp_output_tpr_file]
+
   minimization:
     run: mdrun.cwl
     in:
+      step:
+        default: mdmin
       md_input_tpr_path: minimization_preprocess/gpp_output_tpr_file
     out: [md_output_gro_file, md_output_trr_file]
+
   nvt_dynamics_preprocess:
     run: grompp.cwl
     in:
+      step:
+        default: gppnvt
       gpp_input_gro_path: minimization/md_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
-      gpp_step: gppnvt_step
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: ../workflows/mdp/gmx_full_nvt_test.mdp
     out: [gpp_output_tpr_file]
+
   nvt_dynamics:
     run: mdrun.cwl
     in:
+      step:
+        default: mdnvt
       md_input_tpr_path: nvt_dynamics_preprocess/gpp_output_tpr_file
-      md_step: mdnvt_step
     out: [md_output_gro_file, md_output_trr_file, md_output_cpt_file]
+
   npt_dynamics_preprocess:
     run: grompp.cwl
     in:
+      step:
+        default: gppnpt
       gpp_input_gro_path: nvt_dynamics/md_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
-      gpp_step: gppnpt_step
       gpp_input_cpt_path: nvt_dynamics/md_output_cpt_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: ../workflows/mdp/gmx_full_npt_test.mdp
     out: [gpp_output_tpr_file]
+
   npt_dynamics:
     run: mdrun.cwl
     in:
+      step:
+        default: mdnpt
       md_input_tpr_path: npt_dynamics_preprocess/gpp_output_tpr_file
-      md_step: mdnpt_step
     out: [md_output_gro_file, md_output_trr_file, md_output_cpt_file]
+
   equilibration_preprocess:
     run: grompp.cwl
     in:
+      step:
+        default: gppeq
       gpp_input_gro_path: npt_dynamics/md_output_gro_file
       gpp_input_top_zip_path: add_ions/gio_output_top_zip_file
-      gpp_step: gppeq_step
       gpp_input_cpt_path: npt_dynamics/md_output_cpt_file
+      gpp_input_mdp_path:
+        default:
+          class: File
+          location: ../workflows/mdp/gmx_full_md_test.mdp
     out: [gpp_output_tpr_file]
+
   equilibration:
     run: mdrun.cwl
     in:
+      step:
+        default: mdeq
       md_input_tpr_path: equilibration_preprocess/gpp_output_tpr_file
-      md_step: mdeq_step
     out: [md_output_gro_file, md_output_trr_file, md_output_cpt_file]
+
   rmsd:
     run: rms.cwl
     in:
       rms_input_gro_path: equilibration/md_output_gro_file
       rms_input_trr_path: equilibration/md_output_trr_file
     out: [rms_output_xvg_file]
+
   gnuplot:
     run: gnuplot.cwl
     in:
