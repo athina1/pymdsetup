@@ -20,11 +20,8 @@ def main():
     fu.create_dir(os.path.abspath(workflow_path))
     out_log, _ = fu.get_logs(path=workflow_path, console=True)
     paths = conf.get_paths_dic()
-    #provisional
-    print (paths)
-    paths['input_hs'] = structure = conf.properties[system].get('initial_structure_pdb_path', None)
-    
     props = conf.get_prop_dic(global_log=out_log)
+
     out_log.info('')
     out_log.info('_______TEST CMIP TITRATION WORKFLOW_______')
     out_log.info('')
