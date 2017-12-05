@@ -9,7 +9,7 @@ import sys
 import os
 import configuration.settings as settings
 import tools.file_utils as fu
-import cmip_wrapper.CMIPWrapper as CMIPWrapper
+import cmip_wrapper.CMIPWrapper as CW
 
 def main():
     start_time = time.time()
@@ -29,7 +29,7 @@ def main():
     out_log.info('step3:  CMIPTitration')
     props['step'] = 'step3_CMIPTitration'
     fu.create_dir(props['step3_CMIPTitration']['path'])
-    CMIPWrapper(paths['step3_CMIPTitration'],props['step3_CMIPTitration']).launch()
+    CW.CMIPWrapper(paths['step3_CMIPTitration'],props['step3_CMIPTitration']).launch()
 
     out_log.info('')
 

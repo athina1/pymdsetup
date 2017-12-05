@@ -76,7 +76,7 @@ class Run():
             else:
                 cmd = CMIP.Local.CMIP + " -i " + tmpdir + "/param"
         if 'o' not in self.files:
-           self.addFile({'o' : tmpdir + "/cmip.out"})
+            self.addFile({'o' : tmpdir + "/cmip.out"})
         if 'l' not in self.files:
             self.addFile({'l' : tmpdir + "/cmip.log"})
         if  self.type ==  'direct':
