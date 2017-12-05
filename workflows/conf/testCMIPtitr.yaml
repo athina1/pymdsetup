@@ -2,28 +2,11 @@
 
 ########################## System dependent paths ############################
 linux:
-  cmip_root: /data/soft/CMIP
-  workflow_path: /data/DEVEL/BioExcel/pymdsetup/testworkflow
-  mdp_path: /data/DEVEL/BioExcel/pymdsetup/workflows/mdp
+  CMIP_root: /data/soft/CMIP
+  workflow_path: /home/gelpi/data/DEVEL/BioExcel/pymdsetup/testworkflows
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /data/DEVEL/BioExcel/pymdsetup/testworkflow/2VGB.WT.pdb
-
-macos:
-
-virtualbox:
-
-open_nebula:
-
-mare_nostrum:
-
-minotauro:
-
-archer:
-
-mug_pymdsetup:
-
-pmes:
+  initial_structure_pdb_path: /home/gelpi/data/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb
 
 # Step: mmbpdb -- Get PDB
 step1_mmbpdb:
@@ -31,13 +14,37 @@ step1_mmbpdb:
     output_pdb_path: structure.pdb
   properties:
     pdb_code:
-
-# Step2: CMIP titration
-step2_CMIPtitr:
+# Step3: Prep PDB for CMIP
+step2_preppdbCMIP:
   paths:
-    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
-    output_pdb_path: titrated.pdb
+      input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
+      output_pdb_path: CMIPPrepared.pdb 
+
+# Step3: CMIP titration
+step3_CMIPTitration:
+  paths:
+#   input_hs: dependency/step2_preppdbCMIP/output_pdb_path
+    input_hs: initial_structure_pdb_path
+    output_outpdb: titrated.pdb
   properties:
-    titwat:50
-    titip:0
-    titim:0
+    cmip_tipcalc: 1
+    cmip_titration: 1
+    cmip_readgrid: 2
+    cmip_perfill: 0.7
+    cmip_int: [0.8,0.8,0.8]
+    cmip_focus: 1
+    cmip_inifoc: 2
+    cmip_cutfoc: -0.5
+    cmip_ninter: 10
+    cmip_dields: 2
+    cmip_clhost: 1
+    cmip_calcgrid: 1
+    cmip_irest: 0
+    cmip_orest: 0
+    cmip_coorfmt: 2
+    cmip_titwat: 20
+    cmip_titip: 10
+    cmip_titim: 10
+    cmip_titcut: 20
+
+

@@ -15,7 +15,6 @@
 #
 # inputP.grid0(grid);
 
-import CMIP.Grid
 import re
 import sys
 

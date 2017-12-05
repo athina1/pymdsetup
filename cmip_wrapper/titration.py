@@ -10,7 +10,7 @@ from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
 import CMIP
 
-class CMIPSTitration((object):
+class CMIPSTitration(object):
     """Wrapper class for the titration module of CMIP v2.7.
     Args:
         input_pdb_path (str): Path to the input PDB file.
@@ -34,8 +34,10 @@ class CMIPSTitration((object):
     def launch(self):
         """Launches the execution of the CMIPTtitration binary.
         """
-#        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mut, step=self.step)
-        ureturn command.launch()
+
+    
+
+    return command.launch()
 
 #Creating a main function to be compatible with CWL
 def main():
@@ -44,7 +46,7 @@ def main():
     step, system, mut = step.split(':')
     prop = settings.YamlReader(prop, system).get_prop_dic(mut)[step]
     prop['path']=''
-    Scwrl4(input_pdb_path=sys.argv[1],
+    CMIPSTitration(input_pdb_path=sys.argv[1],
            output_pdb_path=sys.argv[2],
            step=step,
            properties=prop).launch()

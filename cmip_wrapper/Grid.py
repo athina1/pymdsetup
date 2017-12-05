@@ -34,14 +34,15 @@
 # xyz=gr.getxyz(index)
 #
 
-class Grid():
-    def __init__(self,pbfocus=0):
+class Grid(object):
+    def __init__(self, pbfocus=0):
         self.pbfocus=pbfocus
         self.readgrid= 0
         self.perfill = 0.8
         self.int = [0.5, 0.5, 0.5]
         self.dim = [64, 64, 64]
         self.cen =  [0.0, 0.0, 0.0]
+        self.needUpdate=False
 
     def __str__ (self):
         if self.pbfocus:
@@ -105,26 +106,25 @@ class Grid():
             jg = dimv[1] + 1
         return [ig, jg, kg]
 
-def xyz2grid (self, x, y, z):
-    [x1, y1, z1] = self.origin
-    [xs, ys, zs] = self.int
-    return [(x-x1) / xs + 1, (z-z1) / zs + 1, (z-z1) / zs + 1]
+    def xyz2grid (self, x, y, z):
+        [x1, y1, z1] = self.origin
+        [xs, ys, zs] = self.int
+        return [(x-x1) / xs + 1, (z-z1) / zs + 1, (z-z1) / zs + 1]
 
-def grid2xyz (self, i, j, k):
-    [x1, y1, z1] = self.origin
-    [xs, ys, zs] = self.int
-    return [(x1 + (i-1) * xs, y1 + (j-1) * ys, z1 + (k-1) * zs)]
+    def grid2xyz (self, i, j, k):
+        [x1, y1, z1] = self.origin
+        [xs, ys, zs] = self.int
+        return [(x1 + (i-1) * xs, y1 + (j-1) * ys, z1 + (k-1) * zs)]
 	
-####Private
-
-
-    def _update(self):
-        if self['needUpdate']:
+    def update(self):
+        if self.needUpdate:
             self._calcNgrid()
             self._calcOrigin()
             self._calcSize()
-            self['needUpdate'] = False
+            self.needUpdate = False
         return self
+
+####Private
     
     def _getval(self, val):
         self._update();
