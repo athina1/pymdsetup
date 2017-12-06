@@ -10,7 +10,7 @@ DEFAULT_FILES = {
     'grdin' : 'gridin',
     'o' :'output',
     'grdout' : 'gridout',
-    'output' : 'outpdb',
+    'outpdb' : 'outpdb',
     'grdb' : 'grdB',
     'rst' : 'restart',
     'pr' : 'probpdb',
@@ -30,9 +30,10 @@ DEFAULT_FILES = {
 
 class Result():
     
-    def __init__(self, files={}):
+    def __init__(self, workdir='', files={}):
         self.stdout=''
         self.stderr=''
+        self.workdir=workdir
         self.logData={}
         self.files=files
         if 'o' in files:
@@ -72,11 +73,11 @@ class Result():
         if key in self.files:
             return self.files[key]
         else:
-            return DEFAULT_FILES['key']
+            return self.workdir+'/'+DEFAULT_FILES[key]
 
     def getFileContents(self, key):
-        return _getFile(self.files[key])
-
+        fn = self.getFileName(key)
+        return _getFile(fn)
 
     def asString(self):
         txt=""

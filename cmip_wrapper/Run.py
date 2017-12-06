@@ -39,17 +39,13 @@ class Run():
     def __init__(self,inputP, type='direct'):
         workdir=os.getcwd()
         self.workdir = workdir
+        self.tmpdir = tempfile.mkdtemp(prefix="CMIP")
         self.param = inputP
         self.type = type
         #self.files = {'vdw': Local.VDWPRM}
         self.files = {}
         self.queue = ''
         self.exefile = ''
-        
-
-    def rmTmpDir(self):
-        shutil.rmtree(self.tmpdir)
-
 
     def addFile(self, FILES):
         for k in FILES.keys():
@@ -60,50 +56,49 @@ class Run():
         self.files.pop(file, None)
         return self
 
-    def prepare(self):
-        tmpdir = tempfile.mkdtemp(prefix="CMIP")
+    def setup(self):
         if 'i' not in self.files:
             try:
-                TMPPAR = open (tmpdir+"/param", "w")
+                TMPPAR = open (self.tmpdir+"/param", "w")
             except OSError:
-                print ("Error: open "+ tmpdir + "/param")
+                print ("Error: open "+ self.tmpdir + "/param")
                 sys.exit(1)
             
             TMPPAR.write(str(self.param))
             TMPPAR.close()
             if self.exefile:
-                cmd = self.exefile + " -i " + tmpdir +"/param"
+                cmd = self.exefile + " -i " + self.tmpdir +"/param"
             else:
-                cmd = CMIP.Local.CMIP + " -i " + tmpdir + "/param"
+                cmd = CMIP.Local.CMIP + " -i " + self.tmpdir + "/param"
         if 'o' not in self.files:
-            self.addFile({'o' : tmpdir + "/cmip.out"})
+            self.addFile({'o' : self.tmpdir + "/cmip.out"})
         if 'l' not in self.files:
-            self.addFile({'l' : tmpdir + "/cmip.log"})
+            self.addFile({'l' : self.tmpdir + "/cmip.log"})
         if  self.type ==  'direct':
             self.addFile(
                 {
-                    "stderr": tmpdir + "/stderr.log",
-                    "stdout": tmpdir + "/stdout.log"
+                    "stderr": self.tmpdir + "/stderr.log",
+                    "stdout": self.tmpdir + "/stdout.log"
                 }
             )
         for k in self.files.keys():
             cmd = cmd + " -{} {}".format(k,self.files[k])
 
-        runscript = tmpdir + "/run.csh"
+        runscript = self.tmpdir + "/run.csh"
         try:
             CSH = open (runscript,"w")
         except OSError as e:
             print ("Error: {} {} ({})".format(e.errno, e.strerror,runscript))
             sys.exit(1)
-        print (("#!/bin/tcsh -f\nhostname\ncd "+ self.workdir + "\n" + cmd + "\n#rm -rf " + tmpdir + "\n"))
-        CSH.write ("#!/bin/tcsh -f\nhostname\ncd "+ self.workdir + "\n" + cmd + "\n#rm -rf " + tmpdir + "\n")
+        #print (("#!/bin/tcsh -f\nhostname\ncd "+ self.tmpdir + "\n" + cmd + "\n"))
+        CSH.write ("#!/bin/tcsh -f\nhostname\ncd "+ self.tmpdir + "\n" + cmd + "\n")
         CSH.close()
-        #return "/bin/tcsh "+ runscript + " > " + self.files['stdout'] + " >& " + self.files['stderr']
         return "/bin/tcsh ",runscript 
     
     def execute(self):
-        cmdline = self.prepare()        
+        cmdline = self.setup()        
         cproc = subprocess.getoutput (cmdline)            
         return CMIP.Result(self.files)
-        
     		
+    def rmTmpDir(self):
+        shutil.rmtree(self.tmpdir)

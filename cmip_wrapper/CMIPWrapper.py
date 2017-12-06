@@ -5,6 +5,7 @@ __author__ = "gelpi"
 __date__ = "$24-nov-2017 12:30:59$"
 
 import re
+import sys
 from Grid import Grid
 from InputParams import InputParams
 from Run import Run
@@ -19,15 +20,15 @@ class CMIPWrapper():
     """
 
     def __init__(self, paths, props):
-        self.inputFiles=[]
-        self.outputFiles=[]
+        self.cmipPaths=[]
+        self.paths={}
         for k in paths.keys():
-            lb,keyw = re.split('_',k)
-            if lb == 'input':
-                self.inputFiles.append({keyw:paths[k]})
-            elif lb=='output':
-                self.outputFiles.append({keyw:paths[k]})
-        
+            if re.match('cmip_',k):
+                lb, keyw = re.split('_',k)
+                self.cmipPaths.append({keyw:paths[k]})
+            else:
+                self.paths[k]=paths[k]
+        self.cmipPaths.append({'hs':paths['input_pdb_path']})
         self.properties={}
         self.properties['cmipkwds'] = {}
         self.properties['step'] =  props['step']
@@ -38,37 +39,41 @@ class CMIPWrapper():
             else:
                 self.properties[k]=props[k]        
         
-    def launch(self):
-        dualgrid = 'pbfocus' in self.properties['cmipkwds'] and\
-            self.properties['cmipkwds']['pbfocus'] == 1
         gr = self._prepGrid()
-        if dualgrid:
+        if 'pbfocus' in self.properties['cmipkwds'] and\
+            self.properties['cmipkwds']['pbfocus'] == 1:
             gr0 = _prepGrid(1)
             inpP = InputParams(self.properties['step'], gr, gr0)
         else:
             inpP = InputParams(self.properties['step'], gr)
+
         for prm in self.properties['cmipkwds'].keys():
             inpP.addKeyword ({prm.upper():self.properties['cmipkwds'][prm]})
         
-        run = Run(inpP,'wrapper')
+        self.run = Run(inpP,'wrapper')        
+        
         if 'titration' in self.properties['cmipkwds']:
-            run.exefile = self.properties['CMIP_root']+"/src/titration"
+            self.run.exefile = self.properties['CMIP_root']+"/src/titration"
         else:
-            run.exefile = self.properties['CMIP_root']+"/src/cmip"
-        for fn in self.inputFiles + self.outputFiles:
-            run.addFile(fn)
-        if 'vdw' not in run.files:
-            run.addFile({'vdw':self.properties['CMIP_root']+'/dat/vdwprm'})
-        # using cmd_wrapper
+            self.run.exefile = self.properties['CMIP_root']+"/src/cmip"
+        
+        for fn in self.cmipPaths:
+            self.run.addFile(fn)
+        
+        if 'vdw' not in self.run.files:
+            self.run.addFile({'vdw':self.properties['CMIP_root']+'/dat/vdwprm'})    
+    
+    def launch(self,deleteTmpDir=True):
+    # using cmd_wrapper
         out_log, err_log = fu.get_logs(path=self.properties['path'],step=self.properties['step'])
-        cmd = run.prepare()
-        print (cmd)
-        command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
+        command = cmd_wrapper.CmdWrapper(self.run.setup(), out_log, err_log)
         command.launch()
-        # using original CMIP execute
-        # result = run.execute
-        result = Result(run.files)
-        print (result.asString())
+    # using original CMIP execute
+        # self.result = self.run.execute
+        self.result = Result(self.run.tmpdir,self.run.files)
+        if deleteTmpDir:
+            self.run.rmTmpDir()
+        return self.result
         
     def _prepGrid(self,outgrid=0):        
         if outgrid:
@@ -103,7 +108,8 @@ def main():
     props['step']=step
     paths = settings.YamlReader(propfn, 'linux').get_paths_dic()[step]
 
-    CMIPWrapper(paths,props).launch()
+    cw = CMIPWrapper(paths,props)
+    cw.launch(True)
 
 if __name__ == "__main__":
     main()

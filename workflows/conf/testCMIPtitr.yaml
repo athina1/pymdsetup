@@ -2,11 +2,11 @@
 
 ########################## System dependent paths ############################
 linux:
-  CMIP_root: /data/soft/CMIP
-  workflow_path: /home/gelpi/data/DEVEL/BioExcel/pymdsetup/testworkflows
+  CMIP_root: /home/soft/CMIP
+  workflow_path: /home/gelpi/DEVEL/BioExcel/pymdsetup/testworkflows
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/gelpi/data/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb
+  initial_structure_pdb_path: /home/gelpi/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb
 
 # Step: mmbpdb -- Get PDB
 step1_mmbpdb:
@@ -24,10 +24,8 @@ step2_preppdbCMIP:
 step3_CMIPTitration:
   paths:
 #   input_hs: dependency/step2_preppdbCMIP/output_pdb_path
-    input_hs: /home/gelpi/data/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb
-    output_outpdb: titrated
-    output_o: cmip.out
-    output_l: cmip.log
+    input_pdb_path: /home/gelpi/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb    
+    output_pdb_path: CMIPTitrated.pdb
   properties:
     cmip_tipcalc: 1
     cmip_titration: 1

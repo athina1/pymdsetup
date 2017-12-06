@@ -7,6 +7,7 @@ __date__ = "$24-nov-2017 12:30:59$"
 import time
 import sys
 import os
+import re
 import configuration.settings as settings
 import tools.file_utils as fu
 import cmip_wrapper.CMIPWrapper as CW
@@ -21,22 +22,53 @@ def main():
     out_log, _ = fu.get_logs(path=workflow_path, console=True)
     paths = conf.get_paths_dic()
     props = conf.get_prop_dic(global_log=out_log)
-
+    
+    stepid = 'step3_CMIPTitration'
+    
     out_log.info('')
     out_log.info('_______TEST CMIP TITRATION WORKFLOW_______')
     out_log.info('')
 
-    out_log.info('step3:  CMIPTitration')
-    props['step'] = 'step3_CMIPTitration'
-    fu.create_dir(props['step3_CMIPTitration']['path'])
-    CW.CMIPWrapper(paths['step3_CMIPTitration'],props['step3_CMIPTitration']).launch()
-
+    out_log.info(stepid)
+    props['step'] = stepid
+    
+    fu.create_dir(props[stepid]['path'])
+    
+    cw = CW.CMIPWrapper(paths[stepid],props[stepid])
+    
+    #Delaying removal of temporary dir until output is processed
+    cw.launch(False)
+    out_log.info(stepid + " CMIP Output")
+    out_log.info(cw.result.output)
     out_log.info('')
+    
+    outpdbFn = cw.result.getFileName('outpdb')+".pdb"
+    out_log.info('Building output pdb file at')
+    out_log.info(paths[stepid]['output_pdb_path'])
+    
+    out_log.info('Base File: '+ paths[stepid]['input_pdb_path'])
+    out_log.info('Titration File: '+ outpdbFn)
 
+    outFh = open(paths[stepid]['output_pdb_path'],"w")
+    baseFh = open(paths[stepid]['input_pdb_path'],"r")
+    addFh = open(outpdbFn,"r")
+    
+    outFh.write(baseFh.read())
+    baseFh.close()
+    for line in addFh:
+        if re.match('^ATOM',line):
+            outFh.write(line)
+    outFh.close()
+    addFh.close()
+    
+    out_log.info('')
+    
+    cw.run.rmTmpDir()
+    
     elapsed_time = time.time() - start_time
     out_log.info('')
     out_log.info('')
-    out_log.info('Execution sucessful: ')
+    out_log.info('Execution successful: ')
     out_log.info('  Workflow_path: '+workflow_path)
     out_log.info('  Config File: '+yaml_path)
     out_log.info('  System: '+system)
@@ -45,7 +77,6 @@ def main():
     out_log.info('')
     out_log.info('Elapsed time: '+str(elapsed_time)+' seconds')
     out_log.info('')
-
 
 if __name__ == "__main__":
     main()
