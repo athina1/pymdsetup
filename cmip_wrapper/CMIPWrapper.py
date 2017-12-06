@@ -29,6 +29,7 @@ class CMIPWrapper():
             else:
                 self.paths[k]=paths[k]
         self.cmipPaths.append({'hs':paths['input_pdb_path']})
+        
         self.properties={}
         self.properties['cmipkwds'] = {}
         self.properties['step'] =  props['step']

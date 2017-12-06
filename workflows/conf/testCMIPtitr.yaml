@@ -6,25 +6,24 @@ linux:
   workflow_path: /home/gelpi/DEVEL/BioExcel/pymdsetup/testworkflows
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/gelpi/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb
+  initial_structure_pdb_path:
 
 # Step: mmbpdb -- Get PDB
 step1_mmbpdb:
   paths:
     output_pdb_path: structure.pdb
   properties:
-    pdb_code:
+    pdb_code: 1kim
 # Step3: Prep PDB for CMIP
 step2_preppdbCMIP:
   paths:
-      input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
-      output_pdb_path: CMIPPrepared.pdb 
+    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
+    output_pdb_path: CMIPPrepared.pdb 
 
 # Step3: CMIP titration
 step3_CMIPTitration:
   paths:
-#   input_hs: dependency/step2_preppdbCMIP/output_pdb_path
-    input_pdb_path: /home/gelpi/DEVEL/BioExcel/pymdsetup/workflows/1kim_h.pdb    
+    input_pdb_path: dependency/step2_preppdbCMIP/output_pdb_path
     output_pdb_path: CMIPTitrated.pdb
   properties:
     cmip_tipcalc: 1
