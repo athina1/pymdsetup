@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper module for SCWRL
 """
 import sys
@@ -21,30 +23,29 @@ class Scwrl4(object):
             properties=json.loads(properties)
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
-        pattern = re.compile(("(?P<chain>[a-zA-Z*]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
-        self.mutation = pattern.match(properties['mutation']).groupdict()
         self.scwrl4_path = properties.get('scwrl4_path',None)
         self.path = properties.get('path','')
-        self.mut = properties.get('mutation','')
         self.step = properties.get('step','')
-
+        self.mutation = properties['mut'] if properties.get('mut', None) else properties['mutation']
+        pattern = re.compile(("(?P<chain>[a-zA-Z*]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
+        self.mut_dict = pattern.match(self.mutation).groupdict()
 
     def launch(self):
         """Launches the execution of the SCWRL binary.
         """
-        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mut, step=self.step)
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         if self.mutation is not None:
             # Read structure with Biopython
             parser = PDBParser(PERMISSIVE=1)
             st = parser.get_structure('s', self.input_pdb_path)  # s random id never used
 
             # Remove the side chain of the AA to be mutated
-            if self.mutation['chain']!='*':
-                chains = [self.mutation['chain']]
+            if self.mut_dict['chain']!='*':
+                chains = [self.mut_dict['chain']]
             else:
                 chains = [chain.id for chain in st[0]]
 
-            resnum = int(self.mutation['resnum'])
+            resnum = int(self.mut_dict['resnum'])
 
             for chain in chains:
                 residue = st[0][chain][(' ', resnum, ' ')]
@@ -63,12 +64,12 @@ class Scwrl4(object):
                     residue.detach_child(atom.id)
 
                 # Change residue name
-                residue.resname = self.mutation['mt'].upper()
+                residue.resname = self.mut_dict['mt'].upper()
 
             # Write resultant structure
             w = PDBIO()
             w.set_structure(st)
-            prepared_file_path = self.mut+self.step+'prepared.pdb'
+            prepared_file_path = self.mutation+self.step+'prepared.pdb'
             w.save(prepared_file_path)
         else:
             prepared_file_path = self.input_pdb_path
@@ -81,15 +82,11 @@ class Scwrl4(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[3]
-    prop=sys.argv[4]
-    step, system, mut = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic(mut)[step]
-    prop['path']=''
-    Scwrl4(input_pdb_path=sys.argv[1],
-           output_pdb_path=sys.argv[2],
-           step=step,
-           properties=prop).launch()
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Scwrl4(input_pdb_path=sys.argv[4], output_pdb_path=sys.argv[5], properties=prop).launch()
 
 if __name__ == '__main__':
     main()

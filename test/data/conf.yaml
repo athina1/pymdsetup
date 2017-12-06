@@ -68,6 +68,16 @@ archer:
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /home/d118/d118/andrio/structure.pdb
 
+jureca:
+  gmx_path: gmx
+  scwrl4_path: /homea/ias-5/andrio/scwrl/Scwrl4
+  workflow_path: /homea/ias-5/andrio/pymdsetup/testworkflow
+  mdp_path: /homea/ias-5/andrio/pymdsetup/workflows/mdp/
+  gnuplot_path: gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  initial_structure_pdb_path: /homea/ias-5/andrio/pymdsetup/test/data/structure.pdb
+
 scwrl:
   properties:
     input_pdb_path: structure.pdb

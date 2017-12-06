@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper for the GROMACS genion module
 """
 import sys
@@ -12,12 +14,10 @@ class Genion(object):
         input_tpr_path (str): Path to the input portable run input TPR file.
         output_gro_path (str): Path to the input structure GRO file.
         input_top_zip_path (str): Path the input TOP topology in zip format.
-        output_top_zip_path (str): Path the output topology TOP and ITP files
-                                   zipball.
+        output_top_zip_path (str): Path the output topology TOP and ITP files zipball.
         properties (dic):
             output_top_path (str): Path the output topology TOP file.
-            replaced_group (str): Group of molecules that will be replaced by the
-                                solvent.
+            replaced_group (str): Group of molecules that will be replaced by the solvent.
             neutral (bool): Neutralize the charge of the system.
             concentration (float): Concentration of the ions in (mol/liter).
             seed (int): Seed for random number generator.
@@ -95,16 +95,14 @@ class Genion(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[5]
-    prop=sys.argv[6]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Genion(input_tpr_path = sys.argv[1],
-           output_gro_path = sys.argv[2],
-           input_top_zip_path = sys.argv[3],
-           output_top_zip_path = sys.argv[4],
-           step=step,
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Genion(input_tpr_path = sys.argv[4],
+           output_gro_path = sys.argv[5],
+           input_top_zip_path = sys.argv[6],
+           output_top_zip_path = sys.argv[7],
            properties=prop).launch()
 
 if __name__ == '__main__':

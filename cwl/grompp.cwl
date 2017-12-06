@@ -2,44 +2,46 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - python
+  - grompp.py
 inputs:
-  gpp_script:
-    type: File
+  system:
+    type: string
     inputBinding:
       position: 1
-    default:
-      class: File
-      location: ../gromacs_wrapper/grompp.py
-  gpp_input_gro_path:
-    type: File
+    default: "linux"
+  step:
+    type: string
     inputBinding:
       position: 2
-  gpp_input_top_zip_path:
+    default: "gppions"
+  properties_file:
     type: File
     inputBinding:
       position: 3
-  gpp_output_tpr_path:
-    type: string
+    default:
+      class: File
+      location: test/conf_1ps.yaml
+  gpp_input_gro_path:
+    type: File
     inputBinding:
       position: 4
-    default: "grompp.tpr"
-  gpp_step:
-    type: string
+  gpp_input_top_zip_path:
+    type: File
     inputBinding:
       position: 5
-    default: "step7_gppions:linux"
-  gpp_properties:
+  gpp_input_mdp_path:
     type: File
     inputBinding:
       position: 6
-    default:
-      class: File
-      location: "../workflows/conf_2mut_nt0.yaml"
+  gpp_output_tpr_path:
+    type: string
+    inputBinding:
+      position: 7
+    default: "grompp.tpr"
   gpp_input_cpt_path:
     type: File?
     inputBinding:
-      position: 7
+      position: 8
 outputs:
   gpp_output_tpr_file:
     type: File

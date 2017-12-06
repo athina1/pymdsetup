@@ -36,11 +36,11 @@ import sys
 import subprocess
 
 class Run():
-    def __init__(self,inputP):
+    def __init__(self,inputP, type='direct'):
         workdir=os.getcwd()
         self.workdir = workdir
         self.param = inputP
-        self.type = 'direct'
+        self.type = type
         #self.files = {'vdw': Local.VDWPRM}
         self.files = {}
         self.queue = ''
@@ -52,7 +52,6 @@ class Run():
 
 
     def addFile(self, FILES):
-        print(FILES)
         for k in FILES.keys():
             self.files[k] = FILES[k]
         return self
@@ -61,7 +60,7 @@ class Run():
         self.files.pop(file, None)
         return self
 
-    def execute(self,queue=''):
+    def prepare(self):
         tmpdir = tempfile.mkdtemp(prefix="CMIP")
         if 'i' not in self.files:
             try:
@@ -99,8 +98,12 @@ class Run():
         print (("#!/bin/tcsh -f\nhostname\ncd "+ self.workdir + "\n" + cmd + "\n#rm -rf " + tmpdir + "\n"))
         CSH.write ("#!/bin/tcsh -f\nhostname\ncd "+ self.workdir + "\n" + cmd + "\n#rm -rf " + tmpdir + "\n")
         CSH.close()
-        print (("/bin/tcsh "+ runscript + " 1> " +  self.files['stdout'] + " 2> " + self.files['stderr']) )
-        cproc = subprocess.call ("/bin/tcsh "+ runscript + " 1> " +  self.files['stdout'] + " 2> " + self.files['stderr'])            
+        #return "/bin/tcsh "+ runscript + " > " + self.files['stdout'] + " >& " + self.files['stderr']
+        return "/bin/tcsh ",runscript 
+    
+    def execute(self):
+        cmdline = self.prepare()        
+        cproc = subprocess.getoutput (cmdline)            
         return CMIP.Result(self.files)
-            
-		
+        
+    		

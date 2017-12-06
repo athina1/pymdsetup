@@ -35,11 +35,11 @@ class Result():
         self.stderr=''
         self.logData={}
         self.files=files
-        if 'o' not in files:
+        if 'o' in files:
             self.output = _getFile(files['o'])
-        if 'stdout' not in files:
+        if 'stdout' in files:
             self.stdout = _getFile(files['stdout'])
-        if 'stderr' not in files:
+        if 'stderr' in files:
             self.stderr = _getFile(files['stderr'])
         if self.stderr == '' and files['l']:
             LOG  = open (files['l'],"r")

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Python wrapper module for the GROMACS editconf module
 """
 import sys
@@ -43,7 +45,7 @@ class Editconf(object):
                '-o', self.output_gro_path,
                '-d', str(self.distance_to_molecule),
                '-bt', self.box_type]
-               
+
         if self.mpirun_np is not None:
             cmd.insert(0, str(self.mpirun_np))
             cmd.insert(0, '-np')
@@ -57,14 +59,12 @@ class Editconf(object):
 
 #Creating a main function to be compatible with CWL
 def main():
-    step=sys.argv[3]
-    prop=sys.argv[4]
-    step, system = step.split(':')
-    prop = settings.YamlReader(prop, system).get_prop_dic()[step]
-    prop['path']=''
-    Editconf(input_gro_path=sys.argv[1],
-             output_gro_path=sys.argv[2],
-             step=step,
+    system=sys.argv[1]
+    step=sys.argv[2]
+    properties_file=sys.argv[3]
+    prop = settings.YamlReader(properties_file, system).get_prop_dic()[step]
+    Editconf(input_gro_path=sys.argv[4],
+             output_gro_path=sys.argv[5],
              properties=prop).launch()
 
 if __name__ == '__main__':

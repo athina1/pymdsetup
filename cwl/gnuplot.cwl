@@ -2,36 +2,34 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - python
+  - gnuplot.py
 inputs:
-  gnuplot_script:
-    type: File
+  system:
+    type: string
     inputBinding:
       position: 1
+    default: "linux"
+  step:
+    type: string
+    inputBinding:
+      position: 2
+    default: "gnuplot"
+  properties_file:
+    type: File
+    inputBinding:
+      position: 3
     default:
       class: File
-      location: ../gnuplot_wrapper/gnuplot.py
+      location: test/conf_1ps.yaml
   gnuplot_input_xvg_path:
     type: File
     inputBinding:
-      position: 2
+      position: 4
   gnuplot_output_png_path:
     type: string
     inputBinding:
-      position: 3
-    default: "gnuplot.png"
-  gnuplot_step:
-    type: string
-    inputBinding:
-      position: 4
-    default: "step18_gnuplot:linux"
-  gnuplot_properties:
-    type: File
-    inputBinding:
       position: 5
-    default:
-      class: File
-      location: "../workflows/conf_2mut_nt0.yaml"
+    default: "gnuplot.png"
 outputs:
   gnuplot_output_png_file:
     type: File
