@@ -66,8 +66,8 @@ class CMIPWrapper():
     
     def launch(self,deleteTmpDir=True):
     # using cmd_wrapper
-        out_log, err_log = fu.get_logs(path=self.properties['path'],step=self.properties['step'])
-        command = cmd_wrapper.CmdWrapper(self.run.setup(), out_log, err_log)
+        self.out_log, self.err_log = fu.get_logs(path=self.properties['path'],step=self.properties['step'])
+        command = cmd_wrapper.CmdWrapper(self.run.setup(), self.out_log, self.err_log)
         command.launch()
     # using original CMIP execute
         # self.result = self.run.execute

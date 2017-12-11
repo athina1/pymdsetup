@@ -36,11 +36,16 @@ def main():
     fu.create_dir(props[stepid]['path'])
     
     cw = CW.CMIPWrapper(paths[stepid],props[stepid])
-    
     #Delaying removal of temporary dir until output is processed
     cw.launch(False)
+    out_log.debug ("Temp directory: "+ cw.run.tmpdir)
     out_log.info(stepid + " CMIP Output")
-    out_log.info(cw.result.output)
+    
+    if cw.result.errstr:
+        out_log.error(cw.result.errstr)
+        sys.exit(1)
+    else:
+        out_log.info(cw.result.output)
     out_log.info('')
     
     outpdbFn = cw.result.getFileName('outpdb')+".pdb"
