@@ -170,49 +170,49 @@ def merge_dictionaries(a, b):
 
 @task(input_pdb_path=FILE_IN, output_pdb_path=FILE_OUT)
 def scwrl_pc(input_pdb_path, output_pdb_path, properties, **kwargs):
-    scwrl.Scwrl4(input_pdb_path, output_pdb_path, properties, **kwargs).launch()
+    scwrl.Scwrl4(input_pdb_path=input_pdb_path, output_pdb_path=output_pdb_path, properties=properties, **kwargs).launch()
 
 @task(input_structure_pdb_path=FILE_IN, output_gro_path=FILE_OUT, output_top_zip_path=FILE_OUT)
 def pdb2gmx_pc(input_structure_pdb_path, output_gro_path, output_top_zip_path, properties, **kwargs):
-    pdb2gmx.Pdb2gmx(input_structure_pdb_path, output_gro_path, output_top_zip_path, properties, **kwargs).launch()
+    pdb2gmx.Pdb2gmx(input_structure_pdb_path=input_structure_pdb_path, output_gro_path=output_gro_path, output_top_zip_path=output_top_zip_path, properties=properties, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, output_gro_path=FILE_OUT)
 def editconf_pc(input_gro_path, output_gro_path, properties, **kwargs):
-    editconf.Editconf(input_gro_path, output_gro_path, properties, **kwargs).launch()
+    editconf.Editconf(input_gro_path=input_gro_path, output_gro_path=output_gro_path, properties=properties, **kwargs).launch()
 
 @task(input_solute_gro_path=FILE_IN, output_gro_path=FILE_OUT, input_top_zip_path=FILE_IN, output_top_zip_path=FILE_OUT)
 def solvate_pc(input_solute_gro_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs):
-    solvate.Solvate(input_solute_gro_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs).launch()
+    solvate.Solvate(input_solute_gro_path=input_solute_gro_path, output_gro_path=output_gro_path, input_top_zip_path=input_top_zip_path, output_top_zip_path=output_top_zip_path, properties=properties, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, input_top_zip_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT,  input_cpt_path=FILE_IN)
 def grompp_pc_cpt(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs):
-    grompp.Grompp(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, input_cpt_path, **kwargs).launch()
+    grompp.Grompp(input_gro_path=input_gro_path, input_top_zip_path=input_top_zip_path, input_mdp_path=input_mdp_path, output_tpr_path=output_tpr_path, properties=properties, input_cpt_path=input_cpt_path, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, input_top_zip_path=FILE_IN, input_mdp_path=FILE_IN, output_tpr_path=FILE_OUT)
 def grompp_pc(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, **kwargs):
-    grompp.Grompp(input_gro_path, input_top_zip_path, input_mdp_path, output_tpr_path, properties, **kwargs).launch()
+    grompp.Grompp(input_gro_path=input_gro_path, input_top_zip_path=input_top_zip_path, input_mdp_path=input_mdp_path, output_tpr_path=output_tpr_path, properties=properties, **kwargs).launch()
 
 @task(input_tpr_path=FILE_IN, output_gro_path=FILE_OUT, input_top_zip_path=FILE_IN, output_top_zip_path=FILE_OUT)
 def genion_pc(input_tpr_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs):
-    genion.Genion(input_tpr_path, output_gro_path, input_top_zip_path, output_top_zip_path, properties, **kwargs).launch()
+    genion.Genion(input_tpr_path=input_tpr_path, output_gro_path=output_gro_path, input_top_zip_path=input_top_zip_path, output_top_zip_path=output_top_zip_path, properties=properties, **kwargs).launch()
 
 @constraint(ComputingUnits=computing_units)
 @task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT, output_cpt_path=FILE_OUT)
 def mdrun_pc_cpt(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs):
-    mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, output_cpt_path, **kwargs).launch()
+    mdrun.Mdrun(input_tpr_path=input_tpr_path, output_trr_path=output_trr_path, properties=properties, output_gro_path=output_gro_path, output_cpt_path=output_cpt_path, **kwargs).launch()
 
 @constraint(ComputingUnits=computing_units)
 @task(input_tpr_path=FILE_IN, output_trr_path=FILE_OUT, output_gro_path=FILE_OUT)
 def mdrun_pc(input_tpr_path, output_trr_path, output_gro_path, properties, **kwargs):
-    mdrun.Mdrun(input_tpr_path, output_trr_path, output_gro_path, properties, **kwargs).launch()
+    mdrun.Mdrun(input_tpr_path=input_tpr_path, output_trr_path=output_trr_path, properties=properties, output_gro_path=output_gro_path, **kwargs).launch()
 
 @task(input_gro_path=FILE_IN, input_trr_path=FILE_IN, output_xvg_path=FILE_OUT, returns=dict)
 def rms_pc(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs):
-    return rms.Rms(input_gro_path, input_trr_path, output_xvg_path, properties, **kwargs).launch()
+    return rms.Rms(input_gro_path=input_gro_path, input_trr_path=input_trr_path, output_xvg_path=output_xvg_path, properties=properties, **kwargs).launch()
 
 @task(output_png_path=FILE_OUT)
 def gnuplot_pc(input_xvg_path_dict, output_png_path, properties):
-    gnuplot.Gnuplot(input_xvg_path_dict, output_png_path, properties).launch()
+    gnuplot.Gnuplot(input_xvg_path_dict=input_xvg_path_dict, output_png_path=output_png_path, properties=properties).launch()
 
 if __name__ == '__main__':
     main()
