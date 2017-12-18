@@ -4,6 +4,7 @@
 """
 import sys
 import json
+from os.path import join as opj
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
@@ -39,6 +40,17 @@ class Grompp(object):
         self.path = properties.get('path','')
         self.mpirun = properties.get('mpirun', False)
         self.mpirun_np = properties.get('mpirun_np', None)
+        self.mdp = properties.get('mdp', None)
+
+    def create_mdp(self):
+        """Creates an MDP file using the properties file settings
+        """
+        mdp_file_path=fu.create_path(self.path, '.mdp', self.mutation, self.step)
+        header="; This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()"
+        with open(mdp_file_path, 'w') as mdp:
+            mdp.write(header + '\n')
+            for key, value in self.mdp.iteritems():
+                mdp.write(key + ' = ' + value + '\n')
 
     def launch(self):
         """Launches the execution of the GROMACS grompp module.

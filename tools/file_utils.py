@@ -55,11 +55,8 @@ def unzip_top(zip_file, dest_dir=None, top_file=None):
 
 
 def get_logs(path, mutation=None, step=None, console=False):
-    path = '' if (path is None or not os.path.isdir(path)) else path
-    mutation = '' if mutation is None else mutation+'_'
-    step = '' if step is None else step+'_'
-    out_log_path = opj(path, mutation+step+'out.log')
-    err_log_path = opj(path, mutation+step+'err.log')
+    out_log_path = create_path(path, 'out.log', mutation, step)
+    err_log_path = create_path(path, 'out.log', mutation, step)
     logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
     out_Logger = logging.getLogger(out_log_path)
     err_Logger = logging.getLogger(err_log_path)
@@ -78,3 +75,8 @@ def get_logs(path, mutation=None, step=None, console=False):
     out_Logger.setLevel(10)
     err_Logger.setLevel(10)
     return out_Logger, err_Logger
+
+def create_path(path, suffix, mutation=None, step=None):
+    step = '' if step is None else step+'_'
+    mutation = '' if mutation is None else mutation+'_'
+    return opj(path, mutation+step+suffix)
