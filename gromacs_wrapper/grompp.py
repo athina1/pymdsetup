@@ -24,7 +24,7 @@ class Grompp(object):
             gmx_path (str): Path to the GROMACS executable binary.
     """
 
-    def __init__(self, input_gro_path, input_top_zip_path, input_mdp_path,
+    def __init__(self, input_gro_path, input_top_zip_path,
                  output_tpr_path, properties, input_cpt_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
@@ -32,7 +32,7 @@ class Grompp(object):
         self.input_top_zip_path = input_top_zip_path
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
-        self.input_mdp_path=input_mdp_path
+        self.input_mdp_path= properties.get('input_mdp_path', None)
         self.output_mdp_path= properties.get('output_mdp_path', None)
         self.gmx_path = properties.get('gmx_path', None)
         self.mutation = properties.get('mutation',None)
@@ -47,20 +47,119 @@ class Grompp(object):
         """
         mdp_file_path=fu.create_path(self.path, '.mdp', self.mutation, self.step)
         header="; This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()"
+
+        # Position restrain
+        if md:
+            if nvt or npt:
+                self.mdp['define'] =  self.mdp.get('define', '-DPOSRES')
+
+        # Run parameters
+        self.mdp['nsteps'] =  self.mdp.get('nsteps', '5000')
+        if minimization:
+            self.mdp['integrator'] =  self.mdp.get('integrator', 'steep')
+            self.mdp['emtol'] =  self.mdp.get('emtol', '1000.0')
+            self.mdp['emstep'] =  self.mdp.get('emstep', '0.01')
+        if md:
+            self.mdp['integrator'] =  self.mdp.get('integrator', 'md')
+            self.mdp['dt'] =  self.mdp.get('dt', '0.002')
+
+        # Output control
+        if md:
+            if nvt or npt:
+                self.mdp['nstxout']   =  self.mdp.get('nstxout',   '500')
+                self.mdp['nstvout']   =  self.mdp.get('nstvout',   '500')
+                self.mdp['nstenergy'] =  self.mdp.get('nstenergy', '500')
+                self.mdp['nstlog']    =  self.mdp.get('nstlog',    '500')
+            if free:
+                self.mdp['nstxout']   =  self.mdp.get('nstxout',   '5000')
+                self.mdp['nstvout']   =  self.mdp.get('nstvout',   '5000')
+                self.mdp['nstenergy'] =  self.mdp.get('nstenergy', '5000')
+                self.mdp['nstlog']    =  self.mdp.get('nstlog',    '5000')
+                self.mdp['nstxout-compressed'] = self.mdp.get('nstxout-compressed', '5000')
+                self.mdp['compressed-x-grps']    =  self.mdp.get('compressed-x-grps', 'System')
+
+        # Bond parameters
+        if md:
+            self.mdp['constraint_algorithm']   =  self.mdp.get('constraint_algorithm', 'lincs')
+            self.mdp['constraints']            =  self.mdp.get('constraints',          'all-bonds')
+            self.mdp['lincs_iter']             =  self.mdp.get('lincs_iter',           '1')
+            self.mdp['lincs_order']            =  self.mdp.get('lincs_order',          '4')
+            if nvt:
+                self.mdp['continuation']           =  self.mdp.get('continuation',     'no')
+            if npt or free:
+                self.mdp['continuation']           =  self.mdp.get('continuation',      'yes')
+
+
+        # Neighbour searching
+        self.mdp['cutoff-scheme'] =  self.mdp.get('cutoff-scheme', 'Verlet')
+        self.mdp['ns_type'] =  self.mdp.get('ns_type', 'grid')
+        self.mdp['rcoulomb'] =  self.mdp.get('rcoulomb', '1.0')
+        self.mdp['rvdw'] =  self.mdp.get('rvdw', '1.0')
+        if minimization:
+            self.mdp['nstlist'] =  self.mdp.get('nstlist', '1')
+        if md:
+            self.mdp['nstlist'] =  self.mdp.get('nstlist', '10')
+
+        # Eletrostatics
+        self.mdp['coulombtype'] =  self.mdp.get('coulombtype', 'PME')
+        if md:
+            self.mdp['pme_order'] =  self.mdp.get('pme_order', '4')
+            self.mdp['fourierspacing'] =  self.mdp.get('fourierspacing', '0.16')
+
+        # Temperature coupling
+        if md:
+            self.mdp['tcoupl']  =  self.mdp.get('tcoupl', 'V-rescale')
+            self.mdp['tc-grps'] =  self.mdp.get('tc-grps', 'Protein Non-Protein')
+            self.mdp['tau_t']   =  self.mdp.get('tau_t', '0.1	  0.1')
+            self.mdp['ref_t']   =  self.mdp.get('ref_t', '300 	  300')
+
+        # Pressure coupling
+        if md:
+            if nvt:
+                self.mdp['pcoupl']   =  self.mdp.get('pcoupl', 'no')
+            if npt or free:
+                self.mdp['pcoupl']   =  self.mdp.get('pcoupl', 'Parrinello-Rahman')
+                self.mdp['pcoupltype']   =  self.mdp.get('pcoupltype', 'isotropic')
+                self.mdp['tau_p']   =  self.mdp.get('tau_p', '2.0')
+                self.mdp['ref_p']   =  self.mdp.get('ref_p', '1.0')
+                self.mdp['compressibility']   =  self.mdp.get('compressibility', '4.5e-5')
+                if npt:
+                    self.mdp['refcoord_scaling']   =  self.mdp.get('refcoord_scaling', 'com')
+
+        # Dispersion correction
+        if md:
+            self.mdp['DispCorr']   =  self.mdp.get('DispCorr', 'EnerPres')
+
+        # Velocity generation
+        if md:
+            if nvt:
+                self.mdp['gen_vel']    =  self.mdp.get('gen_vel',   'yes')
+                self.mdp['gen_temp']   =  self.mdp.get('gen_temp', '300')
+                self.mdp['gen_seed']   =  self.mdp.get('gen_seed', '-1')
+            if npt or free:
+                self.mdp['gen_vel']   =  self.mdp.get('gen_vel',   'no')
+
+        #Periodic boundary conditions
+        self.mdp['pbc'] =  self.mdp.get('pbc', 'xyz')
+
         with open(mdp_file_path, 'w') as mdp:
             mdp.write(header + '\n')
             for key, value in self.mdp.iteritems():
-                mdp.write(key + ' = ' + value + '\n')
+                mdp.write(key + ' = ' + str(value) + '\n')
+
+        return mdp_file_path
 
     def launch(self):
         """Launches the execution of the GROMACS grompp module.
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
+
+        mdp_file_path = self.create_mdp() if self.input_mdp_path is None else self.input_mdp_path
         # Unzip topology in de directory of the output_tpr_path and get the
         # topology path
         topology_path = fu.unzip_top(self.input_top_zip_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
-        cmd = [gmx, 'grompp', '-f', self.input_mdp_path,
+        cmd = [gmx, 'grompp', '-f', mdp_file_path,
                '-c', self.input_gro_path,
                '-p', topology_path,
                '-o', self.output_tpr_path]
