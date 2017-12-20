@@ -31,25 +31,24 @@ class Gnuplot(object):
         self.path = properties.get('path','')
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
+        self.term = properties.get('term', 'png')
 
     def launch(self):
         """Launches the execution of the GNUPLOT binary.
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        self.output_plotscript_path = self.output_plotscript_path if self.step is None else self.step+'_'+self.output_plotscript_path
-        self.output_plotscript_path = self.output_plotscript_path if self.mutation is None else self.mutation+'_'+self.output_plotscript_path
+        self.output_plotscript_path = fu.create_path(path=os.getcwd(), suffix=self.output_plotscript_path, mutation=self.mutation, step=self.step)
         # Create the input script for gnuplot
-        lb = os.linesep
         xvg_file_list = []
         with open(self.output_plotscript_path, 'w') as ps:
-            ps.write('set term png'+lb)
-            ps.write('set output "' + self.output_png_path + '"'+lb)
+            ps.write('set term '+self.term+'\n')
+            ps.write('set output "' + self.output_png_path + '"'+'\n')
             ps.write('plot')
             for k, v in self.input_xvg_path_dict.iteritems():
                 if isinstance(v, basestring) and os.path.isfile(v):
                     ps.write(' "' + v + '" u 1:3 w lp t "' + k + '",')
                 else:
-                    xvg_file = k + '.xvg'
+                    xvg_file = fu.create_path(path=os.getcwd(), suffix=k + '.xvg', mutation=self.mutation, step=self.step  )
                     np.savetxt(xvg_file, v, fmt='%4.7f')
                     out_log.info('Creating file: '+os.path.abspath(xvg_file))
                     xvg_file_list.append(os.path.abspath(xvg_file))
@@ -61,9 +60,9 @@ class Gnuplot(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
-        for f in xvg_file_list:
-            out_log.info('Removing file: '+os.path.abspath(f))
-            os.unlink(os.path.abspath(f))
+        #for f in xvg_file_list:
+        #    out_log.info('Removing file: '+os.path.abspath(f))
+        #    os.unlink(os.path.abspath(f))
         return returncode
 
 #Creating a main function to be compatible with CWL

@@ -11,8 +11,8 @@ class TestEditconf(object):
         fx.test_teardown(self)
 
     def test_launch(self):
-        output_gro_path = opj(self.test_dir, self.properties['output_gro_path'])
-        output_top_zip_path = opj(self.test_dir, self.properties['output_top_zip_path'])
+        output_gro_path = opj(self.properties['path'], self.properties['output_gro_path'])
+        output_top_zip_path = opj(self.properties['path'], self.properties['output_top_zip_path'])
         returncode = Genion(input_tpr_path=opj(self.data_dir, self.properties['input_tpr_path']),
                             output_gro_path=output_gro_path,
                             input_top_zip_path=opj(self.data_dir, self.properties['input_top_zip_path']),

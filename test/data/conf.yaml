@@ -114,7 +114,10 @@ grompp:
     input_gro_path: sol.gro
     input_top_zip_path: sol_top.zip
     output_tpr_path: gppions.tpr
-    input_mdp_path: gmx_full_ions_test.mdp
+    mdp:
+      # type: minimization, nvt, npt, free
+      type: minimization
+
 
 
 genion:
@@ -135,7 +138,9 @@ gppmin:
     input_gro_path: gio.gro
     input_top_zip_path: gio_top.zip
     output_tpr_path: gppmin.tpr
-    input_mdp_path: gmx_full_min_test.mdp
+    mdp:
+      # type: minimization, nvt, npt, free
+      type: minimization
 
 mdrun:
   properties:

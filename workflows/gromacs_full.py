@@ -20,6 +20,8 @@ def main():
     start_time = time.time()
     yaml_path=sys.argv[1]
     system=sys.argv[2]
+    n_mutations=sys.argv[3]
+
     conf = settings.YamlReader(yaml_path, system)
     workflow_path = conf.properties[system]['workflow_path']
     fu.create_dir(os.path.abspath(workflow_path))
@@ -31,6 +33,16 @@ def main():
     out_log.info('_______GROMACS FULL WORKFLOW_______')
     out_log.info('')
 
+    out_log.info("Command Executed:")
+    out_log.info(" ".join(sys.argv))
+    out_log.info('Workflow_path: '+workflow_path)
+    out_log.info('Config File: '+yaml_path)
+    out_log.info('System: '+system)
+    out_log.info('Mutations limit: '+n_mutations)
+    if len(sys.argv) >= 5:
+        out_log.info('Nodes: '+sys.argv[4])
+
+    out_log.info('')
     out_log.info( 'step1:  mmbpdb -- Get PDB')
     structure = conf.properties[system].get('initial_structure_pdb_path', None)
     if structure is None or not os.path.isfile(structure):
@@ -48,7 +60,7 @@ def main():
     else:
         mutations = [m.strip() for m in conf.properties.get('input_mapped_mutations_list').split(',')]
 
-    mutations_limit = min(len(mutations), int(prop_glob.get('mutations_limit', len(mutations))))
+    mutations_limit = min(len(mutations), int(n_mutations))
     out_log.info('')
     out_log.info('Number of mutations to be modelled: ' + str(mutations_limit))
 
@@ -119,7 +131,7 @@ def main():
         fu.create_dir(prop['step15_gppeq']['path'])
         grompp.Grompp(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
 
-        out_log.info('step16: mdeq ----- Running: 1ns Molecular dynamics Equilibration')
+        out_log.info('step16: mdeq ----- Running: Free Molecular dynamics Equilibration')
         fu.create_dir(prop['step16_mdeq']['path'])
         mdrun.Mdrun(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
 
@@ -133,11 +145,11 @@ def main():
     gnuplot.Gnuplot(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
     elapsed_time = time.time() - start_time
 
-    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp'])
-    out_log.info('')
-    out_log.info('Removing unwanted files: ')
-    for removed_file in removed_list:
-        out_log.info('    X    ' + removed_file)
+    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg'])
+    #out_log.info('')
+    #out_log.info('Removing unwanted files')
+    #for removed_file in removed_list:
+    #    out_log.info('    X    ' + removed_file)
 
     out_log.info('')
     out_log.info('')
@@ -145,8 +157,8 @@ def main():
     out_log.info('  Workflow_path: '+workflow_path)
     out_log.info('  Config File: '+yaml_path)
     out_log.info('  System: '+system)
-    if len(sys.argv) >= 4:
-        out_log.info('  Nodes: '+sys.argv[3])
+    if len(sys.argv) >= 5:
+        out_log.info('  Nodes: '+sys.argv[4])
     out_log.info('')
     out_log.info('Elapsed time: '+str(elapsed_time)+' seconds')
     out_log.info('')

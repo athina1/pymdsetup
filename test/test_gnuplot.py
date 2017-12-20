@@ -12,7 +12,7 @@ class TestEditconf(object):
         fx.test_teardown(self)
 
     def test_launch(self):
-        output_png_path = opj(self.test_dir, self.properties['output_png_path'])
+        output_png_path = opj(self.properties['path'], self.properties['output_png_path'])
         returncode = Gnuplot(input_xvg_path_dict={u'A.Lys58Glu': np.array([[ 0.,2.3958132],[ 1.,2.4249675]]),
                                                   u'A.Thr74Ala': np.array([[ 0.,2.4072435],[ 1.,2.4521089]])},
                              output_png_path=output_png_path,

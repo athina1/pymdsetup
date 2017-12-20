@@ -56,27 +56,47 @@ def unzip_top(zip_file, dest_dir=None, top_file=None):
 
 def get_logs(path, mutation=None, step=None, console=False):
     out_log_path = create_path(path, 'out.log', mutation, step)
-    err_log_path = create_path(path, 'out.log', mutation, step)
+    err_log_path = create_path(path, 'err.log', mutation, step)
     logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
     out_Logger = logging.getLogger(out_log_path)
     err_Logger = logging.getLogger(err_log_path)
+
+    #Creating and formating FileHandler
     out_fileHandler = logging.FileHandler(out_log_path, mode='a', encoding=None, delay=False)
     err_fileHandler = logging.FileHandler(err_log_path, mode='a', encoding=None, delay=False)
     out_fileHandler.setFormatter(logFormatter)
     err_fileHandler.setFormatter(logFormatter)
+
+    #Asign FileHandler
     out_Logger.addHandler(out_fileHandler)
     err_Logger.addHandler(err_fileHandler)
+
+    #Creating and formating consoleHandler
     consoleHandler = logging.StreamHandler()
     consoleHandler.setFormatter(logFormatter)
+
     # Adding console aditional output
     if console:
         out_Logger.addHandler(consoleHandler)
         err_Logger.addHandler(consoleHandler)
+
     out_Logger.setLevel(10)
     err_Logger.setLevel(10)
     return out_Logger, err_Logger
 
 def create_path(path, suffix, mutation=None, step=None):
-    step = '' if step is None else step+'_'
-    mutation = '' if mutation is None else mutation+'_'
+    mutation = '' if mutation is None  else mutation
+    step = '' if step is None else step
+    step = '_'+step if ( (step != '') and (mutation != '') ) else step
+    suffix = '_'+suffix if ( (not suffix.startswith('.')) and (step != '' or mutation != '')) else suffix
     return opj(path, mutation+step+suffix)
+
+def human_readable_time(time_ps):
+    time_units = ['femto seconds','pico seconds','nano seconds','micro seconds','mili seconds']
+    time = time_ps * 1000
+    for tu in time_units:
+        if time < 1000:
+            return str(time)+' '+tu
+        else:
+            time = time/1000
+    return str(time_ps)
