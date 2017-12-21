@@ -9,7 +9,7 @@ macos:
   gmx_path: /usr/local/bin/gmx
   scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
   workflow_path: /Users/pau/projects/pymdsetup/testworkflow
-  gnuplot_path: /usr/bin/gnuplot
+  gnuplot_path: /Users/pau/anaconda2/envs/pymdsetup/bin/gnuplot
   initial_structure_pdb_path: /home/pau/Desktop/structure.pdb
 
 virtualbox:
