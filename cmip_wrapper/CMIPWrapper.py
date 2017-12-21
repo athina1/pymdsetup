@@ -22,23 +22,22 @@ class CMIPWrapper():
     def __init__(self, paths, props):
         self.cmipPaths=[]
         self.paths={}
+        
         for k in paths.keys():
-            if re.match('cmip_',k):
-                lb, keyw = re.split('_',k)
-                self.cmipPaths.append({keyw:paths[k]})
+            if k == 'cmip':
+                self.cmipPaths=paths[k]
             else:
                 self.paths[k]=paths[k]
         self.cmipPaths.append({'hs':paths['input_pdb_path']})
         
         self.properties={}
-        self.properties['cmipkwds'] = {}
         self.properties['step'] =  props['step']
         for k in props.keys():
-            if re.match('cmip_',k):
-                lb, keyw = re.split('_',k)
-                self.properties['cmipkwds'][keyw]=props[k]
+            if k == 'cmip':
+                self.properties['cmipkwds']=props[k]
             else:
                 self.properties[k]=props[k]        
+        
         
         gr = self._prepGrid()
         if 'pbfocus' in self.properties['cmipkwds'] and\
