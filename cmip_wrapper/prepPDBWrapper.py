@@ -10,25 +10,26 @@ import tools.file_utils as fu
 from command_wrapper import cmd_wrapper
 
 
-class prepPDBPWrapper():
+class prepPDBWrapper():
     """Wrapper class for preppdb script        
     """
 
     def __init__(self, paths, props):
+        self.properties={}
         for k in props:
             self.properties[k]=props[k]
-        if res_lib not in paths:
+        if 'res_lib' not in paths:
             self.res_lib = props['CMIP_root']+"/dat/res.lib"
         else:
             self.res_lib = paths['res_lib']
         self.pdb_in = paths['input_pdb_path']
         self.pdb_out = paths['output_pdb_path']        
-        self.script = props['CMIP_root']+"python/preppdb.py"
+        self.script = props['CMIP_root']+"/python/preppdb.py"
     
     def launch(self):
     # using cmd_wrapper
         out_log, err_log = fu.get_logs(path=self.properties['path'],step=self.properties['step'])
-        cmd = "python " + self.script + self.res_lib + self.pdb_in + self.pdb_out
+        cmd =["python ",self.script, self.res_lib, self.pdb_in, self.pdb_out]
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()
 

@@ -37,6 +37,7 @@ class Result():
         self.workdir=workdir
         self.logData={}
         self.files=files
+        self.errstr=''
         if 'o' in files:
             self.output = _getFile(files['o'])
             if self.output == 0:

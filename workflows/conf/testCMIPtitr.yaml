@@ -12,8 +12,10 @@ linux:
 step1_mmbpdb:
   paths:
     output_pdb_path: structure.pdb
+    input_test_pdb_path: /home/gelpi/data/DEVEL/BioExcel/pymdsetup/workflows/1kimh.pdb
   properties:
-    pdb_code: 1kim
+    pdb_code: 1kim    
+    
 # Step3: Prep PDB for CMIP
 step2_preppdbCMIP:
   paths:

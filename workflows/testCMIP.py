@@ -11,6 +11,8 @@ import re
 import configuration.settings as settings
 import tools.file_utils as fu
 import cmip_wrapper.CMIPWrapper as CW
+import cmip_wrapper.prepPDBWrapper as PPW
+from shutil import copyfile
 
 def main():
     start_time = time.time()
@@ -23,13 +25,28 @@ def main():
     paths = conf.get_paths_dic()
     props = conf.get_prop_dic(global_log=out_log)
     
-    
-    stepid = 'step3_CMIPTitration'
-    
     out_log.info('')
     out_log.info('_______TEST CMIP TITRATION WORKFLOW_______')
     out_log.info('')
 
+    stepid = 'step1_mmbpdb'
+    out_log.info(stepid)
+    props['step'] = stepid
+    
+    # for testing only
+    fu.create_dir(props[stepid]['path'])
+
+    copyfile (paths['step1_mmbpdb']['input_test_pdb_path'],
+        paths['step1_mmbpdb']['output_pdb_path'])
+    out_log.info('Test Input File copied')
+    
+    stepid = 'step2_preppdbCMIP'
+    out_log.info(stepid)
+    props['step'] = stepid
+    fu.create_dir(props[stepid]['path'])
+    PPW.prepPDBWrapper(paths[stepid],props[stepid]).launch()
+    
+    stepid = 'step3_CMIPTitration'
     out_log.info(stepid)
     props['step'] = stepid
     
