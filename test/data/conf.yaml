@@ -160,3 +160,18 @@ gnuplot:
   properties:
     output_png_path: gplot.png
     output_plotscript_path: gplot.plotscript
+
+make_ndx:
+  properties:
+    input_structure_path: make_ndx.tpr
+    output_ndx_path: index.ndx
+    selection: "2 & chain A \n 2 & chain B \n 2 & chain C \n 2 & chain D \n name 10 Chain_A \n name 11 Chain_B \n name 12 Chain_C \n name 13 Chain_D \n 10 & !r 315 \n 10 & r 315 & a CA C N O \n 14 | 15 \n del 14 \n del 14 \n 11 & !r 315 \n 11 & r 315 & a CA C N O \n 15 | 16 \n del 15 \n del 15 \n 12 & !r 315 \n 12 & r 315 & a CA C N O \n 16 | 17  \n del 16 \n del 16 \n 13 & !r 315 \n 13 & r 315 & a CA C N O \n 17 | 18 \n del 17 \n del 17 \n name 14 Chain_A_noMut \n name 15 Chain_B_noMut \n name 16 Chain_C_noMut \n name 17 Chain_D_noMut \n 10 & a CA C N O \n 11 & a CA C N O \n 12 & a CA C N O \n 13 & a CA C N O \n name 18 Chain_A_backbone \n name 19 Chain_B_backbone \n name 20 Chain_C_backbone \n name 21 Chain_D_backbone \n q"
+
+genrestr:
+  properties:
+    input_structure_path: genrestr.gro
+    input_ndx_path: genrestr.ndx
+    input_top_zip_path: genrestr_top.zip
+    output_top_zip_path: genrestr_top_out.zip
+    force_constants: 500 500 500
+    restricted_group: chA_&_r_513

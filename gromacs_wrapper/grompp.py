@@ -34,7 +34,7 @@ class Grompp(object):
         self.output_tpr_path = output_tpr_path
         self.input_cpt_path = input_cpt_path
         self.input_mdp_path= properties.get('input_mdp_path', None)
-        self.output_mdp_path= properties.get('output_mdp_path', None)
+        self.output_mdp_path= properties.get('output_mdp_path', 'generated.mdp')
         self.gmx_path = properties.get('gmx_path', None)
         self.mutation = properties.get('mutation',None)
         self.step = properties.get('step',None)
@@ -50,7 +50,7 @@ class Grompp(object):
         """
 
         mdp_list=[]
-        mdp_file_path=fu.create_path(path=os.getcwd(), suffix='.mdp', mutation=self.mutation, step=self.step)
+        mdp_file_path=fu.add_step_mutation_path_to_name(self.output_mdp_path, self.step, self.mutation)
         mdp_list.append(";This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()")
 
         minimization = (self.mdp.get('type', 'minimization') == 'minimization')

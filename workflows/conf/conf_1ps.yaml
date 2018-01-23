@@ -83,8 +83,7 @@ pmes:
 
 jureca:
   gmx_path: gmx
-  scwrl4_path: /homea/ias-5/andrio/scwrl/Scwrl4
-  workflow_path: /homea/ias-5/andrio/pymdsetup/testworkflow
+  scwrl4_path: /homea/ias-5/and2ndrio/pymdsetup/testworkflow
   gnuplot_path: gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)

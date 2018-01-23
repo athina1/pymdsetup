@@ -24,7 +24,7 @@ def main():
     out_log, _ = fu.get_logs(path=workflow_path, console=True)
     paths = conf.get_paths_dic()
     props = conf.get_prop_dic(global_log=out_log)
-    
+
     out_log.info('')
     out_log.info('_______TEST CMIP TITRATION WORKFLOW_______')
     out_log.info('')
@@ -32,62 +32,62 @@ def main():
     stepid = 'step1_mmbpdb'
     out_log.info(stepid)
     props['step'] = stepid
-    
-    # for testing only
+
+    # For testing only
     fu.create_dir(props[stepid]['path'])
 
-    copyfile (paths['step1_mmbpdb']['input_test_pdb_path'],
-        paths['step1_mmbpdb']['output_pdb_path'])
-    out_log.info('Test Input File copied')
-    
+    copyfile(paths['step1_mmbpdb']['input_test_pdb_path'], paths['step1_mmbpdb']['output_pdb_path'])
+    out_log.info('Test input file copy from: '+paths['step1_mmbpdb']['input_test_pdb_path']+' to: '+paths['step1_mmbpdb']['output_pdb_path'])
+
     stepid = 'step2_preppdbCMIP'
     out_log.info(stepid)
     props['step'] = stepid
     fu.create_dir(props[stepid]['path'])
+    out_log.info('Step 2 prep pdb CMIP create dir: '+props[stepid]['path'])
     PPW.prepPDBWrapper(paths[stepid],props[stepid]).launch()
-    
-    stepid = 'step3_CMIPTitration'
-    out_log.info(stepid)
-    props['step'] = stepid
-    
-    fu.create_dir(props[stepid]['path'])
-    
-    cw = CW.CMIPWrapper(paths[stepid],props[stepid])
-    #Delaying removal of temporary dir until output is processed
-    cw.launch(False)
-    out_log.debug ("Temp directory: "+ cw.run.tmpdir)
-    out_log.info(stepid + " CMIP Output")
-    
-    if cw.result.errstr:
-        out_log.error(cw.result.errstr)
-        sys.exit(1)
-    else:
-        out_log.info(cw.result.output)
-    out_log.info('')
-    
-    outpdbFn = cw.result.getFileName('outpdb')+".pdb"
-    out_log.info('Building output pdb file at')
-    out_log.info(paths[stepid]['output_pdb_path'])
-    
-    out_log.info('Base File: '+ paths[stepid]['input_pdb_path'])
-    out_log.info('Titration File: '+ outpdbFn)
 
-    outFh = open(paths[stepid]['output_pdb_path'],"w")
-    baseFh = open(paths[stepid]['input_pdb_path'],"r")
-    addFh = open(outpdbFn,"r")
-    
-    outFh.write(baseFh.read())
-    baseFh.close()
-    for line in addFh:
-        if re.match('^ATOM',line):
-            outFh.write(line)
-    outFh.close()
-    addFh.close()
-    
-    out_log.info('')
-    
-    cw.run.rmTmpDir()
-    
+    # stepid = 'step3_CMIPTitration'
+    # out_log.info(stepid)
+    # props['step'] = stepid
+    #
+    # fu.create_dir(props[stepid]['path'])
+    #
+    # cw = CW.CMIPWrapper(paths[stepid],props[stepid])
+    # #Delaying removal of temporary dir until output is processed
+    # cw.launch(False)
+    # out_log.debug ("Temp directory: "+ cw.run.tmpdir)
+    # out_log.info(stepid + " CMIP Output")
+    #
+    # if cw.result.errstr:
+    #     out_log.error(cw.result.errstr)
+    #     sys.exit(1)
+    # else:
+    #     out_log.info(cw.result.output)
+    # out_log.info('')
+    #
+    # outpdbFn = cw.result.getFileName('outpdb')+".pdb"
+    # out_log.info('Building output pdb file at')
+    # out_log.info(paths[stepid]['output_pdb_path'])
+    #
+    # out_log.info('Base File: '+ paths[stepid]['input_pdb_path'])
+    # out_log.info('Titration File: '+ outpdbFn)
+    #
+    # outFh = open(paths[stepid]['output_pdb_path'],"w")
+    # baseFh = open(paths[stepid]['input_pdb_path'],"r")
+    # addFh = open(outpdbFn,"r")
+    #
+    # outFh.write(baseFh.read())
+    # baseFh.close()
+    # for line in addFh:
+    #     if re.match('^ATOM',line):
+    #         outFh.write(line)
+    # outFh.close()
+    # addFh.close()
+    #
+    # out_log.info('')
+    #
+    # cw.run.rmTmpDir()
+    #
     elapsed_time = time.time() - start_time
     out_log.info('')
     out_log.info('')

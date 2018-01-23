@@ -20,7 +20,7 @@ def test_setup(test_object, dict_key):
 
 def test_teardown(test_object):
     shutil.rmtree(test_object.properties['workflow_path'])
-    fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg', '.grp'])
+    fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg', '.grp', '.ndx'])
 
 def exe_success(return_code):
     return return_code == 0

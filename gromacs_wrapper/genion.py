@@ -53,9 +53,10 @@ class Genion(object):
                 self.global_log.info(19*' '+'To neutralize the system charge')
             elif self.concentration:
                 self.global_log.info(19*' '+'To reach up '+str(self.concentration)+' mol/litre concentration')
+
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        self.output_top_path = self.output_top_path if self.step is None else self.step+'_'+self.output_top_path
-        self.output_top_path = self.output_top_path if self.mutation is None else self.mutation+'_'+self.output_top_path
+        self.output_top_path = fu.add_step_mutation_path_to_name(self.output_top_path, self.step, self.mutation)
+
         # Unzip topology to topology_out
         fu.unzip_top(zip_file=self.input_top_zip_path, top_file=self.output_top_path)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
@@ -81,10 +82,10 @@ class Genion(object):
 
         if self.mpirun:
             cmd.append('<<<')
-            cmd.append(self.replaced_group)
+            cmd.append('\"'+self.replaced_group+'\"')
         else:
             cmd.insert(0, '|')
-            cmd.insert(0, self.replaced_group)
+            cmd.insert(0, '\"'+self.replaced_group+'\"')
             cmd.insert(0, 'echo')
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()

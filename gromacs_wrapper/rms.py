@@ -53,10 +53,10 @@ class Rms(object):
         if self.mpirun:
             cmd.insert(0, 'mpirun')
             cmd.append('<<<')
-            cmd.append("$'0\n0\n'")
+            cmd.append('\"'+"$'0\n0\n'"+'\"')
         else:
             cmd.insert(0, '|')
-            cmd.insert(0, '0 0')
+            cmd.insert(0, '\"'+'0 0'+'\"')
             cmd.insert(0, 'echo')
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         command.launch()

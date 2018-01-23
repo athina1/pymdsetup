@@ -37,7 +37,7 @@ class Gnuplot(object):
         """Launches the execution of the GNUPLOT binary.
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        self.output_plotscript_path = fu.create_path(path=os.getcwd(), suffix=self.output_plotscript_path, mutation=self.mutation, step=self.step)
+        self.output_plotscript_path = fu.add_step_mutation_path_to_name(self.output_plotscript_path, self.step, self.mutation)
         # Create the input script for gnuplot
         xvg_file_list = []
         with open(self.output_plotscript_path, 'w') as ps:
@@ -48,7 +48,7 @@ class Gnuplot(object):
                 if isinstance(v, basestring) and os.path.isfile(v):
                     ps.write(' "' + v + '" u 1:3 w lp t "' + k + '",')
                 else:
-                    xvg_file = fu.create_path(path=os.getcwd(), suffix=k + '.xvg', mutation=self.mutation, step=self.step  )
+                    xvg_file = fu.add_step_mutation_path_to_name(k + '.xvg', self.step, self.mutation)
                     np.savetxt(xvg_file, v, fmt='%4.7f')
                     out_log.info('Creating file: '+os.path.abspath(xvg_file))
                     xvg_file_list.append(os.path.abspath(xvg_file))
@@ -60,9 +60,6 @@ class Gnuplot(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         returncode = command.launch()
-        #for f in xvg_file_list:
-        #    out_log.info('Removing file: '+os.path.abspath(f))
-        #    os.unlink(os.path.abspath(f))
         return returncode
 
 #Creating a main function to be compatible with CWL

@@ -43,8 +43,8 @@ class Solvate(object):
         """Launches the execution of the GROMACS solvate module.
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        self.output_top_path = self.output_top_path if self.step is None else self.step+'_'+self.output_top_path
-        self.output_top_path = self.output_top_path if self.mutation is None else self.mutation+'_'+self.output_top_path
+        self.output_top_path = fu.add_step_mutation_path_to_name(self.output_top_path, self.step, self.mutation)
+
         # Unzip topology to topology_out
         fu.unzip_top(zip_file=self.input_top_zip_path, top_file=self.output_top_path)
 
