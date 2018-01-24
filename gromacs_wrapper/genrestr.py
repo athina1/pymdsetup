@@ -75,10 +75,20 @@ class Genrestr(object):
         with open(self.output_top_path, 'r') as fin:
             data = fin.read().splitlines(True)
             index = data.index('[ system ]\n')
+            data[index+2] = 'system\n'
             data.insert(index, '\n')
             data.insert(index, '#include "'+self.output_itp_path+'"\n')
             data.insert(index, '; Include genrestr generated itp\n')
         with open(self.output_top_path, 'w') as fout:
+            fout.writelines(data)
+
+        with open(self.output_itp_path, 'r') as fin:
+            data = fin.read().splitlines(True)
+            data.insert(0, '\n')
+            data.insert(0, 'system    3\n')
+            data.insert(0, ';Name    nrexcl\n')
+            data.insert(0, '[ system ]\n')
+        with open(self.output_itp_path, 'w') as fout:
             fout.writelines(data)
 
         # zip topology

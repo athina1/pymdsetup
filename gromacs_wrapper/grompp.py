@@ -51,12 +51,12 @@ class Grompp(object):
 
         mdp_list=[]
         mdp_file_path=fu.add_step_mutation_path_to_name(self.output_mdp_path, self.step, self.mutation)
-        mdp_list.append(";This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()")
 
         minimization = (self.mdp.get('type', 'minimization') == 'minimization')
         nvt = (self.mdp.get('type') == 'nvt')
         npt = (self.mdp.get('type') == 'npt')
         free = (self.mdp.get('type') == 'free')
+        index = (self.mdp.get('type') == 'index')
         md = (nvt or npt or free)
         mdp_list.append(";Type of MDP: " + self.mdp.get('type'))
 
@@ -162,6 +162,11 @@ class Grompp(object):
         mdp_list.append("\n;Periodic boundary conditions")
         mdp_list.append("pbc = " + self.mdp.get('pbc', 'xyz'))
 
+        if index:
+            mdp_list =[";This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()"]
+
+        mdp_list.insert(0, ";This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()")
+
         with open(mdp_file_path, 'w') as mdp:
             for line in mdp_list:
                 mdp.write(line + '\n')
@@ -175,6 +180,8 @@ class Grompp(object):
             md = self.mdp.get('type', 'minimization')
             if md == 'minimization':
                 self.global_log.info(19*' '+'Will run a '+md+' md of ' + str(self.mdp['nsteps']) +' steps')
+            elif md == 'index':
+                self.global_log.info(19*' '+'Will create a TPR to be used as structure file')
             else:
                 self.global_log.info(19*' '+'Will run a '+md+' md of ' + fu.human_readable_time(int(self.mdp['nsteps'])*float(self.mdp['dt'])))
 
