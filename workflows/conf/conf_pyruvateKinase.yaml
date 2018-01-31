@@ -167,6 +167,8 @@ step8_gio:
     concentration: 0.05
     replaced_group: SOL
     seed: 1993
+    
+#Generar pdb gro topology i mirar que tingui cadenes
 
 # Step9: gppndx -- Preprocessing index creation
 step9_gppndx:
