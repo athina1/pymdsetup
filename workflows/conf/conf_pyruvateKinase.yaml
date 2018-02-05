@@ -167,7 +167,7 @@ step8_gio:
     concentration: 0.05
     replaced_group: SOL
     seed: 1993
-    
+
 #Generar pdb gro topology i mirar que tingui cadenes
 
 # Step9: gppndx -- Preprocessing index creation
@@ -187,29 +187,83 @@ step10_make_ndx:
     input_structure_path: dependency/step9_gppndx/output_tpr_path
     output_ndx_path: index.ndx
   properties:
-    selection: '\"Protein-H\" & chain A \n \"Protein-H\" & chain B \n \"Protein-H\" & chain C \n \"Protein-H\" & chain D \n name 19 Chain_A \n name 20 Chain_B \n name 21 Chain_C \n name 22 Chain_D \n 19 & !r 371 \n 19 & r 371 & a CA C N O \n 23 | 24 \n del 23 \n del 23 \n 20 & !r 371 \n 20 & r 371 & a CA C N O \n 24 | 25 \n del 24 \n del 24 \n 21 & !r 371 \n 21 & r 371 & a CA C N O \n 25 | 26  \n del 25 \n del 25 \n 22 & !r 371 \n 22 & r 371 & a CA C N O \n 26 | 27 \n del 26 \n del 26 \n name 23 Chain_A_noMut \n name 24 Chain_B_noMut \n name 25 Chain_C_noMut \n name 26 Chain_D_noMut \n 19 & a CA C N O \n 20 & a CA C N O \n 21 & a CA C N O \n 22 & a CA C N O \n name 27 Chain_A_backbone \n name 28 Chain_B_backbone \n name 29 Chain_C_backbone \n name 30 Chain_D_backbone \n \"Chain_A_noMut\" | \"Chain_B_noMut\" | \"Chain_C_noMut\" | \"Chain_D_noMut\" \n name 31 Chain_all_noMut \n \"Chain_A_backbone\" | \"Chain_B_backbone\" | \"Chain_C_backbone\" | \"Chain_D_backbone\" \n name 32 Chain_all_backbone \n q'
+    selection: 'chain A \n
+                chain B \n
+                chain C \n
+                chain D \n
+                name 19 Chain_A \n
+                name 20 Chain_B \n
+                name 21 Chain_C \n
+                name 22 Chain_D \n
+                \"Protein-H\" & 19 & !r 371 \n
+                \"Protein-H\" & 19 & r 371 & a CA C N O \n
+                23 | 24 \n
+                del 23 \n
+                del 23 \n
+                \"Protein-H\" & 20 & !r 371 \n
+                \"Protein-H\" & 20 & r 371 & a CA C N O \n
+                24 | 25 \n
+                del 24 \n
+                del 24 \n
+                \"Protein-H\" & 21 & !r 371 \n
+                \"Protein-H\" & 21 & r 371 & a CA C N O \n
+                25 | 26  \n
+                del 25 \n
+                del 25 \n
+                \"Protein-H\" & 22 & !r 371 \n
+                \"Protein-H\" & 22 & r 371 & a CA C N O \n
+                26 | 27 \n
+                del 26 \n
+                del 26 \n
+                name 23 Chain_A_noMut \n
+                name 24 Chain_B_noMut \n
+                name 25 Chain_C_noMut \n
+                name 26 Chain_D_noMut \n
+                \"Protein-H\" & 19 & a CA C N O \n
+                \"Protein-H\" & 20 & a CA C N O \n
+                \"Protein-H\" & 21 & a CA C N O \n
+                \"Protein-H\" & 22 & a CA C N O \n
+                name 27 Chain_A_backbone \n
+                name 28 Chain_B_backbone \n
+                name 29 Chain_C_backbone \n
+                name 30 Chain_D_backbone \n
+                \"Chain_A_noMut\" | \"Chain_B_noMut\" | \"Chain_C_noMut\" | \"Chain_D_noMut\" \n
+                name 31 Chain_all_noMut \n
+                \"Chain_A_backbone\" | \"Chain_B_backbone\" | \"Chain_C_backbone\" | \"Chain_D_backbone\" \n
+                name 32 Chain_all_backbone \n
+                q'
 
-step11_genrestr:
+step11_ndx2resttop:
   paths:
-    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: genrestr_top_out.zip
+    output_top_zip_path: ndx2resttop_top_out.zip
   properties:
     force_constants: 500 500 500
-    restricted_group: Chain_all_noMut
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_noMut, A ), ( Chain_B, Chain_B_noMut, B ), ( Chain_C, Chain_C_noMut, C ), ( Chain_D, Chain_D_noMut, D )
 
-# Step12:  gppresmin  Preprocessing: Mutated residue minimization
-step12_gppresmin:
-  paths:
-    input_gro_path: dependency/step8_gio/output_gro_path
-    input_top_zip_path: dependency/step11_genrestr/output_top_zip_path
-    output_tpr_path: gppresmin.tpr
-  properties:
-    mdp:
-      type: minimization
-      nsteps: 5000
-      emtol: 10
+
+# step11_genrestr:
+#   paths:
+#     input_structure_path: dependency/step8_gio/output_gro_path
+#     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+#     input_top_zip_path: dependency/step8_gio/output_top_zip_path
+#     output_top_zip_path: genrestr_top_out.zip
+#   properties:
+#     force_constants: 500 500 500
+#     restricted_group: Chain_all_noMut
+#
+# # Step12:  gppresmin  Preprocessing: Mutated residue minimization
+# step12_gppresmin:
+#   paths:
+#     input_gro_path: dependency/step8_gio/output_gro_path
+#     input_top_zip_path: dependency/step11_genrestr/output_top_zip_path
+#     output_tpr_path: gppresmin.tpr
+#   properties:
+#     mdp:
+#       type: minimization
+#       nsteps: 5000
+#       emtol: 10
 
 # Step10: mdmin -- Running: Energy minimization
 # step10_mdmin:

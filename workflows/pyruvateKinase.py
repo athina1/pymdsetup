@@ -16,6 +16,7 @@ import mmb_api.pdb as pdb
 import mmb_api.uniprot as uniprot
 import gromacs_wrapper.rms as rms
 import gnuplot_wrapper.gnuplot as gnuplot
+import gromacs_extra.ndx2resttop as ndx2resttop
 
 
 def main():
@@ -80,46 +81,50 @@ def main():
         out_log.info('-------------------------')
         out_log.info('')
 
-        out_log.info('step3:  scw ------ Model mutation')
+        out_log.info('step3:  scw --------- Model mutation')
         fu.create_dir(prop['step3_scw']['path'])
         paths['step3_scw']['input_pdb_path']=structure
         scwrl.Scwrl4(properties=prop['step3_scw'], **paths['step3_scw']).launch()
 
-        out_log.info('step4:  p2g ------ Create gromacs topology')
+        out_log.info('step4:  p2g --------- Create gromacs topology')
         fu.create_dir(prop['step4_p2g']['path'])
         pdb2gmx.Pdb2gmx(properties=prop['step4_p2g'], **paths['step4_p2g']).launch()
 
-        out_log.info('step5:  ec ------- Define box dimensions')
+        out_log.info('step5:  ec ---------- Define box dimensions')
         fu.create_dir(prop['step5_ec']['path'])
         editconf.Editconf(properties=prop['step5_ec'], **paths['step5_ec']).launch()
 
-        out_log.info('step6:  sol ------ Fill the box with water molecules')
+        out_log.info('step6:  sol --------- Fill the box with water molecules')
         fu.create_dir(prop['step6_sol']['path'])
         solvate.Solvate(properties=prop['step6_sol'], **paths['step6_sol']).launch()
 
-        out_log.info('step7:  gppions -- Preprocessing: Adding monoatomic ions')
+        out_log.info('step7:  gppions ----- Preprocessing: Adding monoatomic ions')
         fu.create_dir(prop['step7_gppions']['path'])
         grompp.Grompp(properties=prop['step7_gppions'], **paths['step7_gppions']).launch()
 
-        out_log.info('step8:  gio ------ Running: Adding monoatomic ions')
+        out_log.info('step8:  gio --------- Running: Adding monoatomic ions')
         fu.create_dir(prop['step8_gio']['path'])
         genion.Genion(properties=prop['step8_gio'], **paths['step8_gio']).launch()
 
-        out_log.info('Step9: gppndx ---- Preprocessing index creation')
+        out_log.info('Step9: gppndx ------- Preprocessing index creation')
         fu.create_dir(prop['step9_gppndx']['path'])
         grompp.Grompp(properties=prop['step9_gppndx'], **paths['step9_gppndx']).launch()
 
-        out_log.info('Step10: make_ndx - Create restrain index')
+        out_log.info('Step10: make_ndx ---- Create restrain index')
         fu.create_dir(prop['step10_make_ndx']['path'])
         make_ndx.MakeNdx(properties=prop['step10_make_ndx'], **paths['step10_make_ndx']).launch()
 
-        out_log.info('Step11: genrestr - Create restrain topology')
-        fu.create_dir(prop['step11_genrestr']['path'])
-        genrestr.Genrestr(properties=prop['step11_genrestr'], **paths['step11_genrestr']).launch()
+        out_log.info('Step11: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step11_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step11_ndx2resttop'], **paths['step11_ndx2resttop']).launch()
 
-        out_log.info('step12: gppresmin  Preprocessing: Mutated residue minimization')
-        fu.create_dir(prop['step12_gppresmin']['path'])
-        grompp.Grompp(properties=prop['step12_gppresmin'], **paths['step12_gppresmin']).launch()
+        # out_log.info('Step11: genrestr - Create restrain topology')
+        # fu.create_dir(prop['step11_genrestr']['path'])
+        # genrestr.Genrestr(properties=prop['step11_genrestr'], **paths['step11_genrestr']).launch()
+        #
+        # out_log.info('step12: gppresmin  Preprocessing: Mutated residue minimization')
+        # fu.create_dir(prop['step12_gppresmin']['path'])
+        # grompp.Grompp(properties=prop['step12_gppresmin'], **paths['step12_gppresmin']).launch()
 
     #     out_log.info('step10: mdmin ---- Running: Energy minimization')
     #     fu.create_dir(prop['step10_mdmin']['path'])
