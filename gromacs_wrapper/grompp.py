@@ -52,120 +52,130 @@ class Grompp(object):
         mdp_list=[]
         mdp_file_path=fu.add_step_mutation_path_to_name(self.output_mdp_path, self.step, self.mutation)
 
-        minimization = (self.mdp.get('type', 'minimization') == 'minimization')
-        nvt = (self.mdp.get('type') == 'nvt')
-        npt = (self.mdp.get('type') == 'npt')
-        free = (self.mdp.get('type') == 'free')
-        index = (self.mdp.get('type') == 'index')
+        sim_type = self.mdp.get('type', 'minimization')
+        minimization = (sim_type == 'minimization')
+        nvt = (sim_type == 'nvt')
+        npt = (sim_type == 'npt')
+        free = (sim_type == 'free')
+        index = (sim_type == 'index')
         md = (nvt or npt or free)
-        mdp_list.append(";Type of MDP: " + self.mdp.get('type'))
+        mdp_list.append(";Type of MDP: " + sim_type)
 
         # Position restrain
-        if md:
-            if nvt or npt:
-                mdp_list.append("\n;Position restrain")
-                mdp_list.append("Define = " + self.mdp.get('define', '-DPOSRES'))
+        if not free:
+            mdp_list.append("\n;Position restrain")
+            mdp_list.append("Define = " + self.mdp.pop('define', '-DPOSRES'))
 
         # Run parameters
         mdp_list.append("\n;Run parameters")
-        mdp_list.append("nsteps = " + self.mdp.get('nsteps', '5000'))
+        mdp_list.append("nsteps = " + self.mdp.pop('nsteps', '5000'))
         if minimization:
-            mdp_list.append("integrator = " + self.mdp.get('integrator', 'steep'))
-            mdp_list.append("emtol = " + self.mdp.get('emtol', '1000.0'))
-            mdp_list.append("emstep = " + self.mdp.get('emstep', '0.01'))
+            mdp_list.append("integrator = " + self.mdp.pop('integrator', 'steep'))
+            mdp_list.append("emtol = " + self.mdp.pop('emtol', '1000.0'))
+            mdp_list.append("emstep = " + self.mdp.pop('emstep', '0.01'))
         if md:
-            mdp_list.append("integrator = " + self.mdp.get('integrator', 'md'))
-            mdp_list.append("dt = " + self.mdp.get('dt', '0.002'))
+            mdp_list.append("integrator = " + self.mdp.pop('integrator', 'md'))
+            mdp_list.append("dt = " + self.mdp.pop('dt', '0.002'))
 
         # Output control
         if md:
             mdp_list.append("\n;Output control")
             if nvt or npt:
-                mdp_list.append("nstxout = " + self.mdp.get('nstxout',   '500'))
-                mdp_list.append("nstvout = " + self.mdp.get('nstvout',   '500'))
-                mdp_list.append("nstenergy = " + self.mdp.get('nstenergy', '500'))
-                mdp_list.append("nstlog = " + self.mdp.get('nstlog',    '500'))
+                mdp_list.append("nstxout = " + self.mdp.pop('nstxout',   '500'))
+                mdp_list.append("nstvout = " + self.mdp.pop('nstvout',   '500'))
+                mdp_list.append("nstenergy = " + self.mdp.pop('nstenergy', '500'))
+                mdp_list.append("nstlog = " + self.mdp.pop('nstlog',    '500'))
+                mdp_list.append("nstcalcenergy = " + self.mdp.pop('nstcalcenergy', '100'))
+                mdp_list.append("nstcomm = " + self.mdp.pop('nstcomm', '100'))
+                mdp_list.append("nstxout-compressed = " + self.mdp.pop('nstxout-compressed', '1000'))
+                mdp_list.append("compressed-x-precision = " + self.mdp.pop('compressed-x-precision', '1000'))
+                mdp_list.append("compressed-x-grps = " + self.mdp.pop('compressed-x-grps', 'System'))
             if free:
-                mdp_list.append("nstxout = " + self.mdp.get('nstxout',   '5000'))
-                mdp_list.append("nstvout = " + self.mdp.get('nstvout',   '5000'))
-                mdp_list.append("nstenergy = " + self.mdp.get('nstenergy', '5000'))
-                mdp_list.append("nstlog = " + self.mdp.get('nstlog',    '5000'))
-                mdp_list.append("nstxout-compressed = " + self.mdp.get('nstxout-compressed', '5000'))
-                mdp_list.append("compressed-x-grps = " + self.mdp.get('compressed-x-grps', 'System'))
+                mdp_list.append("nstxout = " + self.mdp.pop('nstxout',   '5000'))
+                mdp_list.append("nstvout = " + self.mdp.pop('nstvout',   '5000'))
+                mdp_list.append("nstenergy = " + self.mdp.pop('nstenergy', '5000'))
+                mdp_list.append("nstlog = " + self.mdp.pop('nstlog',    '5000'))
+                mdp_list.append("nstxout-compressed = " + self.mdp.pop('nstxout-compressed', '5000'))
+                mdp_list.append("compressed-x-grps = " + self.mdp.pop('compressed-x-grps', 'System'))
 
         # Bond parameters
         if md:
             mdp_list.append("\n;Bond parameters")
-            mdp_list.append("constraint_algorithm = " + self.mdp.get('constraint_algorithm', 'lincs'))
-            mdp_list.append("constraints = " + self.mdp.get('constraints', 'all-bonds'))
-            mdp_list.append("lincs_iter = " + self.mdp.get('lincs_iter', '1'))
-            mdp_list.append("lincs_order = " + self.mdp.get('lincs_order', '4'))
+            mdp_list.append("constraint_algorithm = " + self.mdp.pop('constraint_algorithm', 'lincs'))
+            mdp_list.append("constraints = " + self.mdp.pop('constraints', 'all-bonds'))
+            mdp_list.append("lincs_iter = " + self.mdp.pop('lincs_iter', '1'))
+            mdp_list.append("lincs_order = " + self.mdp.pop('lincs_order', '4'))
             if nvt:
-                mdp_list.append("continuation = " + self.mdp.get('continuation', 'no'))
+                mdp_list.append("continuation = " + self.mdp.pop('continuation', 'no'))
             if npt or free:
-                mdp_list.append("continuation = " + self.mdp.get('continuation', 'yes'))
+                mdp_list.append("continuation = " + self.mdp.pop('continuation', 'yes'))
 
 
         # Neighbour searching
         mdp_list.append("\n;Neighbour searching")
-        mdp_list.append("cutoff-scheme = " + self.mdp.get('cutoff-scheme', 'Verlet'))
-        mdp_list.append("ns_type = " + self.mdp.get('ns_type', 'grid'))
-        mdp_list.append("rcoulomb = " + self.mdp.get('rcoulomb', '1.0'))
-        mdp_list.append("rvdw = " + self.mdp.get('rvdw', '1.0'))
-        mdp_list.append("nstlist = " + self.mdp.get('nstlist', '10'))
+        mdp_list.append("cutoff-scheme = " + self.mdp.pop('cutoff-scheme', 'Verlet'))
+        mdp_list.append("ns_type = " + self.mdp.pop('ns_type', 'grid'))
+        mdp_list.append("rcoulomb = " + self.mdp.pop('rcoulomb', '1.0'))
+        mdp_list.append("rvdw = " + self.mdp.pop('rvdw', '1.0'))
+        mdp_list.append("nstlist = " + self.mdp.pop('nstlist', '10'))
 
         # Eletrostatics
         mdp_list.append("\n;Eletrostatics")
-        mdp_list.append("coulombtype = " + self.mdp.get('coulombtype', 'PME'))
+        mdp_list.append("coulombtype = " + self.mdp.pop('coulombtype', 'PME'))
         if md:
-            mdp_list.append("pme_order = " + self.mdp.get('pme_order', '4'))
-            mdp_list.append("fourierspacing = " + self.mdp.get('fourierspacing', '0.16'))
+            mdp_list.append("pme_order = " + self.mdp.pop('pme_order', '4'))
+            mdp_list.append("fourierspacing = " + self.mdp.pop('fourierspacing', '0.16'))
 
         # Temperature coupling
         if md:
             mdp_list.append("\n;Temperature coupling")
-            mdp_list.append("tcoupl = " + self.mdp.get('tcoupl', 'V-rescale'))
-            mdp_list.append("tc-grps = " + self.mdp.get('tc-grps', 'Protein Non-Protein'))
-            mdp_list.append("tau_t = " + self.mdp.get('tau_t', '0.1	  0.1'))
-            mdp_list.append("ref_t = " + self.mdp.get('ref_t', '300 	  300'))
+            mdp_list.append("tcoupl = " + self.mdp.pop('tcoupl', 'V-rescale'))
+            mdp_list.append("tc-grps = " + self.mdp.pop('tc-grps', 'Protein Non-Protein'))
+            mdp_list.append("tau_t = " + self.mdp.pop('tau_t', '0.1	  0.1'))
+            mdp_list.append("ref_t = " + self.mdp.pop('ref_t', '300 	  300'))
 
         # Pressure coupling
         if md:
             mdp_list.append("\n;Pressure coupling")
             if nvt:
-                mdp_list.append("pcoupl = " + self.mdp.get('pcoupl', 'no'))
+                mdp_list.append("pcoupl = " + self.mdp.pop('pcoupl', 'no'))
             if npt or free:
-                mdp_list.append("pcoupl = " + self.mdp.get('pcoupl', 'Parrinello-Rahman'))
-                mdp_list.append("pcoupltype = " + self.mdp.get('pcoupltype', 'isotropic'))
-                mdp_list.append("tau_p = " + self.mdp.get('tau_p', '2.0'))
-                mdp_list.append("ref_p = " + self.mdp.get('ref_p', '1.0'))
-                mdp_list.append("compressibility = " + self.mdp.get('compressibility', '4.5e-5'))
+                mdp_list.append("pcoupl = " + self.mdp.pop('pcoupl', 'Parrinello-Rahman'))
+                mdp_list.append("pcoupltype = " + self.mdp.pop('pcoupltype', 'isotropic'))
+                mdp_list.append("tau_p = " + self.mdp.pop('tau_p', '2.0'))
+                mdp_list.append("ref_p = " + self.mdp.pop('ref_p', '1.0'))
+                mdp_list.append("compressibility = " + self.mdp.pop('compressibility', '4.5e-5'))
                 if npt:
-                    mdp_list.append("refcoord_scaling = " + self.mdp.get('refcoord_scaling', 'com'))
+                    mdp_list.append("refcoord_scaling = " + self.mdp.pop('refcoord_scaling', 'com'))
 
         # Dispersion correction
         if md:
             mdp_list.append("\n;Dispersion correction")
-            mdp_list.append("DispCorr = " + self.mdp.get('DispCorr', 'EnerPres'))
+            mdp_list.append("DispCorr = " + self.mdp.pop('DispCorr', 'EnerPres'))
 
         # Velocity generation
         if md:
             mdp_list.append("\n;Velocity generation")
             if nvt:
-                mdp_list.append("gen_vel = " + self.mdp.get('gen_vel', 'yes'))
-                mdp_list.append("gen_temp = " + self.mdp.get('gen_temp', '300'))
-                mdp_list.append("gen_seed = " + self.mdp.get('gen_seed', '-1'))
+                mdp_list.append("gen_vel = " + self.mdp.pop('gen_vel', 'yes'))
+                mdp_list.append("gen_temp = " + self.mdp.pop('gen_temp', '300'))
+                mdp_list.append("gen_seed = " + self.mdp.pop('gen_seed', '-1'))
             if npt or free:
-                mdp_list.append("gen_vel = " + self.mdp.get('gen_vel', 'no'))
+                mdp_list.append("gen_vel = " + self.mdp.pop('gen_vel', 'no'))
 
         #Periodic boundary conditions
         mdp_list.append("\n;Periodic boundary conditions")
-        mdp_list.append("pbc = " + self.mdp.get('pbc', 'xyz'))
+        mdp_list.append("pbc = " + self.mdp.pop('pbc', 'xyz'))
 
         if index:
             mdp_list =[";This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()"]
 
         mdp_list.insert(0, ";This mdp file has been created by the pymdsetup.gromacs_wrapper.grompp.create_mdp()")
+
+        # Adding the rest of parameters in the config file to the MDP file
+        for k, v in self.mdp.iteritems():
+            if k != 'type':
+                mdp_list.append(str(k) + ' = '+str(v))
 
         with open(mdp_file_path, 'w') as mdp:
             for line in mdp_list:
@@ -178,7 +188,7 @@ class Grompp(object):
         """
         if self.global_log is not None:
             md = self.mdp.get('type', 'minimization')
-            if md == 'minimization':
+            if md != 'index' and md != 'free':
                 self.global_log.info(19*' '+'Will run a '+md+' md of ' + str(self.mdp['nsteps']) +' steps')
             elif md == 'index':
                 self.global_log.info(19*' '+'Will create a TPR to be used as structure file')

@@ -56,6 +56,8 @@ class Ndx2resttop(object):
                 if index > 0:
                     index_dic[label] = index_dic[label][0], index
                 label = line
+        index_dic[label] = index_dic[label][0], index
+        out_log.info('Index_dic: '+str(index_dic))
 
         self.ref_rest_chain_triplet_list = [tuple(elem.strip(' ()').replace(' ', '').split(',')) for elem in self.ref_rest_chain_triplet_list.split('),')]
         for reference_group, restrain_group, chain in self.ref_rest_chain_triplet_list:
@@ -65,7 +67,9 @@ class Ndx2resttop(object):
             self.output_itp_path = fu.add_step_mutation_path_to_name(restrain_group+'.itp', self.step, self.mutation)
 
             # Mapping atoms from absolute enumeration to Chain relative enumeration
+            out_log.info('reference_group_index: start_closed:'+str(index_dic['[ '+reference_group+' ]'][0]+1)+' stop_open: '+str(index_dic['[ '+reference_group+' ]'][1]))
             reference_group_list = [ int(elem) for line in lines[index_dic['[ '+reference_group+' ]'][0]+1: index_dic['[ '+reference_group+' ]'][1]] for elem in line.split() ]
+            out_log.info('restrain_group_index: start_closed:'+str(index_dic['[ '+restrain_group+' ]'][0]+1)+' stop_open: '+str(index_dic['[ '+restrain_group+' ]'][1]))
             restrain_group_list = [ int(elem) for line in lines[index_dic['[ '+restrain_group+' ]'][0]+1: index_dic['[ '+restrain_group+' ]'][1]] for elem in line.split() ]
             selected_list = [reference_group_list.index(atom)+1 for atom in restrain_group_list]
 

@@ -118,18 +118,48 @@ def main():
         fu.create_dir(prop['step11_ndx2resttop']['path'])
         ndx2resttop.Ndx2resttop(properties=prop['step11_ndx2resttop'], **paths['step11_ndx2resttop']).launch()
 
-        # out_log.info('Step11: genrestr - Create restrain topology')
-        # fu.create_dir(prop['step11_genrestr']['path'])
-        # genrestr.Genrestr(properties=prop['step11_genrestr'], **paths['step11_genrestr']).launch()
-        #
-        # out_log.info('step12: gppresmin  Preprocessing: Mutated residue minimization')
-        # fu.create_dir(prop['step12_gppresmin']['path'])
-        # grompp.Grompp(properties=prop['step12_gppresmin'], **paths['step12_gppresmin']).launch()
+        out_log.info('step12: gppresmin  Preprocessing: Mutated residue minimization')
+        fu.create_dir(prop['step12_gppresmin']['path'])
+        grompp.Grompp(properties=prop['step12_gppresmin'], **paths['step12_gppresmin']).launch()
 
-    #     out_log.info('step10: mdmin ---- Running: Energy minimization')
-    #     fu.create_dir(prop['step10_mdmin']['path'])
-    #     mdrun.Mdrun(properties=prop['step10_mdmin'], **paths['step10_mdmin']).launch()
-    #
+        out_log.info('step13: mdresmin ---- Running: Mutated residue minimization')
+        fu.create_dir(prop['step13_mdresmin']['path'])
+        mdrun.Mdrun(properties=prop['step13_mdresmin'], **paths['step13_mdresmin']).launch()
+
+        out_log.info('Step14: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step14_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step14_ndx2resttop'], **paths['step14_ndx2resttop']).launch()
+
+        out_log.info('step15: gppmin  Preprocessing: minimization')
+        fu.create_dir(prop['step15_gppmin']['path'])
+        grompp.Grompp(properties=prop['step15_gppmin'], **paths['step15_gppmin']).launch()
+
+        out_log.info('step16: mdmin ---- Running: minimization')
+        fu.create_dir(prop['step16_mdmin']['path'])
+        mdrun.Mdrun(properties=prop['step16_mdmin'], **paths['step16_mdmin']).launch()
+
+        out_log.info('Step17: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step17_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step17_ndx2resttop'], **paths['step17_ndx2resttop']).launch()
+
+        out_log.info('step18: gppsa  Preprocessing: simulated annealing')
+        fu.create_dir(prop['step18_gppsa']['path'])
+        grompp.Grompp(properties=prop['step18_gppsa'], **paths['step18_gppsa']).launch()
+
+        out_log.info('step19: mdsa ---- Running: simulated annealing')
+        fu.create_dir(prop['step19_mdsa']['path'])
+        mdrun.Mdrun(properties=prop['step19_mdsa'], **paths['step19_mdsa']).launch()
+
+        out_log.info('step20: gppnvt_1000  Preprocessing: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step20_gppnvt_1000']['path'])
+        grompp.Grompp(properties=prop['step20_gppnvt_1000'], **paths['step20_gppnvt_1000']).launch()
+
+        out_log.info('step21: mdnvt_1000 ---- Running: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step21_mdnvt_1000']['path'])
+        mdrun.Mdrun(properties=prop['step21_mdnvt_1000'], **paths['step21_mdnvt_1000']).launch()
+
+
+
     #     out_log.info('step11: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
     #     fu.create_dir(prop['step11_gppnvt']['path'])
     #     grompp.Grompp(properties=prop['step11_gppnvt'], **paths['step11_gppnvt']).launch()
