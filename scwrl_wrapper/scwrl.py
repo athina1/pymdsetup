@@ -33,6 +33,7 @@ class Scwrl4(object):
     def launch(self):
         """Launches the execution of the SCWRL binary.
         """
+
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         if self.mutation is not None:
             # Read structure with Biopython
@@ -47,6 +48,7 @@ class Scwrl4(object):
 
             resnum = int(self.mut_dict['resnum'])
 
+            sequence=''
             for chain in chains:
                 residue = st[0][chain][(' ', resnum, ' ')]
                 backbone_atoms = ['N', 'CA', 'C', 'O', 'CB']
@@ -66,16 +68,36 @@ class Scwrl4(object):
                 # Change residue name
                 residue.resname = self.mut_dict['mt'].upper()
 
+                # Creating a sequence file where the lower case residues will
+                # remain untouched and the upper case residues will be modified
+                aa1c = { 'ALA':'A', 'CYS':'C', 'ASP':'D', 'GLU':'E', 'PHE':'F', 'GLY':'G', 'HIS':'H', 'ILE':'I', 'LYS':'K', 'LEU':'L', 'MET':'M', 'ASN':'N', 'PRO':'P', 'GLN':'Q', 'ARG':'R', 'SER':'S', 'THR':'T', 'VAL':'V', 'TRP':'W', 'TYR':'Y'}
+                for res in st[0][chain].get_residues():
+                    if res.resname not in aa1c:
+                        st[0][chain].detach_child(res.id)
+                    elif (res.id == (' ', resnum,' ')):
+                        sequence += aa1c[res.resname].upper()
+                    else:
+                        sequence += aa1c[res.resname].lower()
+
+            # Write resultant sequence
+            sequence_file_path = fu.add_step_mutation_path_to_name("sequence.seq", self.step, self.mutation)
+            with open(sequence_file_path, 'w') as sqfile:
+                sqfile.write(sequence+"\n")
+
             # Write resultant structure
             w = PDBIO()
             w.set_structure(st)
-            prepared_file_path = self.mutation+self.step+'prepared.pdb'
+            prepared_file_path = fu.add_step_mutation_path_to_name("prepared.pdb", self.step, self.mutation)
             w.save(prepared_file_path)
+
         else:
             prepared_file_path = self.input_pdb_path
 
         scrwl = 'Scwrl4' if self.scwrl4_path is None else self.scwrl4_path
         cmd = [scrwl, '-i', prepared_file_path, '-o', self.output_pdb_path]
+        if self.mutation:
+            cmd.append('-s')
+            cmd.append(sequence_file_path)
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
         return command.launch()
