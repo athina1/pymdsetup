@@ -8,7 +8,18 @@ linux:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
+  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
+  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_residchainadjusted.pdb
+
+ljorda:
+  gmx_path: /usr/local/gromacs/bin/gmx
+  scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
+  workflow_path: /home/ljorda/Programs/pymdsetup/pyr
+  gnuplot_path: /usr/bin/gnuplot
+  # Path to the initial pdb structure (if this field is empty
+  # pdb_code field will be used to download the structure)
+  #initial_structure_pdb_path: /home/ljorda/Programs/pymdsetup/test/data/2VGB.WT.pdb
+  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_residchainadjusted.pdb
 
 macos:
   gmx_path: /usr/local/bin/gmx
