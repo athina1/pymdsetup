@@ -43,6 +43,8 @@ class Grompp(object):
         self.mpirun_np = properties.get('mpirun_np', None)
         self.mdp = {k: str(v) for k, v in properties.get('mdp', None).items()}
         self.global_log= properties.get('global_log', None)
+        self.nsteps=''
+        self.dt=''
 
 
     def create_mdp(self):
@@ -68,14 +70,16 @@ class Grompp(object):
 
         # Run parameters
         mdp_list.append("\n;Run parameters")
-        mdp_list.append("nsteps = " + self.mdp.pop('nsteps', '5000'))
+        self.nsteps= self.mdp.pop('nsteps', '5000')
+        mdp_list.append("nsteps = " + self.nsteps)
         if minimization:
             mdp_list.append("integrator = " + self.mdp.pop('integrator', 'steep'))
             mdp_list.append("emtol = " + self.mdp.pop('emtol', '1000.0'))
             mdp_list.append("emstep = " + self.mdp.pop('emstep', '0.01'))
         if md:
             mdp_list.append("integrator = " + self.mdp.pop('integrator', 'md'))
-            mdp_list.append("dt = " + self.mdp.pop('dt', '0.002'))
+            self.dt=self.mdp.pop('dt', '0.002')
+            mdp_list.append("dt = " + self.dt)
 
         # Output control
         if md:
@@ -91,12 +95,15 @@ class Grompp(object):
                 mdp_list.append("compressed-x-precision = " + self.mdp.pop('compressed-x-precision', '1000'))
                 mdp_list.append("compressed-x-grps = " + self.mdp.pop('compressed-x-grps', 'System'))
             if free:
+                mdp_list.append("nstcomm = " + self.mdp.pop('nstcomm', '100'))
                 mdp_list.append("nstxout = " + self.mdp.pop('nstxout',   '5000'))
                 mdp_list.append("nstvout = " + self.mdp.pop('nstvout',   '5000'))
                 mdp_list.append("nstenergy = " + self.mdp.pop('nstenergy', '5000'))
                 mdp_list.append("nstlog = " + self.mdp.pop('nstlog',    '5000'))
-                mdp_list.append("nstxout-compressed = " + self.mdp.pop('nstxout-compressed', '5000'))
+                mdp_list.append("nstcalcenergy = " + self.mdp.pop('nstcalcenergy', '100'))
+                mdp_list.append("nstxout-compressed = " + self.mdp.pop('nstxout-compressed', '500'))
                 mdp_list.append("compressed-x-grps = " + self.mdp.pop('compressed-x-grps', 'System'))
+                mdp_list.append("compressed-x-precision = " + self.mdp.pop('compressed-x-precision', '1000'))
 
         # Bond parameters
         if md:
@@ -116,15 +123,21 @@ class Grompp(object):
         mdp_list.append("cutoff-scheme = " + self.mdp.pop('cutoff-scheme', 'Verlet'))
         mdp_list.append("ns_type = " + self.mdp.pop('ns_type', 'grid'))
         mdp_list.append("rcoulomb = " + self.mdp.pop('rcoulomb', '1.0'))
+        mdp_list.append("vdwtype = " + self.mdp.pop('vdwtype', 'cut-off'))
         mdp_list.append("rvdw = " + self.mdp.pop('rvdw', '1.0'))
         mdp_list.append("nstlist = " + self.mdp.pop('nstlist', '10'))
+        mdp_list.append("rlist = " + self.mdp.pop('rlist', '1'))
 
         # Eletrostatics
         mdp_list.append("\n;Eletrostatics")
         mdp_list.append("coulombtype = " + self.mdp.pop('coulombtype', 'PME'))
         if md:
             mdp_list.append("pme_order = " + self.mdp.pop('pme_order', '4'))
-            mdp_list.append("fourierspacing = " + self.mdp.pop('fourierspacing', '0.16'))
+            mdp_list.append("fourierspacing = " + self.mdp.pop('fourierspacing', '0.12'))
+            mdp_list.append("fourier_nx = " + self.mdp.pop('fourier_nx', '0'))
+            mdp_list.append("fourier_ny = " + self.mdp.pop('fourier_ny', '0'))
+            mdp_list.append("fourier_nz = " + self.mdp.pop('fourier_nz', '0'))
+            mdp_list.append("ewald_rtol = " + self.mdp.pop('ewald_rtol', '1e-5'))
 
         # Temperature coupling
         if md:
@@ -142,11 +155,11 @@ class Grompp(object):
             if npt or free:
                 mdp_list.append("pcoupl = " + self.mdp.pop('pcoupl', 'Parrinello-Rahman'))
                 mdp_list.append("pcoupltype = " + self.mdp.pop('pcoupltype', 'isotropic'))
-                mdp_list.append("tau_p = " + self.mdp.pop('tau_p', '2.0'))
+                mdp_list.append("tau_p = " + self.mdp.pop('tau_p', '1.0'))
                 mdp_list.append("ref_p = " + self.mdp.pop('ref_p', '1.0'))
                 mdp_list.append("compressibility = " + self.mdp.pop('compressibility', '4.5e-5'))
-                if npt:
-                    mdp_list.append("refcoord_scaling = " + self.mdp.pop('refcoord_scaling', 'com'))
+                mdp_list.append("refcoord_scaling = " + self.mdp.pop('refcoord_scaling', 'com'))
+
 
         # Dispersion correction
         if md:
@@ -189,11 +202,11 @@ class Grompp(object):
         if self.global_log is not None:
             md = self.mdp.get('type', 'minimization')
             if md != 'index' and md != 'free':
-                self.global_log.info(19*' '+'Will run a '+md+' md of ' + str(self.mdp['nsteps']) +' steps')
+                self.global_log.info(19*' '+'Will run a '+md+' md of ' + str(self.nsteps) +' steps')
             elif md == 'index':
                 self.global_log.info(19*' '+'Will create a TPR to be used as structure file')
             else:
-                self.global_log.info(19*' '+'Will run a '+md+' md of ' + fu.human_readable_time(int(self.mdp['nsteps'])*float(self.mdp['dt'])))
+                self.global_log.info(19*' '+'Will run a '+md+' md of ' + fu.human_readable_time(int(self.nsteps)*float(self.dt)))
 
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         mdp_file_path = self.create_mdp() if self.input_mdp_path is None else self.input_mdp_path

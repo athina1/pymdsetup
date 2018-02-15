@@ -70,7 +70,7 @@ class Scwrl4(object):
 
                 # Creating a sequence file where the lower case residues will
                 # remain untouched and the upper case residues will be modified
-                aa1c = { 'ALA':'A', 'CYS':'C', 'ASP':'D', 'GLU':'E', 'PHE':'F', 'GLY':'G', 'HIS':'H', 'ILE':'I', 'LYS':'K', 'LEU':'L', 'MET':'M', 'ASN':'N', 'PRO':'P', 'GLN':'Q', 'ARG':'R', 'SER':'S', 'THR':'T', 'VAL':'V', 'TRP':'W', 'TYR':'Y'}
+                aa1c = { 'ALA':'A', 'CYS':'C', 'CYX':'C', 'ASP':'D', 'ASH':'D', 'GLU':'E', 'GLH':'E', 'PHE':'F', 'GLY':'G', 'HIS':'H', 'HID':'H', 'HIE':'H', 'HIP':'H', 'ILE':'I', 'LYS':'K', 'LEU':'L', 'MET':'M', 'MSE':'M', 'ASN':'N', 'PRO':'P', 'HYP':'P', 'GLN':'Q', 'ARG':'R', 'SER':'S', 'THR':'T', 'VAL':'V', 'TRP':'W', 'TYR':'Y'}
                 for res in st[0][chain].get_residues():
                     if res.resname not in aa1c:
                         st[0][chain].detach_child(res.id)

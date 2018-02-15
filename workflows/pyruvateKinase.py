@@ -158,32 +158,87 @@ def main():
         fu.create_dir(prop['step21_mdnvt_1000']['path'])
         mdrun.Mdrun(properties=prop['step21_mdnvt_1000'], **paths['step21_mdnvt_1000']).launch()
 
+        out_log.info('Step22: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step22_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step22_ndx2resttop'], **paths['step22_ndx2resttop']).launch()
+
+        out_log.info('step23: gppnvt_800  Preprocessing: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step23_gppnvt_800']['path'])
+        grompp.Grompp(properties=prop['step23_gppnvt_800'], **paths['step23_gppnvt_800']).launch()
+
+        out_log.info('step24: mdnvt_800 ---- Running: nvt constant number of molecules, volume and temp')
+        fu.create_dir(prop['step24_mdnvt_800']['path'])
+        mdrun.Mdrun(properties=prop['step24_mdnvt_800'], **paths['step24_mdnvt_800']).launch()
+
+        out_log.info('Step25: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step25_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step25_ndx2resttop'], **paths['step25_ndx2resttop']).launch()
+
+        out_log.info('step26: gppnpt_500  Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step26_gppnpt_500']['path'])
+        grompp.Grompp(properties=prop['step26_gppnpt_500'], **paths['step26_gppnpt_500']).launch()
+
+        out_log.info('step27: mdnpt_500 ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step27_mdnpt_500']['path'])
+        mdrun.Mdrun(properties=prop['step27_mdnpt_500'], **paths['step27_mdnpt_500']).launch()
+
+        out_log.info('Step28: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step28_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step28_ndx2resttop'], **paths['step28_ndx2resttop']).launch()
+
+        out_log.info('step29: gppnpt_300  Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step29_gppnpt_300']['path'])
+        grompp.Grompp(properties=prop['step29_gppnpt_300'], **paths['step29_gppnpt_300']).launch()
+
+        out_log.info('step30: mdnpt_300 ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step30_mdnpt_300']['path'])
+        mdrun.Mdrun(properties=prop['step30_mdnpt_300'], **paths['step30_mdnpt_300']).launch()
+
+        out_log.info('Step31: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step31_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step31_ndx2resttop'], **paths['step31_ndx2resttop']).launch()
+
+        out_log.info('step32: gppnpt_200  Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step32_gppnpt_200']['path'])
+        grompp.Grompp(properties=prop['step32_gppnpt_200'], **paths['step32_gppnpt_200']).launch()
+
+        out_log.info('step33: mdnpt_200 ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step33_mdnpt_200']['path'])
+        mdrun.Mdrun(properties=prop['step33_mdnpt_200'], **paths['step33_mdnpt_200']).launch()
+
+        out_log.info('Step34: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step34_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step34_ndx2resttop'], **paths['step34_ndx2resttop']).launch()
+
+        out_log.info('step35: gppnpt_100  Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step35_gppnpt_100']['path'])
+        grompp.Grompp(properties=prop['step35_gppnpt_100'], **paths['step35_gppnpt_100']).launch()
+
+        out_log.info('step36: mdnpt_100 ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step36_mdnpt_100']['path'])
+        mdrun.Mdrun(properties=prop['step36_mdnpt_100'], **paths['step36_mdnpt_100']).launch()
+
+        out_log.info('Step37: ndx2resttop - Create restrain topology')
+        fu.create_dir(prop['step37_ndx2resttop']['path'])
+        ndx2resttop.Ndx2resttop(properties=prop['step37_ndx2resttop'], **paths['step37_ndx2resttop']).launch()
+
+        out_log.info('step38: gppnpt - Preprocessing: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step38_gppnpt']['path'])
+        grompp.Grompp(properties=prop['step38_gppnpt'], **paths['step38_gppnpt']).launch()
+
+        out_log.info('step39: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
+        fu.create_dir(prop['step39_mdnpt']['path'])
+        mdrun.Mdrun(properties=prop['step39_mdnpt'], **paths['step39_mdnpt']).launch()
+
+        out_log.info('step40: gppmd - Preprocessing: Free Molecular dynamics')
+        fu.create_dir(prop['step40_gppmd']['path'])
+        grompp.Grompp(properties=prop['step40_gppmd'], **paths['step40_gppmd']).launch()
+
+        out_log.info('step41: md ---- Running: Free Molecular dynamics')
+        fu.create_dir(prop['step41_md']['path'])
+        mdrun.Mdrun(properties=prop['step41_md'], **paths['step41_md']).launch()
 
 
-    #     out_log.info('step11: gppnvt --- Preprocessing: nvt constant number of molecules, volume and temp')
-    #     fu.create_dir(prop['step11_gppnvt']['path'])
-    #     grompp.Grompp(properties=prop['step11_gppnvt'], **paths['step11_gppnvt']).launch()
-    #
-    #     out_log.info('step12: mdnvt ---- Running: nvt constant number of molecules, volume and temp')
-    #     fu.create_dir(prop['step12_mdnvt']['path'])
-    #     mdrun.Mdrun(properties=prop['step12_mdnvt'], **paths['step12_mdnvt']).launch()
-    #
-    #     out_log.info('step13: gppnpt --- Preprocessing: npt constant number of molecules, pressure and temp')
-    #     fu.create_dir(prop['step13_gppnpt']['path'])
-    #     grompp.Grompp(properties=prop['step13_gppnpt'], **paths['step13_gppnpt']).launch()
-    #
-    #     out_log.info('step14: mdnpt ---- Running: npt constant number of molecules, pressure and temp')
-    #     fu.create_dir(prop['step14_mdnpt']['path'])
-    #     mdrun.Mdrun(properties=prop['step14_mdnpt'], **paths['step14_mdnpt']).launch()
-    #
-    #     out_log.info('step15: gppeq ---- Preprocessing: 1ns Molecular dynamics Equilibration')
-    #     fu.create_dir(prop['step15_gppeq']['path'])
-    #     grompp.Grompp(properties=prop['step15_gppeq'], **paths['step15_gppeq']).launch()
-    #
-    #     out_log.info('step16: mdeq ----- Running: Free Molecular dynamics Equilibration')
-    #     fu.create_dir(prop['step16_mdeq']['path'])
-    #     mdrun.Mdrun(properties=prop['step16_mdeq'], **paths['step16_mdeq']).launch()
-    #
     #     out_log.info('step17: rmsd ----- Computing RMSD')
     #     fu.create_dir(prop['step17_rmsd']['path'])
     #     rms_list.append(rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
