@@ -70,7 +70,7 @@ class Scwrl4(object):
 
                 # Creating a sequence file where the lower case residues will
                 # remain untouched and the upper case residues will be modified
-                aa1c = { 'ALA':'A', 'CYS':'C', 'CYX':'C', 'ASP':'D', 'ASH':'D', 'GLU':'E', 'GLH':'E', 'PHE':'F', 'GLY':'G', 'HIS':'H', 'HID':'H', 'HIE':'H', 'HIP':'H', 'ILE':'I', 'LYS':'K', 'LEU':'L', 'MET':'M', 'MSE':'M', 'ASN':'N', 'PRO':'P', 'HYP':'P', 'GLN':'Q', 'ARG':'R', 'SER':'S', 'THR':'T', 'VAL':'V', 'TRP':'W', 'TYR':'Y'}
+                aa1c = { 'ALA':'A', 'CYS':'C', 'CYX':'C', 'ASP':'D', 'ASH':'D', 'GLU':'E', 'GLH':'E', 'PHE':'F', 'GLY':'G', 'HIS':'H', 'HID':'H', 'HIE':'H', 'HIP':'H', 'ILE':'I', 'LYS':'K', 'LYP':'K', 'LEU':'L', 'MET':'M', 'MSE':'M', 'ASN':'N', 'PRO':'P', 'HYP':'P', 'GLN':'Q', 'ARG':'R', 'SER':'S', 'THR':'T', 'VAL':'V', 'TRP':'W', 'TYR':'Y'}
                 for res in st[0][chain].get_residues():
                     if res.resname not in aa1c:
                         st[0][chain].detach_child(res.id)
@@ -94,7 +94,7 @@ class Scwrl4(object):
             prepared_file_path = self.input_pdb_path
 
         scrwl = 'Scwrl4' if self.scwrl4_path is None else self.scwrl4_path
-        cmd = [scrwl, '-i', prepared_file_path, '-o', self.output_pdb_path]
+        cmd = [scrwl, '-i', prepared_file_path, '-o', self.output_pdb_path, '-h', '-t']
         if self.mutation:
             cmd.append('-s')
             cmd.append(sequence_file_path)

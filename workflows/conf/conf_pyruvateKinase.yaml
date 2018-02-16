@@ -8,8 +8,8 @@ linux:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
-  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_residchainadjusted.pdb
+  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
+  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_ctermresidchain_adjusted.pdb
 
 ljorda:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -164,7 +164,7 @@ step7_gppions:
       type: minimization
       nsteps: 5000
 
-# Step8: gio -- Running: Add ions to neutralice the charge
+# Step8: gio -- Running: Add ions
 step8_gio:
   paths:
     input_tpr_path: dependency/step7_gppions/output_tpr_path

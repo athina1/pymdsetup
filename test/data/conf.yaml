@@ -118,6 +118,20 @@ grompp:
       # type: minimization, nvt, npt, free
       type: minimization
 
+gromppmd:
+  properties:
+    input_gro_path: gppmd.gro
+    input_top_zip_path: gppmd.zip
+    output_tpr_path: gppmd.tpr
+    input_cpt_path: gppmd.cpt
+    mdp:
+      # type: minimization, nvt, npt, free
+      type: free
+      nsteps: 5000
+      nstlist: 20
+      tinit: 300
+      continuation: 'yes'
+
 
 
 genion:

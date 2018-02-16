@@ -199,6 +199,8 @@ class Grompp(object):
     def launch(self):
         """Launches the execution of the GROMACS grompp module.
         """
+        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
+        mdp_file_path = self.create_mdp() if self.input_mdp_path is None else self.input_mdp_path
         if self.global_log is not None:
             md = self.mdp.get('type', 'minimization')
             if md != 'index' and md != 'free':
@@ -208,8 +210,6 @@ class Grompp(object):
             else:
                 self.global_log.info(19*' '+'Will run a '+md+' md of ' + fu.human_readable_time(int(self.nsteps)*float(self.dt)))
 
-        out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        mdp_file_path = self.create_mdp() if self.input_mdp_path is None else self.input_mdp_path
         # Unzip topology in de directory of the output_tpr_path and get the
         # topology path
         topology_path = fu.unzip_top(self.input_top_zip_path)
