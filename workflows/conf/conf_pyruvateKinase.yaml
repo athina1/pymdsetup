@@ -173,8 +173,7 @@ step8_gio:
     output_top_zip_path: gio_top.zip
   properties:
     output_top_path: gio.top
-    neutral: False
-    # If neutral is True concentration value is not used
+    neutral: True
     concentration: 0.05
     replaced_group: SOL
     seed: 1993

@@ -49,9 +49,7 @@ class Genion(object):
         """Launches the execution of the GROMACS genion module.
         """
         if self.global_log is not None:
-            if self.neutral:
-                self.global_log.info(19*' '+'To neutralize the system charge')
-            elif self.concentration:
+            if self.concentration:
                 self.global_log.info(19*' '+'To reach up '+str(self.concentration)+' mol/litre concentration')
 
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
@@ -72,7 +70,7 @@ class Genion(object):
             cmd.insert(0, 'mpirun')
         if self.neutral:
             cmd.append('-neutral')
-        elif self.concentration:
+        if self.concentration:
             cmd.append('-conc')
             cmd.append(str(self.concentration))
 
