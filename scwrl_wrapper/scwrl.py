@@ -27,7 +27,7 @@ class Scwrl4(object):
         self.path = properties.get('path','')
         self.step = properties.get('step','')
         self.mutation = properties['mut'] if properties.get('mut', None) else properties['mutation']
-        pattern = re.compile(("(?P<chain>[a-zA-Z*]{1}).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
+        pattern = re.compile(("(?P<chain>[a-zA-Z*]+).(?P<wt>[a-zA-Z]{3})(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mut_dict = pattern.match(self.mutation).groupdict()
 
     def launch(self):
@@ -40,8 +40,7 @@ class Scwrl4(object):
             parser = PDBParser(PERMISSIVE=1,QUIET=True)
             st = parser.get_structure('s', self.input_pdb_path)  # s random id never used
 
-            # Remove the side chain of the AA to be mutated
-            if self.mut_dict['chain']!='*':
+            if self.mut_dict['chain'] != 'ALL':
                 chains = [self.mut_dict['chain']]
             else:
                 chains = [chain.id for chain in st[0]]

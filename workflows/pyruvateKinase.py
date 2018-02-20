@@ -72,6 +72,7 @@ def main():
     for mut in mutations:
         if mutations_counter == mutations_limit: break
         mutations_counter += 1
+        mut = mut if not mut.startswith('*') else mut.replace('*', 'ALL')
         paths = conf.get_paths_dic(mut)
         prop = conf.get_prop_dic(mut, global_log=out_log)
 
