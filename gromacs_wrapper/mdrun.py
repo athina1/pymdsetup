@@ -23,15 +23,18 @@ class Mdrun(object):
     """
 
     def __init__(self, input_tpr_path, output_gro_path, properties,
-                 output_trr_path=None, output_cpt_path=None, **kwargs):
+                 output_trr_path=None, output_cpt_path=None,
+                 output_xtc_path=None, output_edr_path=None,
+                 output_log_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_tpr_path = input_tpr_path
         self.output_trr_path = output_trr_path
         self.output_gro_path = output_gro_path
         self.output_cpt_path = output_cpt_path
-        self.output_edr_path = properties.get('output_edr_path',None)
-        self.output_xtc_path = properties.get('output_xtc_path',None)
+        self.output_xtc_path = output_xtc_path
+        self.output_edr_path = output_edr_path
+        self.output_log_path = output_log_path
         self.num_threads = properties.get('num_threads',None)
         self.ntmpi = properties.get('ntmpi', None)
         self.ntomp = properties.get('ntomp', None)
@@ -48,31 +51,29 @@ class Mdrun(object):
         """
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
         gmx = 'gmx' if self.gmx_path is None else self.gmx_path
-        cmd = [gmx, 'mdrun', '-s', self.input_tpr_path,
-               '-c', self.output_gro_path,
-               '-g', 'md.log']
+        cmd = [gmx, 'mdrun', '-s', self.input_tpr_path, '-c', self.output_gro_path]
 
         if self.output_trr_path is not None:
             cmd.append('-o')
             cmd.append(self.output_trr_path)
+        if self.output_xtc_path is not None:
+            cmd.append('-x')
+            cmd.append(self.output_xtc_path)
+        if self.output_edr_path is not None:
+            cmd.append('-e')
+            cmd.append(self.output_edr_path)
+        if self.output_cpt_path is not None:
+            cmd.append('-cpo')
+            cmd.append(self.output_cpt_path)
+        if self.output_log_path is not None:
+            cmd.append('-g')
+            cmd.append(self.output_log_path)
+
         if self.mpirun_np is not None:
             cmd.insert(0, str(self.mpirun_np))
             cmd.insert(0, '-np')
         if self.mpirun:
             cmd.insert(0, 'mpirun')
-        if not self.output_xtc_path is None:
-            self.output_xtc_path = self.output_xtc_path if self.step is None else self.step+'_'+self.output_xtc_path
-            self.output_xtc_path = self.output_xtc_path if self.mutation is None else self.mutation+'_'+self.output_xtc_path
-            cmd.append('-x')
-            cmd.append(self.output_xtc_path)
-        if not self.output_edr_path is None:
-            self.output_edr_path = self.output_edr_path if self.step is None else self.step+'_'+self.output_edr_path
-            self.output_edr_path = self.output_edr_path if self.mutation is None else self.mutation+'_'+self.output_edr_path
-            cmd.append('-e')
-            cmd.append(self.output_edr_path)
-        if not self.output_cpt_path is None:
-            cmd.append('-cpo')
-            cmd.append(self.output_cpt_path)
         #Number of threads to run (0 is guess)
         if not self.num_threads is None:
             cmd.append('-nt')
