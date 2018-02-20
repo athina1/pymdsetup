@@ -8,8 +8,8 @@ linux:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
-  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_ctermresidchain_adjusted.pdb
+  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
+  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_residchainadjusted.pdb
 
 ljorda:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -18,8 +18,7 @@ ljorda:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  #initial_structure_pdb_path: /home/ljorda/Programs/pymdsetup/test/data/2VGB.WT.pdb
-  initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_residchainadjusted.pdb
+  initial_structure_pdb_path: /home/ljorda/Desktop/PK/MDWeb/Base_structure/GromacsSetup/PK_WT_Protonated_ctermresidchain_adjusted.pdb
 
 macos:
   gmx_path: /usr/local/bin/gmx
@@ -164,7 +163,7 @@ step7_gppions:
       type: minimization
       nsteps: 5000
 
-# Step8: gio -- Running: Add ions
+# Step8: gio -- Running: Add ions to neutralice the charge
 step8_gio:
   paths:
     input_tpr_path: dependency/step7_gppions/output_tpr_path
@@ -173,7 +172,8 @@ step8_gio:
     output_top_zip_path: gio_top.zip
   properties:
     output_top_path: gio.top
-    neutral: True
+    neutral: False
+    # If neutral is True concentration value is not used
     concentration: 0.05
     replaced_group: SOL
     seed: 1993
@@ -280,9 +280,9 @@ step13_mdresmin:
     input_tpr_path: dependency/step12_gppresmin/output_tpr_path
     output_trr_path: mdresmin.trr
     output_gro_path: mdresmin.gro
-  properties:
-    output_xtc_path: mdresmin.xtc
     output_edr_path: mdresmin.edr
+    output_log_path: mdresmin.log
+  properties:
     num_threads: 0
 
 # Step14: ndx2resttop - Create restrain topology
@@ -314,9 +314,9 @@ step16_mdmin:
     input_tpr_path: dependency/step15_gppmin/output_tpr_path
     output_trr_path: mdmin.trr
     output_gro_path: mdmin.gro
-  properties:
-    output_xtc_path: mdmin.xtc
     output_edr_path: mdmin.edr
+    output_log_path: mdmin.log
+  properties:
     num_threads: 0
 
 # Step17: ndx2resttop - Create restrain topology
@@ -354,9 +354,10 @@ step19_mdsa:
     output_trr_path: mdsa.trr
     output_gro_path: mdsa.gro
     output_cpt_path: mdsa.cpt
-  properties:
     output_xtc_path: mdsa.xtc
     output_edr_path: mdsa.edr
+    output_log_path: mdsa.log
+  properties:
     num_threads: 0
 
 # step20: gppnvt_1000  Preprocessing: nvt constant number of molecules, volume and temp
@@ -386,9 +387,10 @@ step21_mdnvt_1000:
     output_trr_path: mdnvt_1000.trr
     output_gro_path: mdnvt_1000.gro
     output_cpt_path: mdnvt_1000.cpt
-  properties:
     output_xtc_path: mdnvt_1000.xtc
     output_edr_path: mdnvt_1000.edr
+    output_log_path: mdnvt_1000.log
+  properties:
     num_threads: 0
 
 # Step22: ndx2resttop - Create restrain topology
@@ -428,9 +430,10 @@ step24_mdnvt_800:
     output_trr_path: mdnvt_800.trr
     output_gro_path: mdnvt_800.gro
     output_cpt_path: mdnvt_800.cpt
-  properties:
     output_xtc_path: mdnvt_800.xtc
     output_edr_path: mdnvt_800.edr
+    output_log_path: mdnvt_800.log
+  properties:
     num_threads: 0
 
 # Step25: ndx2resttop - Create restrain topology
@@ -466,9 +469,10 @@ step27_mdnpt_500:
     output_trr_path: mdnpt_500.trr
     output_gro_path: mdnpt_500.gro
     output_cpt_path: mdnpt_500.cpt
-  properties:
     output_xtc_path: mdnpt_500.xtc
     output_edr_path: mdnpt_500.edr
+    output_log_path: mdnpt_500.log
+  properties:
     num_threads: 0
 
 # Step28: ndx2resttop - Create restrain topology
@@ -504,9 +508,10 @@ step30_mdnpt_300:
     output_trr_path: mdnpt_300.trr
     output_gro_path: mdnpt_300.gro
     output_cpt_path: mdnpt_300.cpt
-  properties:
     output_xtc_path: mdnpt_300.xtc
     output_edr_path: mdnpt_300.edr
+    output_log_path: mdnpt_300.log
+  properties:
     num_threads: 0
 
 # Step31: ndx2resttop - Create restrain topology
@@ -542,9 +547,10 @@ step33_mdnpt_200:
     output_trr_path: mdnpt_200.trr
     output_gro_path: mdnpt_200.gro
     output_cpt_path: mdnpt_200.cpt
-  properties:
     output_xtc_path: mdnpt_200.xtc
     output_edr_path: mdnpt_200.edr
+    output_log_path: mdnpt_200.log
+  properties:
     num_threads: 0
 
 # Step34: ndx2resttop - Create restrain topology
@@ -580,9 +586,10 @@ step36_mdnpt_100:
     output_trr_path: mdnpt_100.trr
     output_gro_path: mdnpt_100.gro
     output_cpt_path: mdnpt_100.cpt
-  properties:
     output_xtc_path: mdnpt_100.xtc
     output_edr_path: mdnpt_100.edr
+    output_log_path: mdnpt_100.log
+  properties:
     num_threads: 0
 
 # Step37: ndx2resttop - Create restrain topology
@@ -618,9 +625,10 @@ step39_mdnpt:
     output_trr_path: mdnpt.trr
     output_gro_path: mdnpt.gro
     output_cpt_path: mdnpt.cpt
-  properties:
     output_xtc_path: mdnpt.xtc
     output_edr_path: mdnpt.edr
+    output_log_path: mdnpt.log
+  properties:
     num_threads: 0
 
 #step40: gppmd - Preprocessing: Free Molecular dynamics
@@ -637,6 +645,10 @@ step40_gppmd:
       nstlist: 20
       tinit: 300
       continuation: 'yes'
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step41: md ---- Running: Free Molecular dynamics
 step41_md:
@@ -645,10 +657,12 @@ step41_md:
     output_trr_path: md.trr
     output_gro_path: md.gro
     output_cpt_path: md.cpt
-  properties:
     output_xtc_path: md.xtc
     output_edr_path: md.edr
+    output_log_path: md.log
+  properties:
     num_threads: 0
+
 
 
 
