@@ -231,29 +231,9 @@ def main():
         fu.create_dir(prop['step39_mdnpt']['path'])
         mdrun.Mdrun(properties=prop['step39_mdnpt'], **paths['step39_mdnpt']).launch()
 
-        out_log.info('step40: gppmd - Preprocessing: Free Molecular dynamics')
-        fu.create_dir(prop['step40_gppmd']['path'])
-        grompp.Grompp(properties=prop['step40_gppmd'], **paths['step40_gppmd']).launch()
 
-        out_log.info('step41: md ---- Running: Free Molecular dynamics')
-        fu.create_dir(prop['step41_md']['path'])
-        mdrun.Mdrun(properties=prop['step41_md'], **paths['step41_md']).launch()
-
-
-    #     out_log.info('step17: rmsd ----- Computing RMSD')
-    #     fu.create_dir(prop['step17_rmsd']['path'])
-    #     rms_list.append(rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
-    #
-    # xvg_dict=reduce(lambda a, b: dict(a, **b), rms_list)
-    # out_log.info('step18: gnuplot ----- Creating RMSD plot')
-    # fu.create_dir(prop_glob['step18_gnuplot']['path'])
-    # gnuplot.Gnuplot(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
     elapsed_time = time.time() - start_time
     removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg', '.seq'])
-    #out_log.info('')
-    #out_log.info('Removing unwanted files')
-    #for removed_file in removed_list:
-    #    out_log.info('    X    ' + removed_file)
 
     out_log.info('')
     out_log.info('')

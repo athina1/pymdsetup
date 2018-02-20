@@ -346,6 +346,10 @@ step18_gppsa:
       annealing-time: 0 15 30  45  60  80  100 0 15 30  45  60  80  100
       annealing-temp: 0 50 100 150 200 250 300 0 50 100 150 200 250 300
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step19: mdsa ---- Running: simulated annealing
 step19_mdsa:
@@ -378,6 +382,10 @@ step20_gppnvt_1000:
       tinit: 100
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step21: mdnvt_1000 ---- Running: nvt constant number of molecules, volume and temp
 step21_mdnvt_1000:
@@ -420,6 +428,10 @@ step23_gppnvt_800:
       tinit: 120
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step24: mdnvt_800 ---- Running: nvt constant number of molecules, volume and temp
 step24_mdnvt_800:
@@ -459,6 +471,10 @@ step26_gppnpt_500:
       tinit: 140
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step27: mdnpt_500 ---- Running: npt constant number of molecules, pressure and temp
 step27_mdnpt_500:
@@ -498,6 +514,10 @@ step29_gppnpt_300:
       tinit: 160
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step30: mdnpt_300 ---- Running: npt constant number of molecules, pressure and temp
 step30_mdnpt_300:
@@ -537,6 +557,10 @@ step32_gppnpt_200:
       tinit: 180
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step33: mdnpt_200 ---- Running: npt constant number of molecules, pressure and temp
 step33_mdnpt_200:
@@ -576,6 +600,10 @@ step35_gppnpt_100:
       tinit: 190
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step36: mdnpt_100 ---- Running: npt constant number of molecules, pressure and temp
 step36_mdnpt_100:
@@ -615,6 +643,10 @@ step38_gppnpt:
       tinit: 200
       continuation: 'yes'
       define: -DCUSTOM_POSRES
+      # Do not write TRR file
+      nstxout: 0
+      nstvout: 0
+      nstfout: 0
 
 # step39: mdnpt ---- Running: npt constant number of molecules, pressure and temp
 step39_mdnpt:
@@ -628,53 +660,3 @@ step39_mdnpt:
     output_log_path: mdnpt.log
   properties:
     num_threads: 0
-
-#step40: gppmd - Preprocessing: Free Molecular dynamics
-step40_gppmd:
-  paths:
-    input_gro_path: dependency/step39_mdnpt/output_gro_path
-    input_top_zip_path: dependency/step37_ndx2resttop/output_top_zip_path
-    input_cpt_path: dependency/step39_mdnpt/output_cpt_path
-    output_tpr_path: gppmd.tpr
-  properties:
-    mdp:
-      type: free
-      nsteps: 5000
-      nstlist: 20
-      tinit: 300
-      continuation: 'yes'
-      # Do not write TRR file
-      nstxout: 0
-      nstvout: 0
-      nstfout: 0
-
-# step41: md ---- Running: Free Molecular dynamics
-step41_md:
-  paths:
-    input_tpr_path: dependency/step40_gppmd/output_tpr_path
-    output_trr_path: md.trr
-    output_gro_path: md.gro
-    output_cpt_path: md.cpt
-    output_xtc_path: md.xtc
-    output_edr_path: md.edr
-    output_log_path: md.log
-  properties:
-    num_threads: 0
-
-
-
-
-# # Step17: rms -- Computing RMSD
-# step17_rmsd:
-#   paths:
-#     input_gro_path: dependency/step8_gio/output_gro_path
-#     input_trr_path: dependency/step16_mdeq/output_trr_path
-#     output_xvg_path: rmsd.xvg
-#   properties:
-#
-# # Step18: gnuplot ----- Creating RMSD plot
-# step18_gnuplot:
-#   paths:
-#     output_png_path: gplot.png
-#   properties:
-#     output_plotscript_path: gplot.plotscript
