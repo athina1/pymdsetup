@@ -9,7 +9,7 @@ linux:
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
   initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/2VGB.WT.pdb
-  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_WT_Protonated_residchainadjusted.pdb
+  #initial_structure_pdb_path: /home/pau/projects/pymdsetup/test/data/PK_Gromacs_Setup.pdb
 
 ljorda:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -18,7 +18,7 @@ ljorda:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/ljorda/Desktop/PK/MDWeb/Base_structure/root.moby.pdb
+  initial_structure_pdb_path: /home/ljorda/Desktop/PK/MDWeb/Gromacs/WT/pymdsetup/PK_Gromacs_Setup
 
 macos:
   gmx_path: /usr/local/bin/gmx

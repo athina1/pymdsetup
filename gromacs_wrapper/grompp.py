@@ -101,7 +101,7 @@ class Grompp(object):
                 mdp_list.append("nstenergy = " + self.mdp.pop('nstenergy', '5000'))
                 mdp_list.append("nstlog = " + self.mdp.pop('nstlog',    '5000'))
                 mdp_list.append("nstcalcenergy = " + self.mdp.pop('nstcalcenergy', '100'))
-                mdp_list.append("nstxout-compressed = " + self.mdp.pop('nstxout-compressed', '500'))
+                mdp_list.append("nstxout-compressed = " + self.mdp.pop('nstxout-compressed', '1000'))
                 mdp_list.append("compressed-x-grps = " + self.mdp.pop('compressed-x-grps', 'System'))
                 mdp_list.append("compressed-x-precision = " + self.mdp.pop('compressed-x-precision', '1000'))
 
