@@ -18,7 +18,7 @@ ljorda:
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /home/ljorda/Desktop/PK/MDWeb/Gromacs/WT/pymdsetup/PK_Gromacs_Setup
+  initial_structure_pdb_path: /home/ljorda/Desktop/PK/MDWeb/Gromacs/WT/pymdsetup_like/PK_Gromacs_Setup.pdb
 
 macos:
   gmx_path: /usr/local/bin/gmx
