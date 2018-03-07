@@ -32,7 +32,7 @@ def remove_temp_files(endswith_list, source_dir=None):
             removed_list.append(f)
     return removed_list
 
-def zip_top(top_file, zip_file):
+def zip_top(top_file, zip_file, remove_files=False):
     top_dir = os.path.abspath(os.path.dirname(top_file))
     files = glob.iglob(os.path.join(top_dir, "*.itp"))
     if os.path.abspath(os.getcwd()) != top_dir:
@@ -40,7 +40,9 @@ def zip_top(top_file, zip_file):
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for f in files:
             zip.write(f, arcname=os.path.basename(f))
+            if remove_files: os.remove(f)
         zip.write(top_file, arcname=os.path.basename(top_file))
+        if remove_files: os.remove(top_file)
 
 def unzip_top(zip_file, dest_dir=None, top_file=None):
     if dest_dir is None:

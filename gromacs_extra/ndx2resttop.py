@@ -97,7 +97,7 @@ class Ndx2resttop(object):
 
 
         # zip topology
-        fu.zip_top(self.output_top_path, self.output_top_zip_path)
+        fu.zip_top(self.output_top_path, self.output_top_zip_path, remove_files=True)
         out_log.info('Zip: '+ self.output_top_path +' to: '+ self.output_top_zip_path)
 
         return 0
