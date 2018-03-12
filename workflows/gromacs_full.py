@@ -48,7 +48,7 @@ def main():
     if structure is None or not os.path.isfile(structure):
         out_log.info( '     Selected PDB code: ' + prop_glob['step1_mmbpdb']['pdb_code'])
         fu.create_dir(prop_glob['step1_mmbpdb']['path'])
-        pdb.MmbPdb(prop_glob['step1_mmbpdb']['pdb_code'], paths_glob['step1_mmbpdb']['output_pdb_path']).get_pdb()
+        pdb.MmbPdb().get_pdb(prop_glob['step1_mmbpdb']['pdb_code'], paths_glob['step1_mmbpdb']['output_pdb_path'])
         structure = paths_glob['step1_mmbpdb']['output_pdb_path']
 
     out_log.info( 'step2:  mmbuniprot -- Get mutations')

@@ -37,7 +37,7 @@ def main():
     if structure is None or not os.path.isfile(structure):
         out_log.info( '                   Selected PDB code: ' + prop['step1_mmbpdb']['pdb_code'])
         fu.create_dir(prop['step1_mmbpdb']['path'])
-        pdb.MmbPdb(prop['step1_mmbpdb']['pdb_code'], paths['step1_mmbpdb']['output_pdb_path']).get_pdb()
+        pdb.MmbPdb().get_pdb(prop['step1_mmbpdb']['pdb_code'], paths['step1_mmbpdb']['output_pdb_path'])
         structure = paths['step1_mmbpdb']['output_pdb_path']
 
     out_log.info('step2:  p2g ------ Create gromacs topology')

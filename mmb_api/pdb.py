@@ -1,33 +1,37 @@
 import requests
 import os
 import shutil
-
+import json
 
 class MmbPdb(object):
     """Wrapper class for the MMB group PDB REST API.
     This class is a wrapper for the PDB (http://www.rcsb.org/pdb/home/home.do)
     mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)
-    Args:
-        pdb_code (str): Protein Data Bank (PDB) four letter code.
-            ie: '2ki5'
-        output_pdb_path (str): File path where the PDB file will be stored.
-            ie: '/home/user1/2ki5.pdb'
     """
-    def __init__(self, pdb_code, output_pdb_path, **kwargs):
-        self._pdb_code = pdb_code
-        self._output_pdb_path = output_pdb_path
-        self._filter = "filter=/1&group=ATOM"
+    def __init__(self, url=None):
+        self.url = url if url else "http://mmb.irbbarcelona.org/api/pdb/"
 
-    def get_pdb(self):
+    def get_pdb(self, pdb_code, output_pdb_path, filt="filter=/1&group=ATOM"):
         """
-        Writes the PDB file content of `self._pdb_code`
-        to `self._output_pdb_path`
+        Writes the PDB file content of pdb_code
+        to output_pdb_path
         """
-        if os.path.isfile(self._pdb_code):
-            shutil.copy(self._pdb_code, self._output_pdb_path)
+        if os.path.isfile(pdb_code):
+            shutil.copy(pdb_code, output_pdb_path)
         else:
-            url = ("http://mmb.irbbarcelona.org"
-                   "/api/pdb/"+self._pdb_code.lower()+"/coords/?"+self._filter)
+            url = self.url+pdb_code.lower()+"/coords/?"+filt
             pdb_string = requests.get(url).content
-            with open(self._output_pdb_path, 'w') as pdb_file:
+            with open(output_pdb_path, 'w') as pdb_file:
                 pdb_file.write(pdb_string)
+
+    def get_cluster_pdb_codes(self, pdb_code, cluster="cl-90"):
+        """
+        Returns the list of pdb_codes of the selected cluster
+        """
+        pdb_codes = set()
+        url = self.url+pdb_code.lower()+'/clusters/'+cluster+".json"
+        cluster = json.loads(requests.get(url).content)['clusterMembers']
+        for elem in cluster:
+            pdb_codes.add(elem['_id'].lower())
+
+        return pdb_codes
