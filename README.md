@@ -28,7 +28,7 @@ Linux (http://www.gnuplot.info/)
 1. Install CMAKE and GNUPLOT:
 
     ```bash
-    sudo apt-get -y install git vim htop cmake gnuplot
+    sudo apt-get -y install git vim htop cmake gnuplot python-pip
     ```
 
 2. Install numpy biopython pyyaml requests and nose Python libraries:
