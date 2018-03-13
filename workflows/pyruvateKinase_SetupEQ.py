@@ -231,10 +231,9 @@ def main():
         fu.create_dir(prop['step39_mdnpt']['path'])
         mdrun.Mdrun(properties=prop['step39_mdnpt'], **paths['step39_mdnpt']).launch()
 
+        fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg', '.seq'])
 
     elapsed_time = time.time() - start_time
-    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg', '.seq'])
-
     out_log.info('')
     out_log.info('')
     out_log.info('Execution sucessful: ')
