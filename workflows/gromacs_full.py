@@ -138,6 +138,7 @@ def main():
         out_log.info('step17: rmsd ----- Computing RMSD')
         fu.create_dir(prop['step17_rmsd']['path'])
         rms_list.append(rms.Rms(properties=prop['step17_rmsd'], **paths['step17_rmsd']).launch())
+        removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg', '.grp', '.seq'])
 
     xvg_dict=reduce(lambda a, b: dict(a, **b), rms_list)
     out_log.info('step18: gnuplot ----- Creating RMSD plot')
@@ -145,7 +146,6 @@ def main():
     gnuplot.Gnuplot(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
     elapsed_time = time.time() - start_time
 
-    removed_list = fu.remove_temp_files(['#', '.top', '.plotscript', '.edr', '.xtc', '.itp', '.top', '.log', '.pdb', '.cpt', '.mdp', '.xvg'])
     #out_log.info('')
     #out_log.info('Removing unwanted files')
     #for removed_file in removed_list:
