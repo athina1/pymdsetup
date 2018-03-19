@@ -146,10 +146,6 @@ def main():
     gnuplot.Gnuplot(input_xvg_path_dict=xvg_dict, properties=prop_glob['step18_gnuplot'], **paths_glob['step18_gnuplot']).launch()
     elapsed_time = time.time() - start_time
 
-    #out_log.info('')
-    #out_log.info('Removing unwanted files')
-    #for removed_file in removed_list:
-    #    out_log.info('    X    ' + removed_file)
 
     out_log.info('')
     out_log.info('')
