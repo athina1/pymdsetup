@@ -25,7 +25,7 @@ Linux (http://www.gnuplot.info/)
 
 (We are assuming that you are installing Pymdsetup in your home directory `cd ~`)
 
-1. Install CMAKE and GNUPLOT:
+1. Install CMAKE, GNUPLOT and PIP:
 
     ```bash
     sudo apt-get -y install git vim htop cmake gnuplot python-pip
@@ -80,11 +80,13 @@ https://www.anaconda.com/
 1. On your local connected computer, download Pymdsetup, Anaconda and the Biopython Anaconda package and copy them to the offline computer:
 
     ```bash
+    pip install python-pip
     git clone https://github.com/bioexcel/pymdsetup.git
     wget https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh
     wget https://repo.continuum.io/pkgs/free/linux-64/biopython-1.69-np113py27_0.tar.bz2
 
     ```
+*Copy all files to the disconnected computer*
 
 2. On the disconnected computer:
 
