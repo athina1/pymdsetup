@@ -81,7 +81,7 @@ https://www.anaconda.com/
 
     ```bash
     git clone https://github.com/bioexcel/pymdsetup.git
-    wget https://repo.continuum.io/archive/Anaconda2-5.0.0-Linux-x86_64.sh
+    wget https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh
     wget https://repo.continuum.io/pkgs/free/linux-64/biopython-1.69-np113py27_0.tar.bz2
 
     ```
@@ -89,7 +89,7 @@ https://www.anaconda.com/
 2. On the disconnected computer:
 
     ```bash
-    bash Anaconda2-5.0.0-Linux-x86_64.sh
+    bash Anaconda2-5.1.0-Linux-x86_64.sh
     source .bashrc
     mv biopython-1.69-np113py27_0.tar.bz2 anaconda2/pkgs/
     conda install anaconda2/pkgs/biopython-1.69-np113py27_0.tar.bz2
