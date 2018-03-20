@@ -80,7 +80,7 @@ https://www.anaconda.com/
 1. On your local connected computer, download Pymdsetup, Anaconda and the Biopython Anaconda package and copy them to the offline computer:
 
     ```bash
-    pip install python-pip
+    sudo apt-get install -y git
     git clone https://github.com/bioexcel/pymdsetup.git
     wget https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh
     wget https://repo.continuum.io/pkgs/free/linux-64/biopython-1.69-np113py27_0.tar.bz2
