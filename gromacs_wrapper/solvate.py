@@ -71,7 +71,7 @@ class Solvate(object):
 
 
         # zip new_topology
-        fu.zip_top(self.output_top_path, self.output_top_zip_path, remove_files=True)
+        fu.zip_top(self.output_top_path, self.output_top_zip_path, remove_files=False)
         return returncode
 
 #Creating a main function to be compatible with CWL

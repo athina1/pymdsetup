@@ -112,6 +112,8 @@ step3_scw:
   paths:
     input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
     output_pdb_path: mutated.pdb
+  properties:
+    
 
 # Step4: p2g -- Create gromacs topology
 step4_p2g:
@@ -692,3 +694,18 @@ step41_md:
     output_log_path: md.log
   properties:
     num_threads: 0
+
+# Step42: rms -- Computing RMSD
+step42_rmsd:
+  paths:
+    input_gro_path: dependency/step8_gio/output_gro_path
+    input_xtc_path: dependency/step41_md/output_xtc_path
+    output_xvg_path: rmsd.xvg
+  properties:
+
+# Step43: gnuplot ----- Creating RMSD plot
+step43_gnuplot:
+  paths:
+    output_png_path: gplot.png
+  properties:
+    output_plotscript_path: gplot.plotscript

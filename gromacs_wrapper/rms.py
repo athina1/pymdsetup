@@ -15,7 +15,7 @@ class Rms(object):
     """Wrapper for the 5.1.2 version of the rms module
     Args:
         input_gro_path (str): Path to the original (before launching the trajectory) GROMACS structure file GRO.
-        input_trr_paht (str): Path to the GROMACS uncompressed raw trajectory file TRR.
+        input_xtc_paht (str): Path to the GROMACS compressed raw trajectory file XTC.
         output_xvg_path (str): Path to the simple xmgrace plot file XVG.
         properties (dic):
             gmx_path (str): Path to the GROMACS executable binary.
@@ -26,7 +26,7 @@ class Rms(object):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_gro_path = input_gro_path
-        self.input_trr_path = input_trr_path
+        self.input_xtc_path = input_xtc_path
         self.output_xvg_path = output_xvg_path
         self.gmx_path = properties.get('gmx_path',None)
         self.mutation = properties.get('mutation',None)
@@ -44,7 +44,7 @@ class Rms(object):
 
         cmd = [gmx, 'rms', '-xvg', 'none',
                '-s', self.input_gro_path,
-               '-f', self.input_trr_path,
+               '-f', self.input_xtc_path,
                '-o', self.output_xvg_path]
 
         if self.mpirun_np is not None:
