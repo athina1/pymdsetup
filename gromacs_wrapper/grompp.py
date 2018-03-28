@@ -9,6 +9,7 @@ from os.path import join as opj
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
+import time
 
 class Grompp(object):
     """Wrapper for the 5.1.2 version of the GROMACS grompp module.

@@ -8,6 +8,7 @@ from command_wrapper import cmd_wrapper
 import configuration.settings as settings
 from tools import file_utils as fu
 
+
 class MakeNdx(object):
     """Wrapper for the 5.1.2 version of the make_ndx module
     Args:
