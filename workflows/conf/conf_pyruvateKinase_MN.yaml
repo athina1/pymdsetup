@@ -164,7 +164,7 @@ step7_gppions:
   properties:
     mdp:
       type: minimization
-      nsteps: 500
+      nsteps: 5000
 
 # Step8: gio -- Running: Add ions to neutralice the charge
 step8_gio:
@@ -192,7 +192,7 @@ step9_gppndx:
   properties:
     mdp:
       type: index
-      nsteps: 500
+      nsteps: 5000
 
 # Step10: make_ndx -- Create restrain index
 step10_make_ndx:
@@ -273,7 +273,7 @@ step12_gppresmin:
   properties:
     mdp:
       type: minimization
-      nsteps: 500
+      nsteps: 5000
       emtol: 10
       define: -DCUSTOM_POSRES
 
@@ -307,7 +307,7 @@ step15_gppmin:
   properties:
     mdp:
       type: minimization
-      nsteps: 500
+      nsteps: 5000
       emtol: 10
       define: -DCUSTOM_POSRES
 
@@ -341,7 +341,7 @@ step18_gppsa:
   properties:
     mdp:
       type: nvt
-      nsteps: 500
+      nsteps: 50000
       nstlist: 20
       gen_temp: 0
       annealing: single single
@@ -377,7 +377,7 @@ step20_gppnvt_1000:
   properties:
     mdp:
       type: nvt
-      nsteps: 100
+      nsteps: 10000
       nstlist: 20
       gen_vel: 'no'
       gen_temp: ' '
@@ -423,7 +423,7 @@ step23_gppnvt_800:
   properties:
     mdp:
       type: nvt
-      nsteps: 100
+      nsteps: 10000
       nstlist: 20
       gen_vel: 'no'
       gen_temp: ' '
@@ -469,7 +469,7 @@ step26_gppnpt_500:
   properties:
     mdp:
       type: npt
-      nsteps: 100
+      nsteps: 10000
       nstlist: 20
       tinit: 140
       continuation: 'yes'
@@ -512,7 +512,7 @@ step29_gppnpt_300:
   properties:
     mdp:
       type: npt
-      nsteps: 100
+      nsteps: 10000
       nstlist: 20
       tinit: 160
       continuation: 'yes'
@@ -555,7 +555,7 @@ step32_gppnpt_200:
   properties:
     mdp:
       type: npt
-      nsteps: 500
+      nsteps: 5000
       nstlist: 20
       tinit: 180
       continuation: 'yes'
@@ -598,7 +598,7 @@ step35_gppnpt_100:
   properties:
     mdp:
       type: npt
-      nsteps: 500
+      nsteps: 5000
       nstlist: 20
       tinit: 190
       continuation: 'yes'
@@ -641,7 +641,7 @@ step38_gppnpt:
   properties:
     mdp:
       type: npt
-      nsteps: 500
+      nsteps: 50000
       nstlist: 20
       tinit: 200
       continuation: 'yes'
