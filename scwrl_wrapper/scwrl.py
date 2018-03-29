@@ -35,7 +35,7 @@ class Scwrl4(object):
         """
 
         out_log, err_log = fu.get_logs(path=self.path, mutation=self.mutation, step=self.step)
-        if self.mutation is not None:
+        if self.mutation:
             # Read structure with Biopython
             parser = PDBParser(PERMISSIVE=1,QUIET=True)
             st = parser.get_structure('s', self.input_pdb_path)  # s random id never used
