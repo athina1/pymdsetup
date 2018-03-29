@@ -84,21 +84,6 @@ def main():
     out_log.debug('Paths:\n'+str(paths['step10_make_ndx'])+'\nProperties:\n'+str(prop['step10_make_ndx'])+'\n')
     make_ndx.MakeNdx(properties=prop['step10_make_ndx'], **paths['step10_make_ndx']).launch()
 
-    out_log.info('Step11: ndx2resttop - Create restrain topology')
-    fu.create_dir(prop['step11_ndx2resttop']['path'])
-    out_log.debug('Paths:\n'+str(paths['step11_ndx2resttop'])+'\nProperties:\n'+str(prop['step11_ndx2resttop'])+'\n')
-    ndx2resttop.Ndx2resttop(properties=prop['step11_ndx2resttop'], **paths['step11_ndx2resttop']).launch()
-
-    out_log.info('step12: gppresmin --- Preprocessing: Mutated residue minimization')
-    fu.create_dir(prop['step12_gppresmin']['path'])
-    out_log.debug('Paths:\n'+str(paths['step12_gppresmin'])+'\nProperties:\n'+str(prop['step12_gppresmin'])+'\n')
-    grompp.Grompp(properties=prop['step12_gppresmin'], **paths['step12_gppresmin']).launch()
-
-    out_log.info('step13: mdresmin ---- Running: Mutated residue minimization')
-    fu.create_dir(prop['step13_mdresmin']['path'])
-    out_log.debug('Paths:\n'+str(paths['step13_mdresmin'])+'\nProperties:\n'+str(prop['step13_mdresmin'])+'\n')
-    mdrun.Mdrun(properties=prop['step13_mdresmin'], **paths['step13_mdresmin']).launch()
-
     out_log.info('Step14: ndx2resttop - Create restrain topology')
     fu.create_dir(prop['step14_ndx2resttop']['path'])
     out_log.debug('Paths:\n'+str(paths['step14_ndx2resttop'])+'\nProperties:\n'+str(prop['step14_ndx2resttop'])+'\n')
