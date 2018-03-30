@@ -16,7 +16,7 @@ import mmb_api.pdb as pdb
 import mmb_api.uniprot as uniprot
 import gromacs_wrapper.rms as rms
 import gnuplot_wrapper.gnuplot as gnuplot
-import gromacs_extra.genrestr as genrestr
+import gromacs_extra.ndx2resttop as ndx2resttop
 
 
 def main():
