@@ -185,9 +185,9 @@ step10_make_ndx:
     output_ndx_path: index.ndx
   properties:
     selection: '\"Protein\" \n
-                name 19 Protein \n
+                name 19 Prot \n
                 \"Backbone\" \n
-                name 20 Backbone \n
+                name 20 Back \n
                 \"Protein-H\" & 19 \n
                 name 21 Heavy \n
                 q'
@@ -236,7 +236,7 @@ step17_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 1000 1000 1000
-    restricted_group: Protein
+    restricted_group: Prot
 
 # step18: gppsa  Preprocessing: simulated annealing
 step18_gppsa:
@@ -318,7 +318,7 @@ step22_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 800 800 800
-    restricted_group: Protein
+    restricted_group: Prot
 
 # step23: gppnvt_800  Preprocessing: nvt constant number of molecules, volume and temp
 step23_gppnvt_800:
@@ -365,7 +365,7 @@ step25_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 500 500 500
-    restricted_group: Protein
+    restricted_group: Prot
 
 # step26: gppnpt_500  Preprocessing: npt constant number of molecules, pressure and temp
 step26_gppnpt_500:
@@ -409,7 +409,7 @@ step28_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 300 300 300
-    restricted_group: Protein
+    restricted_group: Prot
 
 # step29: gppnpt_300  Preprocessing: npt constant number of molecules, pressure and temp
 step29_gppnpt_300:
@@ -453,7 +453,7 @@ step31_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 200 200 200
-    restricted_group: Backbone
+    restricted_group: Back
 
 # step32: gppnpt_200  Preprocessing: npt constant number of molecules, pressure and temp
 step32_gppnpt_200:
@@ -497,7 +497,7 @@ step34_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 100 100 100
-    restricted_group: Backbone
+    restricted_group: Back
 
 #step35: gppnpt_100  Preprocessing: npt constant number of molecules, pressure and temp
 step35_gppnpt_100:
@@ -541,7 +541,7 @@ step37_genrestr:
     output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 0 0 0
-    restricted_group: Backbone
+    restricted_group: Back
 
 #step38: gppnpt - Preprocessing: npt constant number of molecules, pressure and temp
 step38_gppnpt:
@@ -586,7 +586,7 @@ step40_gppmd:
   properties:
     mdp:
       type: free
-      nsteps: 50000
+      nsteps: 500
       nstlist: 20
       tinit: 300
       continuation: 'yes'
