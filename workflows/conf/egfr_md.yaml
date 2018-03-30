@@ -4,7 +4,7 @@
 linux:
   gmx_path: /usr/local/gromacs/bin/gmx
   scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
-  workflow_path: /home/pau/projects/pymdsetup/pyr
+  workflow_path: /home/pau/projects/pymdsetup/egfr
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
@@ -23,11 +23,11 @@ ljorda:
 macos:
   gmx_path: /usr/local/bin/gmx
   scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
-  workflow_path: /Users/pau/projects/pymdsetup/test_10ns
+  workflow_path: /Users/pau/projects/pymdsetup/egfr
   gnuplot_path: /usr/bin/gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /Users/pau/Desktop/structure.pdb
+  initial_structure_pdb_path: /Users/pau/projects/pymdsetup/test/data/2gs2_modeller.pdb
 
 virtualbox:
   gmx_path: /usr/local/gromacs/bin/gmx
@@ -184,36 +184,37 @@ step10_make_ndx:
     input_structure_path: dependency/step9_gppndx/output_tpr_path
     output_ndx_path: index.ndx
   properties:
-    selection: 'chain A \n
-                name 19 Chain_A \n
-                19 & a CA C N O \n
-                name 20 Chain_A_backbone \n
+    selection: '\"Protein\" \n
+                name 19 Protein \n
+                \"Backbone\" \n
+                name 20 Backbone \n
                 \"Protein-H\" & 19 \n
-                name 21 Chain_A_Heavy \n
+                name 21 Heavy \n
                 q'
 
-# Step14: ndx2resttop - Create restrain topology
-step14_ndx2resttop:
+# Step11: genrest - Create restrain topology
+step11_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top.zip
   properties:
     force_constants: 500 500 500
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_Heavy, A )
+    restricted_group: Heavy
 
 # step15:  gppmin  Preprocessing: minimization
 step15_gppmin:
   paths:
     input_gro_path: dependency/step8_gio/output_gro_path
-    input_top_zip_path: dependency/step14_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step11_genrestr/output_top_zip_path
     output_tpr_path: gppmin.tpr
   properties:
     mdp:
       type: minimization
       nsteps: 5000
       emtol: 10
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
 
 # Step16: mdmin ---- Running: minimization
 step16_mdmin:
@@ -226,21 +227,22 @@ step16_mdmin:
   properties:
     num_threads: 0
 
-# Step17: ndx2resttop - Create restrain topology
-step17_ndx2resttop:
+# Step17: genrestr - Create restrain topology
+step17_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 1000 1000 1000
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_Heavy, A )
+    restricted_group: Protein
 
 # step18: gppsa  Preprocessing: simulated annealing
 step18_gppsa:
   paths:
     input_gro_path: dependency/step16_mdmin/output_gro_path
-    input_top_zip_path: dependency/step17_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step17_genrestr/output_top_zip_path
     output_tpr_path: gppsa.tpr
   properties:
     mdp:
@@ -252,7 +254,7 @@ step18_gppsa:
       annealing-npoints: 7 7
       annealing-time: 0 15 30  45  60  80  100 0 15 30  45  60  80  100
       annealing-temp: 0 50 100 150 200 250 300 0 50 100 150 200 250 300
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -275,7 +277,7 @@ step19_mdsa:
 step20_gppnvt_1000:
   paths:
     input_gro_path: dependency/step19_mdsa/output_gro_path
-    input_top_zip_path: dependency/step17_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step17_genrestr/output_top_zip_path
     input_cpt_path: dependency/step19_mdsa/output_cpt_path
     output_tpr_path: gppnvt_1000.tpr
   properties:
@@ -288,7 +290,7 @@ step20_gppnvt_1000:
       gen_seed: ' '
       tinit: 100
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -307,21 +309,22 @@ step21_mdnvt_1000:
   properties:
     num_threads: 0
 
-# Step22: ndx2resttop - Create restrain topology
-step22_ndx2resttop:
+# Step22: genrestr - Create restrain topology
+step22_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 800 800 800
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_Heavy, A )
+    restricted_group: Protein
 
 # step23: gppnvt_800  Preprocessing: nvt constant number of molecules, volume and temp
 step23_gppnvt_800:
   paths:
     input_gro_path: dependency/step21_mdnvt_1000/output_gro_path
-    input_top_zip_path: dependency/step22_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step22_genrestr/output_top_zip_path
     input_cpt_path: dependency/step21_mdnvt_1000/output_cpt_path
     output_tpr_path: gppnvt_800.tpr
   properties:
@@ -334,7 +337,7 @@ step23_gppnvt_800:
       gen_seed: ' '
       tinit: 120
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -353,21 +356,22 @@ step24_mdnvt_800:
   properties:
     num_threads: 0
 
-# Step25: ndx2resttop - Create restrain topology
-step25_ndx2resttop:
+# Step25: genrestr - Create restrain topology
+step25_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 500 500 500
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_Heavy, A )
+    restricted_group: Protein
 
 # step26: gppnpt_500  Preprocessing: npt constant number of molecules, pressure and temp
 step26_gppnpt_500:
   paths:
     input_gro_path: dependency/step24_mdnvt_800/output_gro_path
-    input_top_zip_path: dependency/step25_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step25_genrestr/output_top_zip_path
     input_cpt_path: dependency/step24_mdnvt_800/output_cpt_path
     output_tpr_path: gppnpt_500.tpr
   properties:
@@ -377,7 +381,7 @@ step26_gppnpt_500:
       nstlist: 20
       tinit: 140
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -396,21 +400,22 @@ step27_mdnpt_500:
   properties:
     num_threads: 0
 
-# Step28: ndx2resttop - Create restrain topology
-step28_ndx2resttop:
+# Step28: genrestr - Create restrain topology
+step28_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 300 300 300
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_Heavy, A )
+    restricted_group: Protein
 
 # step29: gppnpt_300  Preprocessing: npt constant number of molecules, pressure and temp
 step29_gppnpt_300:
   paths:
     input_gro_path: dependency/step27_mdnpt_500/output_gro_path
-    input_top_zip_path: dependency/step28_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step28_genrestr/output_top_zip_path
     input_cpt_path: dependency/step27_mdnpt_500/output_cpt_path
     output_tpr_path: gppnpt_300.tpr
   properties:
@@ -420,7 +425,7 @@ step29_gppnpt_300:
       nstlist: 20
       tinit: 160
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -439,21 +444,22 @@ step30_mdnpt_300:
   properties:
     num_threads: 0
 
-# Step31: ndx2resttop - Create restrain topology
-step31_ndx2resttop:
+# Step31: genrestr - Create restrain topology
+step31_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 200 200 200
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_backbone, A )
+    restricted_group: Backbone
 
 # step32: gppnpt_200  Preprocessing: npt constant number of molecules, pressure and temp
 step32_gppnpt_200:
   paths:
     input_gro_path: dependency/step30_mdnpt_300/output_gro_path
-    input_top_zip_path: dependency/step31_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step31_genrestr/output_top_zip_path
     input_cpt_path: dependency/step30_mdnpt_300/output_cpt_path
     output_tpr_path: gppnpt_200.tpr
   properties:
@@ -463,7 +469,7 @@ step32_gppnpt_200:
       nstlist: 20
       tinit: 180
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -482,21 +488,22 @@ step33_mdnpt_200:
   properties:
     num_threads: 0
 
-# Step34: ndx2resttop - Create restrain topology
-step34_ndx2resttop:
+# Step34: genrestr - Create restrain topology
+step34_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 100 100 100
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_backbone, A )
+    restricted_group: Backbone
 
 #step35: gppnpt_100  Preprocessing: npt constant number of molecules, pressure and temp
 step35_gppnpt_100:
   paths:
     input_gro_path: dependency/step33_mdnpt_200/output_gro_path
-    input_top_zip_path: dependency/step34_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step34_genrestr/output_top_zip_path
     input_cpt_path: dependency/step33_mdnpt_200/output_cpt_path
     output_tpr_path: gppnpt_100.tpr
   properties:
@@ -506,7 +513,7 @@ step35_gppnpt_100:
       nstlist: 20
       tinit: 190
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -525,21 +532,22 @@ step36_mdnpt_100:
   properties:
     num_threads: 0
 
-# Step37: ndx2resttop - Create restrain topology
-step37_ndx2resttop:
+# Step37: genrestr - Create restrain topology
+step37_genrestr:
   paths:
+    input_structure_path: dependency/step8_gio/output_gro_path
     input_ndx_path: dependency/step10_make_ndx/output_ndx_path
     input_top_zip_path: dependency/step8_gio/output_top_zip_path
-    output_top_zip_path: ndx2resttop_top_out.zip
+    output_top_zip_path: genrestr_top_out.zip
   properties:
     force_constants: 0 0 0
-    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_backbone, A )
+    restricted_group: Backbone
 
 #step38: gppnpt - Preprocessing: npt constant number of molecules, pressure and temp
 step38_gppnpt:
   paths:
     input_gro_path: dependency/step36_mdnpt_100/output_gro_path
-    input_top_zip_path: dependency/step37_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step37_genrestr/output_top_zip_path
     input_cpt_path: dependency/step36_mdnpt_100/output_cpt_path
     output_tpr_path: gppnpt.tpr
   properties:
@@ -549,7 +557,7 @@ step38_gppnpt:
       nstlist: 20
       tinit: 200
       continuation: 'yes'
-      define: -DCUSTOM_POSRES
+      define: -DPOSRES
       # Do not write TRR file
       nstxout: 0
       nstvout: 0
@@ -572,7 +580,7 @@ step39_mdnpt:
 step40_gppmd:
   paths:
     input_gro_path: dependency/step39_mdnpt/output_gro_path
-    input_top_zip_path: dependency/step37_ndx2resttop/output_top_zip_path
+    input_top_zip_path: dependency/step37_genrestr/output_top_zip_path
     input_cpt_path: dependency/step39_mdnpt/output_cpt_path
     output_tpr_path: gppmd.tpr
   properties:

@@ -3,10 +3,13 @@
 """Python wrapper module for the GROMACS genrestr module
 """
 import sys
+import re
 import json
+import os
 import configuration.settings as settings
 from command_wrapper import cmd_wrapper
 from tools import file_utils as fu
+
 
 class Genrestr(object):
     """Wrapper class for the 5.1.2 version of the GROMACS genrestr module.
@@ -73,23 +76,36 @@ class Genrestr(object):
         fu.unzip_top(zip_file=self.input_top_zip_path, top_file=self.output_top_path)
         out_log.info('Unzip: '+ self.input_top_zip_path + ' to: '+self.output_top_path)
         with open(self.output_top_path, 'r') as fin:
-            data = fin.read().splitlines(True)
-            index = data.index('[ system ]\n')
-            data[index+2] = 'system\n'
-            data.insert(index, '\n')
-            data.insert(index, '#include "'+self.output_itp_path+'"\n')
-            data.insert(index, '; Include genrestr generated itp\n')
-        with open(self.output_top_path, 'w') as fout:
-            fout.writelines(data)
+            for line in fin:
+                if line.startswith('#ifdef POSRES'):
+                    itp_name = re.findall('"([^"]*)"',fin.next())[0]
+                    out_log.debug('itp_name: '+itp_name)
+                    break
+
+        # with open(self.output_top_path, 'r') as fin:
+        #     data = fin.read().splitlines(True)
+        #     index = data.index('#ifdef POSRES\n')
+        #     data[index+2] = 'system\n'
+        #     data.insert(index, '\n')
+        #     data.insert(index, '#endif\n')
+        #     data.insert(index, '#include "'+self.output_itp_path+'"\n')
+        #     data.insert(index, '#ifdef CUSTOM_POSRES\n')
+        #     data.insert(index, '; Include Position restraint file\n')
+        #     # data.insert(index, '#include "'+self.output_itp_path+'"\n')
+        #     # data.insert(index, '; Include genrestr generated itp\n')
+        # with open(self.output_top_path, 'w') as fout:
+        #     fout.writelines(data)
 
         with open(self.output_itp_path, 'r') as fin:
             data = fin.read().splitlines(True)
-            data.insert(0, '\n')
-            data.insert(0, 'system    3\n')
-            data.insert(0, ';Name    nrexcl\n')
-            data.insert(0, '[ system ]\n')
-        with open(self.output_itp_path, 'w') as fout:
+            # data.insert(0, '\n')
+            # data.insert(0, 'system    3\n')
+            # data.insert(0, ';Name    nrexcl\n')
+            # data.insert(0, '[ system ]\n')
+        with open(itp_name, 'w') as fout:
             fout.writelines(data)
+        os.remove(self.output_itp_path)
+
 
         # zip topology
         fu.zip_top(self.output_top_path, self.output_top_zip_path, remove_files=False)
