@@ -105,7 +105,7 @@ def main():
     out_log.info('Step17: genrestr - Create restrain topology')
     fu.create_dir(prop['step17_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step17_genrestr'])+'\nProperties:\n'+str(prop['step17_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step17_genrestr'], **paths['step17_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step17_genrestr'], **paths['step17_genrestr']).launch()
 
     out_log.info('step18: gppsa ------- Preprocessing: simulated annealing')
     fu.create_dir(prop['step18_gppsa']['path'])
@@ -130,7 +130,7 @@ def main():
     out_log.info('Step22: genrestr - Create restrain topology')
     fu.create_dir(prop['step22_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step22_genrestr'])+'\nProperties:\n'+str(prop['step22_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step22_genrestr'], **paths['step22_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step22_genrestr'], **paths['step22_genrestr']).launch()
 
     out_log.info('step23: gppnvt_800 -- Preprocessing: nvt constant number of molecules, volume and temp')
     fu.create_dir(prop['step23_gppnvt_800']['path'])
@@ -145,7 +145,7 @@ def main():
     out_log.info('Step25: genrestr - Create restrain topology')
     fu.create_dir(prop['step25_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step25_genrestr'])+'\nProperties:\n'+str(prop['step25_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step25_genrestr'], **paths['step25_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step25_genrestr'], **paths['step25_genrestr']).launch()
 
     out_log.info('step26: gppnpt_500 -- Preprocessing: npt constant number of molecules, pressure and temp')
     fu.create_dir(prop['step26_gppnpt_500']['path'])
@@ -160,7 +160,7 @@ def main():
     out_log.info('Step28: genrestr - Create restrain topology')
     fu.create_dir(prop['step28_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step28_genrestr'])+'\nProperties:\n'+str(prop['step28_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step28_genrestr'], **paths['step28_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step28_genrestr'], **paths['step28_genrestr']).launch()
 
     out_log.info('step29: gppnpt_300 -- Preprocessing: npt constant number of molecules, pressure and temp')
     fu.create_dir(prop['step29_gppnpt_300']['path'])
@@ -175,7 +175,7 @@ def main():
     out_log.info('Step31: genrestr - Create restrain topology')
     fu.create_dir(prop['step31_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step31_genrestr'])+'\nProperties:\n'+str(prop['step31_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step31_genrestr'], **paths['step31_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step31_genrestr'], **paths['step31_genrestr']).launch()
 
     out_log.info('step32: gppnpt_200 -- Preprocessing: npt constant number of molecules, pressure and temp')
     fu.create_dir(prop['step32_gppnpt_200']['path'])
@@ -190,7 +190,7 @@ def main():
     out_log.info('Step34: genrestr - Create restrain topology')
     fu.create_dir(prop['step34_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step34_genrestr'])+'\nProperties:\n'+str(prop['step34_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step34_genrestr'], **paths['step34_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step34_genrestr'], **paths['step34_genrestr']).launch()
 
     out_log.info('step35: gppnpt_100 -- Preprocessing: npt constant number of molecules, pressure and temp')
     fu.create_dir(prop['step35_gppnpt_100']['path'])
@@ -205,7 +205,7 @@ def main():
     out_log.info('Step37: genrestr - Create restrain topology')
     fu.create_dir(prop['step37_genrestr']['path'])
     out_log.debug('\nPaths:\n'+str(paths['step37_genrestr'])+'\nProperties:\n'+str(prop['step37_genrestr'])+'\n')
-    genrestr.genrestr(properties=prop['step37_genrestr'], **paths['step37_genrestr']).launch()
+    genrestr.Genrestr(properties=prop['step37_genrestr'], **paths['step37_genrestr']).launch()
 
     out_log.info('step38: gppnpt ------ Preprocessing: npt constant number of molecules, pressure and temp')
     fu.create_dir(prop['step38_gppnpt']['path'])
