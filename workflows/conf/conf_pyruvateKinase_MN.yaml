@@ -50,11 +50,11 @@ open_nebula:
 mare_nostrum:
   gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
   scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
-  workflow_path: /gpfs/scratch/bsc23/bsc23210/test_10ns
+  workflow_path: /gpfs/scratch/bsc23/bsc23210/test_pyruvate
   gnuplot_path: gnuplot
   # Path to the initial pdb structure (if this field is empty
   # pdb_code field will be used to download the structure)
-  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/structure.pdb
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/pymdsetup/test/data/PK_Gromacs_Setup.pdb
 
 minotauro:
   gmx_path: /gpfs/home/bsc23/bsc23210/gromacs/bin/gmx
