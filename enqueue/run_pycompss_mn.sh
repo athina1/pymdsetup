@@ -6,7 +6,7 @@ enqueue_compss \
   --num_nodes=$3 \
   --max_tasks_per_node=1 \
   --qos=bsc_ls \
-  --worker_working_dir=gpfs \
+  --worker_working_dir=scratch \
   --network=infiniband \
   --lang=python \
   --pythonpath=/gpfs/home/bsc23/bsc23210/pymdsetup/:/gpfs/home/bsc23/bsc23210/ \
@@ -15,6 +15,6 @@ enqueue_compss \
   --tracing=$4 \
   --graph=$5 \
   --log_level=debug \
-/gpfs/home/bsc23/bsc23210/pymdsetup/workflows/gromacs_full_pycompss.py $6 $7 $3 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
+/gpfs/home/bsc23/bsc23210/pymdsetup/workflows/pyruvateKinase_MN.py $6 $7 $3 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20}
 
-#./run_pycompss_mn.sh None 30 3 false false workflows/conf_2mut_nt0.yaml mare_nostrum
+#bash /gpfs/home/bsc23/bsc23210/pymdsetup/enqueue/run_pycompss_mn.sh None 15 3 false false /gpfs/home/bsc23/bsc23210/pymdsetup/workflows/conf/conf_pyruvateKinase_MN_test.yaml mare_nostrum
