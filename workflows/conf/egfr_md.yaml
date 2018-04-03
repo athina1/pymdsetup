@@ -586,7 +586,7 @@ step40_gppmd:
   properties:
     mdp:
       type: free
-      nsteps: 500
+      nsteps: 50000
       nstlist: 20
       tinit: 300
       continuation: 'yes'
