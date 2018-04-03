@@ -51,6 +51,7 @@ class MakeNdx(object):
         else:
             cmd.insert(0, '|')
             cmd.insert(0, '\"'+self.selection+'\"')
+            cmd.insert(0, '-e')
             cmd.insert(0, 'echo')
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log)
