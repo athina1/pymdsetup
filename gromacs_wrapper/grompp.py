@@ -14,20 +14,21 @@ import time
 class Grompp(object):
     """Wrapper for the 5.1.2 version of the GROMACS grompp module.
     The GROMACS preprocessor module needs to be feeded with the input system
-    and the molecular dynamics parameter file MDP, to create a portable binary
-    run input file TPR.
+    and the dynamics parameters to create a portable binary run input file TPR.
+    The dynamics parameters are specified in the mdp section of the
+    configuration YAML file. The parameter names and defaults are the same as
+    the ones in the official MDP specification: (http://manual.gromacs.org/current/online/mdp_opt.html)
     Args:
         input_gro_path (str): Path to the input GROMACS structure GRO file.
-        input_top_zip_path (str): Path the input GROMACS topology TOP file.
+        input_top_zip_path (str): Path the input GROMACS topology TOP and ITP files in zip format.
         output_tpr_path (str): Path to the output portable binary run file TPR.
         input_cpt_path (str): Path to the input GROMACS checkpoint file CPT.
-        input_mdp_path (str): Path to the input GROMACS parameter input file MDP.
         properties (dic):
             gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, input_gro_path, input_top_zip_path,
-                 output_tpr_path, properties, input_cpt_path=None, **kwargs):
+                 output_tpr_path, input_cpt_path=None, properties, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_gro_path = input_gro_path

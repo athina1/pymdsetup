@@ -188,7 +188,7 @@ step10_make_ndx:
                 name 19 Prot \n
                 \"Backbone\" \n
                 name 20 Back \n
-                \"Protein-H\" & 19 \n
+                \"Protein-H\" \n
                 name 21 Heavy \n
                 q'
 
