@@ -1,4 +1,4 @@
-gromacs_wrapper package
+gromacs_extra package
 =======================
 
 Submodules
