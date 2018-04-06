@@ -68,6 +68,13 @@ gromacs_wrapper.cluster module
     :undoc-members:
     :show-inheritance:
 
+gromacs_wrapper.genrestr module
+------------------------------
+
+.. automodule:: gromacs_wrapper.genrestr
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

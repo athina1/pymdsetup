@@ -12,17 +12,17 @@ from tools import file_utils as fu
 
 
 class Genrestr(object):
-    """Wrapper class for the 5.1.2 version of the GROMACS genrestr module.
+    """Wrapper class for the GROMACS genrestr module.
+
     Args:
         input_structure_path (str): Path to the input structure PDB/GRO/TPR file.
         input_ndx_path (str): Path to the input index NDX file.
         input_top_zip_path (str): Path the input TOP topology in zip format.
         output_top_zip_path (str): Path the output TOP topology in zip format.
         properties (dic):
-            output_top_path (str): Path the output TOP file.
-            output_itp_path (str): Path to the output include for topology ITP file.
-            force_constants (float[3]): Array of three floats defining the force constants
-            gmx_path (str): Path to the GROMACS executable binary.
+            | **output_top_path** (*str*): Path the output TOP file.
+            | **output_itp_path** (*str*): Path to the output include for topology ITP file.
+            | **force_constants** (*float[3]*): Array of three floats defining the force constants
     """
 
     def __init__(self, input_structure_path, input_ndx_path, input_top_zip_path,
