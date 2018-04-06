@@ -14,3 +14,4 @@ pymdsetup
    test
    tools
    workflows
+   gromacs_extra
