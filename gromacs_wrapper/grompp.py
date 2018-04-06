@@ -17,18 +17,18 @@ class Grompp(object):
     and the dynamics parameters to create a portable binary run input file TPR.
     The dynamics parameters are specified in the mdp section of the
     configuration YAML file. The parameter names and defaults are the same as
-    the ones in the official MDP specification http://manual.gromacs.org/current/online/mdp_opt.html
+    the ones in the official MDP specification: http://manual.gromacs.org/current/online/mdp_opt.html
     Args:
-        input_gro_path (str): Path to the input GROMACS structure GRO file.
-        input_top_zip_path (str): Path the input GROMACS topology TOP and ITP files in zip format.
-        output_tpr_path (str): Path to the output portable binary run file TPR.
-        input_cpt_path (str): Path to the input GROMACS checkpoint file CPT.
-        properties (dic):
+        input_gro_path (str): Path to the input GROMACS structure GRO file.\n
+        input_top_zip_path (str): Path the input GROMACS topology TOP and ITP files in zip format.\n
+        output_tpr_path (str): Path to the output portable binary run file TPR.\n
+        input_cpt_path (str)[Optional]: Path to the input GROMACS checkpoint file CPT.\n
+        properties (dic):\n
             gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, input_gro_path, input_top_zip_path,
-                 output_tpr_path, input_cpt_path=None, properties, **kwargs):
+                 output_tpr_path, properties, input_cpt_path=None, **kwargs):
         if isinstance(properties, basestring):
             properties=json.loads(properties)
         self.input_gro_path = input_gro_path
