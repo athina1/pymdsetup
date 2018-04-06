@@ -10,10 +10,11 @@ from tools import file_utils as fu
 
 class MakeNdx(object):
     """Wrapper for the 5.1.2 version of the make_ndx module
+
     Args:
         input_structure_path (str): Path to the input GRO/PDB/TPR file.
         output_ndx_path (str): Path to the output index NDX file.
-        properties (dic):
+        properties (dic):                                                       
             selection (str): Atom selection string.
     """
 

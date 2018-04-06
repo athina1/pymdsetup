@@ -12,12 +12,13 @@ import fnmatch
 
 
 class Ndx2resttop(object):
-    """Generate a restrained topology from an index file.
+    """Generate a restrained topology from an index NDX file.
+
     Args:
         input_ndx_path (str): Path to the input NDX index file.
         input_top_zip_path (str): Path the input TOP topology in zip format.
         output_top_zip_path (str): Path the output TOP topology in zip format.
-        properties (dic):
+        properties (dic):                                                        
             output_top_path (str): Path the output TOP file.
             force_constants (float[3]): Array of three floats defining the force constants.
             ref_rest_chain_triplet_list (str): Triplet list composed by (reference group, restrain group, chain) list.
