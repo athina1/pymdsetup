@@ -18,11 +18,11 @@ class Ndx2resttop(object):
         input_ndx_path (str): Path to the input NDX index file.
         input_top_zip_path (str): Path the input TOP topology in zip format.
         output_top_zip_path (str): Path the output TOP topology in zip format.
-        properties (dic):                                                        
-            output_top_path (str): Path the output TOP file.
-            force_constants (float[3]): Array of three floats defining the force constants.
-            ref_rest_chain_triplet_list (str): Triplet list composed by (reference group, restrain group, chain) list.
-            group (str): Group of the index file where the restrain will be applied.
+        properties (dic):
+            | **output_top_path** (*str*): Path the output TOP file.
+            | **force_constants** (*float[3]*): Array of three floats defining the force constants.
+            | **ref_rest_chain_triplet_list** (*str*): Triplet list composed by (reference group, restrain group, chain) list.
+            | **group** (*str*): Group of the index file where the restrain will be applied.
     """
 
     def __init__(self, input_ndx_path, input_top_zip_path,

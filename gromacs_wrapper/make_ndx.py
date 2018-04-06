@@ -14,8 +14,8 @@ class MakeNdx(object):
     Args:
         input_structure_path (str): Path to the input GRO/PDB/TPR file.
         output_ndx_path (str): Path to the output index NDX file.
-        properties (dic):                                                       
-            selection (str): Atom selection string.
+        properties (dic):
+            | **selection** (*str*): Atom selection string.
     """
 
     def __init__(self, input_structure_path, output_ndx_path, properties, **kwargs):

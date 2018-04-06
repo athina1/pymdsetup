@@ -25,8 +25,8 @@ class Grompp(object):
         output_tpr_path (str): Path to the output portable binary run file TPR.
         input_cpt_path (str)[Optional]: Path to the input GROMACS checkpoint file CPT.
         properties (dic):
-               gmx_path (str): Path to the GROMACS executable binary.
-               
+               | **mdp** (*str*): MDP options specification.
+
     """
 
     def __init__(self, input_gro_path, input_top_zip_path,
