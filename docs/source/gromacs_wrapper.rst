@@ -60,6 +60,14 @@ gromacs_wrapper.solvate module
     :undoc-members:
     :show-inheritance:
 
+gromacs_wrapper.cluster module
+------------------------------
+
+.. automodule:: gromacs_wrapper.cluster
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

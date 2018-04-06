@@ -8,10 +8,10 @@ pymdsetup
    configuration
    ebi_api
    gnuplot_wrapper
+   gromacs_extra
    gromacs_wrapper
    mmb_api
    scwrl_wrapper
    test
    tools
    workflows
-   gromacs_extra
