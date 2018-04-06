@@ -7,7 +7,7 @@ Submodules
 gromacs_extra.ndx2resttop module
 -------------------------------
 
-.. automodule:: gromacs_wrapper.ndx2resttop
+.. automodule:: gromacs_extra.ndx2resttop
     :members:
     :undoc-members:
     :show-inheritance:
